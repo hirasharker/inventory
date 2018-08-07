@@ -53,7 +53,7 @@ class Stock_Model extends CI_Model {
     }
 
     public function get_item_by_warehouse_id($warehouse_id){
-        $this->db->select('tbl_stock.*,tbl_item.part_no');
+        $this->db->select('tbl_stock.*,tbl_item.part_no, tbl_item.item_price');
         $this->db->from('tbl_stock');
         $this->db->join('tbl_item','tbl_item.item_id = tbl_stock.item_id');
         $this->db->where('tbl_stock.warehouse_id',$warehouse_id);

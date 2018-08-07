@@ -117,6 +117,7 @@
           var element = $(this).find('option:selected'); 
           var itemName = element.attr("itemName");
 
+          var itemPrice = $(this).find('option:selected').attr('itemPrice');
           var quantity = $(this).find('option:selected').attr('quantity');
           count = document.getElementById('count').value;
           var val = $('#item option:selected').val();
@@ -138,9 +139,10 @@
                 +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+this.value+'">'
                 +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
                 +'</div><div class="col-lg-2">'
-                +'<input class="form-control" placeholder = "Price" name="sales_price[]" required></div>'
+                +'<input class="form-control" placeholder = "Price" name="sales_price[]" value="'+itemPrice+'" required type="hidden">'
+                +'<label>MRP '+itemPrice+'/-</label></div>'
                 +'<div class="col-lg-2">'
-                +'<input class="form-control" placeholder = "Discount" name="discount[]" required value="0"></div><div class="col-lg-2">'
+                +'<input class="form-control" placeholder = "Discount" name="discount[]" required value=""></div><div class="col-lg-2">'
                 +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div><div class="col-lg-1"><label>('+quantity+')</label></div>'
                 +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
@@ -204,7 +206,7 @@
 
                   $.each(opts, function(i, d) {
                       // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
-                      $('#item').append('<option itemName="' + d.item_name + '" value="' + d.item_id + '" quantity = "'+ d.quantity +'" >' +d.part_no+"-"+ d.item_name + '</option>');
+                      $('#item').append('<option itemName="' + d.item_name + '" value="' + d.item_id + '" quantity = "'+ d.quantity +'" itemPrice = "'+d.item_price+'">' +d.part_no+"-"+ d.item_name + '</option>');
 
                   });
               }
