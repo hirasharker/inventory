@@ -112,8 +112,6 @@
 
 <script>
         $( "#item" ).change(function() {
-          var hasChild = $( "#create" ).has( "div" ).length;
-          alert(hasChild);
           // alert( "Handler for .change() called."+this.value);
           // var itemName = $('#item option:selected').text();
           var element = $(this).find('option:selected'); 
@@ -122,6 +120,17 @@
           var itemPrice = $(this).find('option:selected').attr('itemPrice');
           var quantity = $(this).find('option:selected').attr('quantity');
           count = document.getElementById('count').value;
+          if(count == 0){
+            var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
+            +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">Price</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">Discount</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">QTY</label></div>'
+            +'<div class="col-lg-1"><label class="lblItem">Stock</label></div>'
+            +'</div>';
+            
+            $('#create').append(itemHeader);
+          }
           var val = $('#item option:selected').val();
               if(val!=0){
                 $.ajax({
@@ -141,10 +150,10 @@
                 +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+this.value+'">'
                 +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
                 +'</div><div class="col-lg-2">'
-                +'<input class="form-control" placeholder = "Price" name="sales_price[]" value="'+itemPrice+'" required type="hidden">'
+                +'<input class="form-control item-price" placeholder = "Price" name="sales_price[]" value="'+itemPrice+'" required type="hidden" >'
                 +'<label>MRP '+itemPrice+'/-</label></div>'
                 +'<div class="col-lg-2">'
-                +'<input class="form-control" placeholder = "Discount" name="discount[]" required value=""></div><div class="col-lg-2">'
+                +'<input class="form-control" placeholder = "Discount" name="discount[]" required value="0" type="hidden"></div><div class="col-lg-2">'
                 +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div><div class="col-lg-1"><label>('+quantity+')</label></div>'
                 +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
@@ -152,8 +161,6 @@
                      $('#create').append(code);
                         document.getElementById('count').value = count;
                 }
-
-                     
 
                 $("#item option[value='"+this.value+"']").remove();
             }
@@ -218,17 +225,19 @@
         });
 
 
-
-
        $('#create').on('click', '.remove', function(e){ //Once remove button is clicked
             e.preventDefault();
              var itemName = $(this).parent('div').find(".lblItem").text();
+             var itemPrice = $(this).parent('div').find(".item-price").val();
              var itemId = $(this).parent('div').find('.item-id').val();
              // alert(itemId);
              count--;
              document.getElementById('count').value = count;
-            $('#item').append('<option value="'+itemId+'">'+itemName+'</option>');
+            $('#item').append('<option value="'+itemId+'" itemName ="'+itemName+'" itemPrice="'+itemPrice+'">'+itemName+'</option>');
             $(this).parent('div').remove(); //Remove field html
+            if(count == 0){
+              $('#itemHeader').remove();
+            }
 
         });
 
