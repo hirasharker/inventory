@@ -124,7 +124,7 @@
             var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
             +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
             +'<div class="col-lg-2"><label class="lblItem">Price</label></div>'
-            +'<div class="col-lg-2"><label class="lblItem">Discount</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem"></label></div>'
             +'<div class="col-lg-2"><label class="lblItem">QTY</label></div>'
             +'<div class="col-lg-1"><label class="lblItem">Stock</label></div>'
             +'</div>';
