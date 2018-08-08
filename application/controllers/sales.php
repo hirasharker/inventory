@@ -761,7 +761,7 @@ class Sales extends CI_Controller {
 		
 		$sales_data['sales']			=	$this->sales_model->get_sales_by_id($sales_id);
 		$sales_data['customer']		 	=	$this->sales_model->get_customer_by_id($sales_data['sales']->customer_id);
-		$sales_data['sales_detail']		=	$this->sales_model->get_sales_details_by_id($sales_id);
+		$sales_data['sales_detail']		=	$this->sales_model->get_sales_details_by_id($sales_id,$sales_data['sales']->warehouse_id);
 		$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_customer_id($sales_data['sales']->customer_id);
 		$paid_amount					=	$this->sales_model->get_paid_amount_by_customer_id($sales_data['sales']->customer_id);
 		$sales_data['balance'] 			=	$invoice_balance[0]->invoice_balance - $paid_amount->paid_amount;
