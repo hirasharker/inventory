@@ -15,7 +15,7 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-9">
                        <?php echo form_open('sales/add_sales');?>
                        <!-- <form role="form" method="get" action="#"> -->
 
@@ -112,6 +112,8 @@
 
 <script>
         $( "#item" ).change(function() {
+          var hasChild = $( "#create" ).has( "div" ).length;
+          alert(hasChild);
           // alert( "Handler for .change() called."+this.value);
           // var itemName = $('#item option:selected').text();
           var element = $(this).find('option:selected'); 
@@ -254,7 +256,7 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-9">
                         <form role="form" method="post" action="<?php echo base_url();?>sales/update_sales/<?php echo $sales->sales_id;?>">
 
                             <div class="form-group">
@@ -287,10 +289,20 @@
                                 </select>
                             </div>
 
+                            <div class="form-group">
+                                <label>Select Warehouse</label>
+                                <select class="form-control" name="warehouse_id" id="warehouseId">
+                                    <option value="">Select Warehouse</option>
+                                    <?php foreach($warehouse_list as $value){?>
+                                    <option <?php if($sales->warehouse_id==$value->warehouse_id){ echo "selected";}?>  value="<?php echo $value->warehouse_id; ?>" ><?php echo $value->warehouse_name;?></option>
+                                <?php }?>
+                                </select>
+                            </div>
+
 
                             <div class="form-group">
                                 <label>Select Item</label>
-                                <select class="form-control" id="item" name="item_id">
+                                <select class="form-control select-tag" id="item" name="item_id">
                                     <option>select</option>
                                 <?php foreach($item_list as $value){?>
                                     <option value="<?php echo $value->item_id; ?>" itemName="<?php echo $value->item_name;?>"><?php echo $value->item_name;?></option>
@@ -342,13 +354,15 @@
         // alert(<?php echo json_encode($value->item_name);?>);
         // alert( "Handler for .change() called."+this.value);
         var itemName = <?php echo json_encode($value->item_name);?>;
+        var itemPrice = <?php echo json_encode($value->item_price);?>;
         count = document.getElementById('count').value;
         count++;
         var code = '<div class="col-lg-12" style="margin-bottom: 10px"><div class="col-lg-4"><label class="lblItem">'
         +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+<?php echo json_encode($value->item_id);?>+'">'
         +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
         +'</div><div class="col-lg-2">'
-        +'<input class="form-control" placeholder = "Price" name="sales_price[]" value="'+<?php echo json_encode($value->sales_price);?>+'" required>'
+        +'<input class="form-control" placeholder = "Price" name="sales_price[]" value="'+itemPrice+'" required type="hidden">'
+        +'<label>MRP '+itemPrice+'/-</label>'
         +'</div><div class="col-lg-2">'
         +'<input class="form-control" placeholder = "Disc" name="discount[]" value="'+<?php echo json_encode($value->individual_discount);?>+'" required></div>'
         +'<div class="col-lg-2">'
@@ -458,7 +472,7 @@
 
                   $.each(opts, function(i, d) {
                       // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
-                      $('#item').append('<option value="' + d.item_id + '" quantity = "'+ d.quantity +'">' + d.item_name + '</option>');
+                      $('#item').append('<option itemName="' + d.item_name + '" value="' + d.item_id + '" quantity = "'+ d.quantity +'" itemPrice = "'+d.item_price+'">' +d.part_no+"-"+ d.item_name + '</option>');
 
                   });
               }

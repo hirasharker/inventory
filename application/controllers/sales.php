@@ -45,14 +45,15 @@ class Sales extends CI_Controller {
 		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
 		$sales_data					=	array();
-		$sales_data['item_list']	=	$this->item_model->get_all_items();
+		
 		$sales_data['warehouse_list']	=	$this->warehouse_model->get_all_warehouses();
 		$sales_data['customer_list']=	$this->sales_model->get_all_customers();
 		$sales_data['dealer_list']	=	$this->dealer_model->get_all_dealers();
 
 		if($sales_id != 0){
 			$sales_data['sales']		=	$this->sales_model->get_sales_by_id($sales_id);
-			$sales_data['sales_detail']	=	$this->sales_model->get_sales_details_by_id($sales_id);
+			$sales_data['sales_detail']	=	$this->sales_model->get_sales_details_by_id($sales_id , $sales_data['sales']->warehouse_id);
+			$sales_data['item_list']	=	$this->stock_model->get_item_by_warehouse_id($sales_data['sales']->warehouse_id);
 		}else{
 			$sales_data['sales']		=	NULL;
 			$sales_data['sales_detail']	=	NULL;

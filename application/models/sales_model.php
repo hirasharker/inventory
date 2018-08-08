@@ -142,10 +142,12 @@ class Sales_Model extends CI_Model {
         return $result;
     }
 
-    public function get_sales_details_by_id($sales_id){
-        $this->db->select('*');
+    public function get_sales_details_by_id($sales_id, $warehouse_id){
+        $this->db->select('tbl_sales_detail.*,tbl_item.item_price,tbl_stock.quantity as stock_quantity');
         $this->db->from('tbl_sales_detail');
         $this->db->where('sales_id',$sales_id);
+        $this->db->join('tbl_item','tbl_item.item_id = tbl_sales_detail.item_id','inner');
+        $this->db->join('tbl_stock','tbl_stock.item_id = tbl_sales_detail.item_id and tbl_stock.warehouse_id = '.$warehouse_id,'inner');
         $result_query=$this->db->get();
         $result=$result_query->result();
         return $result;
