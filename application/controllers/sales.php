@@ -189,10 +189,18 @@ class Sales extends CI_Controller {
 		$sales_data['user_id']			=	$this->session->userdata('user_id');
 		$sales_data['user_name']		=	$this->session->userdata('user_name');
 		
+		$sales_data['warehouse_id']		=	$this->input->post('warehouse_id','',TRUE);
+		$sales_data['warehouse_name']	=	$this->warehouse_model->get_warehouse_by_id($sales_data['warehouse_id'])->warehouse_name;
 
 		$sales_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
-		$sales_data['customer_name']	=	$this->sales_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
-
+		if($sales_data['customer_id']!= NULL){
+			$sales_data['customer_name']	=	$this->sales_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
+		}
+		
+		$sales_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
+		if($sales_data['dealer_id']!= NULL){
+			$sales_data['dealer_name']		=	$this->dealer_model->get_dealer_by_id($sales_data['dealer_id'])->dealer_name;
+		}
 		
 		$sales_data['sales_date']		=	$this->input->post('sales_date','',TRUE);
 		$sales_data['overall_discount']	=	$this->input->post('sales_discount','',TRUE);
@@ -205,7 +213,7 @@ class Sales extends CI_Controller {
 		$discount 						=	$this->input->post('discount','',TRUE);
 		$quantity						=	$this->input->post('quantity','',TRUE);
 
-		$sales_detail					=	$this->sales_model->get_sales_details_by_id($sales_id);
+		$sales_detail					=	$this->sales_model->get_sales_details_by_id($sales_id, $sales_data['warehouse_id']);
 
 		$stock[]						=	array();
 
@@ -222,11 +230,13 @@ class Sales extends CI_Controller {
 
 			$this->sales_model->update_sales($sales_data,$sales_id);
 
-			$this->delete_sales_detail($sales_id);
+			$this->delete_sales_detail($sales_id,$sales_data['warehouse_id']);
 
 			$count							=	$this->input->post('count','',TRUE);
 
 			$sales_detail_data				=	array();
+
+			$sales_detail_data['warehouse_id']				=	$sales_data['warehouse_id'];
 
 			for ($i=0; $i < $count ; $i++) {
 				$sales_detail_data['sales_id']				=	$sales_id;
@@ -245,7 +255,7 @@ class Sales extends CI_Controller {
 
 				$this->item_model->subtract_item_quantity($sales_detail_data['item_id'],$quantity[$i]);
 
-				$this->stock_model->subtract_stock_quantity($purchase_detail_data['item_id'], $purchase_detail_data['warehouse_id'], $purchase_detail_data['quantity']);
+				$this->stock_model->subtract_stock_quantity($sales_detail_data['item_id'], $sales_data['warehouse_id'], $sales_detail_data['quantity']);
 			}
 
 			redirect('sales/view_sales','refresh');
@@ -254,19 +264,19 @@ class Sales extends CI_Controller {
 		}
 	}
 
-	public function delete_sales($sales_id)
+	public function delete_sales($sales_id, $warehouse_id)
 	{
 		$this->sales_model->delete_sales($sales_id);
-		$this->delete_sales_detail($sales_id);
+		$this->delete_sales_detail($sales_id,$warehouse_id);
 		redirect('sales/view_sales','refresh');
 	}
 
-	private function delete_sales_detail($sales_id)
+	private function delete_sales_detail($sales_id,$warehouse_id)
 	{
-		$sales_detail 		=	$this->sales_model->get_sales_details_by_id($sales_id);
+		$sales_detail 		=	$this->sales_model->get_sales_details_by_id($sales_id,$warehouse_id);
 		foreach ($sales_detail as $value) {
 			$this->item_model->add_item_quantity($value->item_id,$value->quantity);
-			$this->stock_model->add_stock_quantity($value->item_id, $value->warehouse_id, $value->quantity);
+			$this->stock_model->add_stock_quantity($value->item_id, $warehouse_id, $value->quantity);
 		}
 		$this->sales_model->delete_sales_detail($sales_id);
 	}

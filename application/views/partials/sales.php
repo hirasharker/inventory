@@ -118,7 +118,7 @@
           var itemName = element.attr("itemName");
 
           var itemPrice = $(this).find('option:selected').attr('itemPrice');
-          var quantity = $(this).find('option:selected').attr('quantity');
+          var stockQuantity = $(this).find('option:selected').attr('stockQuantity');
           count = document.getElementById('count').value;
           if(count == 0){
             var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
@@ -153,8 +153,9 @@
                 +'<input class="form-control item-price" placeholder = "Price" name="sales_price[]" value="'+itemPrice+'" required type="hidden" >'
                 +'<label>MRP '+itemPrice+'/-</label></div>'
                 +'<div class="col-lg-2">'
+                +'<input class="form-control stock-quantity" type="hidden" value="'+stockQuantity+'">'
                 +'<input class="form-control" placeholder = "Discount" name="discount[]" required value="0" type="hidden"></div><div class="col-lg-2">'
-                +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div><div class="col-lg-1"><label>('+quantity+')</label></div>'
+                +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div><div class="col-lg-1"><label>('+stockQuantity+')</label></div>'
                 +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
                 if(this.value != 0){
@@ -215,7 +216,7 @@
 
                   $.each(opts, function(i, d) {
                       // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
-                      $('#item').append('<option itemName="' + d.item_name + '" value="' + d.item_id + '" quantity = "'+ d.quantity +'" itemPrice = "'+d.item_price+'">' +d.part_no+"-"+ d.item_name + '</option>');
+                      $('#item').append('<option itemName="' + d.item_name + '" value="' + d.item_id + '" stockQuantity = "'+ d.quantity +'" itemPrice = "'+d.item_price+'">' +d.part_no+"-"+ d.item_name + '</option>');
 
                   });
               }
@@ -230,10 +231,11 @@
              var itemName = $(this).parent('div').find(".lblItem").text();
              var itemPrice = $(this).parent('div').find(".item-price").val();
              var itemId = $(this).parent('div').find('.item-id').val();
-             // alert(itemId);
+             var stockQuantity = $(this).parent('div').find('.stock-quantity').val();
+
              count--;
              document.getElementById('count').value = count;
-            $('#item').append('<option value="'+itemId+'" itemName ="'+itemName+'" itemPrice="'+itemPrice+'">'+itemName+'</option>');
+            $('#item').append('<option value="'+itemId+'" itemName ="'+itemName+'" itemPrice="'+itemPrice+'" stockQuantity="'+stockQuantity+'">'+itemName+'</option>');
             $(this).parent('div').remove(); //Remove field html
             if(count == 0){
               $('#itemHeader').remove();
@@ -314,7 +316,7 @@
                                 <select class="form-control select-tag" id="item" name="item_id">
                                     <option>select</option>
                                 <?php foreach($item_list as $value){?>
-                                    <option value="<?php echo $value->item_id; ?>" itemName="<?php echo $value->item_name;?>"><?php echo $value->item_name;?></option>
+                                    <option value="<?php echo $value->item_id; ?>" itemName="<?php echo $value->item_name;?>" stockQuantity="<?php echo $value->quantity; ?>"><?php echo $value->item_name;?></option>
                                 <?php }?>
                                 </select>
                             </div>
@@ -359,12 +361,25 @@
 
 
 <script>
+
     <?php foreach($sales_detail as $value){?>
         // alert(<?php echo json_encode($value->item_name);?>);
         // alert( "Handler for .change() called."+this.value);
         var itemName = <?php echo json_encode($value->item_name);?>;
         var itemPrice = <?php echo json_encode($value->item_price);?>;
         count = document.getElementById('count').value;
+        if(count == 0){
+            var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
+            +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">Price</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem"></label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">QTY</label></div>'
+            +'<div class="col-lg-1"><label class="lblItem">Stock</label></div>'
+            +'</div>';
+            
+            $('#create').append(itemHeader);
+          }
+
         count++;
         var code = '<div class="col-lg-12" style="margin-bottom: 10px"><div class="col-lg-4"><label class="lblItem">'
         +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+<?php echo json_encode($value->item_id);?>+'">'
@@ -373,9 +388,11 @@
         +'<input class="form-control" placeholder = "Price" name="sales_price[]" value="'+itemPrice+'" required type="hidden">'
         +'<label>MRP '+itemPrice+'/-</label>'
         +'</div><div class="col-lg-2">'
-        +'<input class="form-control" placeholder = "Disc" name="discount[]" value="'+<?php echo json_encode($value->individual_discount);?>+'" required></div>'
+        +'<input class="form-control" placeholder = "Disc" name="discount[]" value="'+<?php echo json_encode($value->individual_discount);?>+'" type="hidden"></div>'
         +'<div class="col-lg-2">'
-        +'<input class="form-control" placeholder = "QTY" name="quantity[]" value="'+<?php echo json_encode($value->quantity);?>+'" required></div>'
+        +'<input class="form-control stock-quantity" type="hidden" value="'+<?php echo json_encode($value->stock_quantity+$value->quantity);?>+'">'
+        +'<input class="form-control" type="number" min="1" max="'+<?php echo json_encode($value->stock_quantity+$value->quantity);?>+'" placeholder = "QTY" name="quantity[]" value="'+<?php echo json_encode($value->quantity);?>+'" required></div>'
+        +'<div class="col-lg-1"><label>('+<?php echo json_encode($value->stock_quantity + $value->quantity );?>+')</label></div>'
         +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
         $('#create').append(code);
@@ -388,13 +405,24 @@
 
 <script>
         $( "#item" ).change(function() {
-          alert( "Handler for .change() called."+this.value);
+          // alert( "Handler for .change() called."+this.value);
           // var itemName = $('#item option:selected').text();
           var element = $(this).find('option:selected'); 
           var itemName = element.attr("itemName");
 
-          var quantity = $(this).find('option:selected').attr('quantity');
+          var stockQuantity = $(this).find('option:selected').attr('stockQuantity');
           count = document.getElementById('count').value;
+          if(count == 0){
+            var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
+            +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">Price</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem"></label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">QTY</label></div>'
+            +'<div class="col-lg-1"><label class="lblItem">Stock</label></div>'
+            +'</div>';
+            
+            $('#create').append(itemHeader);
+          }
           var val = $('#item option:selected').val();
               if(val!=0){
                 count++;
@@ -402,16 +430,20 @@
                 +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+this.value+'">'
                 +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
                 +'</div><div class="col-lg-2">'
-                +'<input class="form-control" placeholder = "Price" name="sales_price[]" required></div>'
+                +'<input class="form-control item-price" placeholder = "Price" name="sales_price[]" value="'+itemPrice+'" required type="hidden" >'
+                +'<label>MRP '+itemPrice+'/-</label></div>'
                 +'<div class="col-lg-2">'
-                +'<input class="form-control" placeholder = "Discount" name="discount[]" required value="0"></div><div class="col-lg-2">'
-                +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div><div class="col-lg-1"><label>('+quantity+')</label></div>'
+                +'<input class="form-control" placeholder = "Discount" name="discount[]" required value="0" type="hidden"></div>'
+                +'<div class="col-lg-2">'
+                +'<input class="form-control stock-quantity" type="hidden" value="'+stockQuantity+'">'
+                +'<input class="form-control" placeholder = "QTY" name="quantity[]" required value="0" type="number" max="'+stockQuantity+'"></div>'
+                +'<div class="col-lg-1"><label>('+stockQuantity+')</label></div>'
                 +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
                       $('#create').append(code);
                         document.getElementById('count').value = count;
 
-                // $("#item option[value='"+this.value+"']").remove();
+                $("#item option[value='"+this.value+"']").remove();
               }
         });
 
@@ -496,12 +528,16 @@
             e.preventDefault();
              var itemName = $(this).parent('div').find(".lblItem").text();
              var itemId = $(this).parent('div').find('.item-id').val();
-             alert(itemId);
-             count--;
-             document.getElementById('count').value = count;
-            $('#item').append('<option value="'+itemId+'">'+itemName+'</option>');
-            $(this).parent('div').remove(); //Remove field html
+             var itemPrice = $(this).parent('div').find(".item-price").val();
+             var stockQuantity = $(this).parent('div').find(".stock-quantity").val();
 
+            count--;
+            document.getElementById('count').value = count;
+            $('#item').append('<option value="'+itemId+'" stockQuantity="'+stockQuantity+'" itemPrice="'+itemPrice+'" itemName="'+itemName+'">'+itemName+'</option>');
+            $(this).parent('div').remove(); //Remove field html
+            if(count == 0){
+              $('#itemHeader').remove();
+            }
         });
 
 </script>
