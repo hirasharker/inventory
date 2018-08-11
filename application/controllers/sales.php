@@ -15,6 +15,8 @@ class Sales extends CI_Controller {
 		$this->load->model('company_model','company_model',TRUE);
 		$this->load->model('convert_model','convert_model',TRUE);
 		$this->load->model('module_model','module_model',TRUE);
+		$this->load->model('company_model','company_model',TRUE);
+
 	}
 
 
@@ -781,6 +783,8 @@ class Sales extends CI_Controller {
 		$paid_amount 					=	0;
 
 		$sales_data 					= 	array();
+
+		$sales_data['company_detail']	=	$this->company_model->get_company_by_id('1');
 		
 		$sales_data['sales']			=	$this->sales_model->get_sales_by_id($sales_id);
 		$sales_data['sales_detail']		=	$this->sales_model->get_sales_details_by_id($sales_id,$sales_data['sales']->warehouse_id);

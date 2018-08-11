@@ -39,7 +39,7 @@
               <th style="padding-left: 10px; text-align: left;"><?php echo $dealer->dealer_name;?> </th>
             </tr>
             <tr>
-              <td style="padding-left: 10px; text-align: left;"><?php echo $dealer->address;?></td>
+              <td style="padding-left: 10px; text-align: left;"><?php echo $dealer->present_address;?></td>
             </tr>
             <!-- <tr>
               <td style="padding-left: 10px; text-align: left;">Chittagong.</td>
@@ -120,7 +120,7 @@
           <?php } elseif (isset($dealer)) {?>
             <td colspan="2" style="width : 70%; padding-bottom: .4in; padding-top: .2in;"><b>For&nbsp;<?php echo $sales->dealer_name;?></b></td>
           <?php }?>
-            <td style="width : 30%; text-align: right;"><b>for My Company Limited</b></td>
+            <td style="width : 30%; text-align: right;"><b>for <?php echo $company_detail->company_name;?></b></td>
           </tr>
         </table>
         <table width="100%">

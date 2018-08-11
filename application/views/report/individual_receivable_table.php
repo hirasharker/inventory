@@ -16,7 +16,7 @@
             <?php $i=1; $balance = 0; foreach($sales as $value){$balance = $value->total_price;?>
             <tr class="gradeA">
                 <td><?php echo $i; ?></td>
-                <td><a href="<?php echo base_url().'sales/index/'.$value->sales_id;?>" target="_blank"><?php echo $value->sales_id;?></a></td>
+                <td><a href="<?php echo base_url().'sales/sales_invoice/'.$value->sales_id;?>" target="_blank"><?php echo $value->sales_id;?></a></td>
                 <td>---</td>
                 <td><a href="<?php echo base_url().'sales/customer/'.$value->customer_id;?>" target="_blank"><?php echo $value->customer_name;?></a></td>
                 <td><?php echo $value->sales_date;?></td>
