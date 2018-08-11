@@ -64,6 +64,10 @@
                     <div class="col-lg-5">
                         <form role="form" method="post" action="<?php echo base_url();?>sales/update_customer/<?php echo $customer->customer_id;?>">
                             <div class="form-group">
+                                <label>Customer Code</label>
+                                <input class="form-control" disabled value="<?php echo $customer->customer_id;?>">
+                            </div>
+                            <div class="form-group">
                                 <label>Customer's Name</label>
                                 <input class="form-control" placeholder = "customer's Name" name="customer_name" value="<?php echo $customer->customer_name;?>">
                             </div>

@@ -323,6 +323,34 @@ class Sales_Model extends CI_Model {
         return $result;
     }
 
+    public function get_invoice_balance_by_dealer_id($dealer_id){
+        $this->db->select('tbl_sales_detail.dealer_id, sum((tbl_sales_detail.sales_price * tbl_sales_detail.quantity-tbl_sales_detail.individual_discount)*(1-.01*tbl_sales_detail.overall_discount)) as invoice_balance'); 
+        // $this->db->select('tbl_sales_detail.dealer_id, tbl_sales_detail.sales_price'); 
+        $this->db->from('tbl_sales_detail');
+        $this->db->where('tbl_sales_detail.dealer_id',$dealer_id);
+        $this->db->join('tbl_sales','tbl_sales.sales_id = tbl_sales_detail.sales_id','left');
+        // $this->db->join('tbl_sales','tbl_sales.dealer_id = tbl_sales_detail.dealer_id','inner');
+        $this->db->group_by('tbl_sales_detail.dealer_id');
+
+        // $this->db->order_by('tbl_sales.time_stamp','desc');
+        // $this->db->order_by('tbl_sales.dealer_name','desc');
+        $result_query=$this->db->get();
+        $result=$result_query->result();
+        return $result;
+    }
+
+    public function get_paid_amount_by_dealer_id($dealer_id){
+        $this->db->select('tbl_dealer.dealer_id, sum(tbl_money_receipt.received_amount) as paid_amount'); 
+        $this->db->from('tbl_dealer');
+        $this->db->where('tbl_dealer.dealer_id',$dealer_id);
+        $this->db->join('tbl_money_receipt','tbl_money_receipt.dealer_id = tbl_dealer.dealer_id','inner');
+        $this->db->order_by('tbl_money_receipt.time_stamp','desc');
+        $result_query=$this->db->get();
+        $result=$result_query->row();
+        return $result;
+    }
+    
+
     //-----------RECEIVABLE------------
 
     public function get_customer_like_customer_id($search_key){

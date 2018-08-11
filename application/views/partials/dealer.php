@@ -73,6 +73,10 @@
                         <form role="form" method="post" action="<?php echo base_url();?>dealer/update_dealer">
                             <input type="hidden" name="dealer_id" value="<?php echo $dealer_detail->dealer_id; ?>" />
                             <div class="form-group">
+                                <label>Dealer Code</label>
+                                <input class="form-control" value="<?php echo $dealer_detail->dealer_id; ?>" disabled>
+                            </div>
+                            <div class="form-group">
                                 <label>Dealer's Name</label>
                                 <input class="form-control" placeholder = "Dealer's Name" name="dealer_name" value="<?php echo $dealer_detail->dealer_name; ?>">
                             </div>

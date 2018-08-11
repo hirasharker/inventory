@@ -308,7 +308,7 @@
                             <?php }?>
                             <?php if($dealer_permission->permission_view==1){?>
                             <li class="<?php if ($selected == "all_dealers") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>view_dealers/">All Dealers</a>
+                                <a href="<?php echo base_url();?>dealer/view_dealers/">All Dealers</a>
                             </li>
                             <?php }?>
                         </ul>

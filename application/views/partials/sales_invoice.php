@@ -19,6 +19,7 @@
       <div id="header">
         <div class="left">
           <table border="0">
+            <?php if(isset($customer)){?>
             <tr>
               <th rowspan="6" style="vertical-align:top;">Party Name: </th>
               <th style="padding-left: 10px; text-align: left;"><?php echo $customer->customer_name;?> </th>
@@ -32,6 +33,21 @@
             <tr>
               <td style="padding-left: 10px; text-align: left;">Phone: <?php echo $customer->phone_no;?></td>
             </tr>
+            <?php } elseif (isset($dealer)) {?>
+            <tr>
+              <th rowspan="6" style="vertical-align:top;">Dealer Name: </th>
+              <th style="padding-left: 10px; text-align: left;"><?php echo $dealer->dealer_name;?> </th>
+            </tr>
+            <tr>
+              <td style="padding-left: 10px; text-align: left;"><?php echo $dealer->address;?></td>
+            </tr>
+            <!-- <tr>
+              <td style="padding-left: 10px; text-align: left;">Chittagong.</td>
+            </tr> -->
+            <tr>
+              <td style="padding-left: 10px; text-align: left;">Phone: <?php echo $dealer->phone_no;?></td>
+            </tr>
+            <?php }?>
           </table>
         </div>
         <div class="right">
@@ -99,13 +115,21 @@
             <td style="text-align: right; width:30%"><b><?php echo $balance?></b>&nbsp; Dr</td>
           </tr>
           <tr>
+          <?php if(isset($customer)){?>
             <td colspan="2" style="width : 70%; padding-bottom: .4in; padding-top: .2in;"><b>For&nbsp;<?php echo $sales->customer_name;?></b></td>
+          <?php } elseif (isset($dealer)) {?>
+            <td colspan="2" style="width : 70%; padding-bottom: .4in; padding-top: .2in;"><b>For&nbsp;<?php echo $sales->dealer_name;?></b></td>
+          <?php }?>
             <td style="width : 30%; text-align: right;"><b>for My Company Limited</b></td>
           </tr>
         </table>
         <table width="100%">
            <tr>
+           <?php if(isset($customer)){?>
             <td style="width : 15%; text-align: left; border-top: 2px solid #000;"><b>Customer Signature</b></td>
+          <?php } elseif (isset($dealer)) {?>
+            <td style="width : 15%; text-align: left; border-top: 2px solid #000;"><b>Dealer Signature</b></td>
+          <?php }?>
             <td style="width : 70%; color: #FFF">..........................................................................</td>
             <td style="width : 15%; text-align: center; border-top: 2px solid #000;">Authorised Signature</td>
           </tr>

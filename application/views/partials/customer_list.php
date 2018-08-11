@@ -26,6 +26,7 @@
                                     <thead>
                                         <tr>
                                             <th>SL</th>
+                                            <th>Customer Code</th>
                                             <th>Customer Name</th>
                                             <th>Address</th>
                                             <th>Phone</th>
@@ -36,6 +37,7 @@
                                         <?php $i=1; foreach($customer_list as $value){?>
                                         <tr class="gradeA">
                                             <td><?php echo $i;?></td>
+                                            <td><?php echo $value->customer_id;?></td>
                                             <td><?php echo $value->customer_name;?></td>
                                             <td><?php echo $value->address;?></td>
                                             <td class="center"><?php echo $value->phone_no;?></td>

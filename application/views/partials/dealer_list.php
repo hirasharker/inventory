@@ -26,6 +26,7 @@
                                     <thead>
                                         <tr>
                                             <th>SL</th>
+                                            <th>Dealer Code</th>
                                             <th>Dealer Name</th>
                                             <th>Dealer Category</th>
                                             <th>Address</th>
@@ -37,6 +38,7 @@
                                         <?php $i=1; foreach($dealer_list as $value){?>
                                         <tr class="gradeA">
                                             <td><?php echo $i;?></td>
+                                            <td><?php echo $value->dealer_id;?></td>
                                             <td><?php echo $value->dealer_name;?></td>
                                             <td><?php echo $value->dealer_category;?></td>
                                             <td><?php echo $value->present_address;?></td>

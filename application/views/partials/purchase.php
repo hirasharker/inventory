@@ -111,6 +111,15 @@
           // alert( "Handler for .change() called."+this.value);
          
                 count = document.getElementById('count').value;
+                if(count == 0){
+                    var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
+                    +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
+                    +'<div class="col-lg-4"><label class="lblItem">Price</label></div>'
+                    +'<div class="col-lg-3"><label class="lblItem">QTY</label></div>'
+                    +'</div>';
+                    
+                    $('#create').append(itemHeader);
+                  }
                 // var itemName = $('#item option:selected').text();
                 var element = $(this).find('option:selected'); 
                 var itemName = element.attr("itemName");
@@ -148,8 +157,12 @@
              // alert(itemId);
              count--;
              document.getElementById('count').value = count;
-            // $('#item').append('<option value="'+itemId+'">'+itemName+'</option>');
+            $('#item').append('<option value="'+itemId+'">'+itemName+'</option>');
             $(this).parent('div').remove(); //Remove field html
+
+            if(count == 0){
+              $('#itemHeader').remove();
+            }
 
         });
 
@@ -268,6 +281,16 @@
         var itemName = <?php echo json_encode($value->item_name);?>;
         count = document.getElementById('count').value;
 
+        if(count == 0){
+            var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
+            +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
+            +'<div class="col-lg-4"><label class="lblItem">Price</label></div>'
+            +'<div class="col-lg-3"><label class="lblItem">QTY</label></div>'
+            +'</div>';
+            
+            $('#create').append(itemHeader);
+          }
+
         count++;
         var code = '<div class="col-lg-12" style="margin-bottom: 10px"><div class="col-lg-4"><label class="lblItem">'
         +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+<?php echo json_encode($value->item_id);?>+'">'
@@ -293,6 +316,17 @@
 
           // var itemName = $('#item option:selected').text();
           count = document.getElementById('count').value;
+
+          if(count == 0){
+            var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
+            +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
+            +'<div class="col-lg-4"><label class="lblItem">Price</label></div>'
+            +'<div class="col-lg-3"><label class="lblItem">QTY</label></div>'
+            +'</div>';
+            
+            $('#create').append(itemHeader);
+          }
+
           var val = $('#item option:selected').val();
           if(val!=0){
             count++;
@@ -307,7 +341,7 @@
                   $('#create').append(code);
                     document.getElementById('count').value = count;
 
-            // $("#item option[value='"+this.value+"']").remove();
+            $("#item option[value='"+this.value+"']").remove();
 
         }
           
@@ -320,9 +354,12 @@
              // alert(itemId);
              count--;
              document.getElementById('count').value = count;
-            // $('#item').append('<option value="'+itemId+'">'+itemName+'</option>');
+            $('#item').append('<option value="'+itemId+'">'+itemName+'</option>');
             $(this).parent('div').remove(); //Remove field html
 
+            if(count == 0){
+              $('#itemHeader').remove();
+            }
         });
 
 </script>

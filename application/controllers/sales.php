@@ -264,8 +264,11 @@ class Sales extends CI_Controller {
 		}
 	}
 
-	public function delete_sales($sales_id, $warehouse_id)
+	public function delete_sales($sales_id, $warehouse_id=NULL)
 	{
+		if($warehouse_id==NULL){
+			$warehouse_id 		=	$this->sales_model->get_sales_by_id($sales_id)->warehouse_id;
+		}
 		$this->sales_model->delete_sales($sales_id);
 		$this->delete_sales_detail($sales_id,$warehouse_id);
 		redirect('sales/view_sales','refresh');
@@ -424,9 +427,12 @@ class Sales extends CI_Controller {
 		$money_receipt_data['user_id']				=	$this->session->userdata('user_id');
 		$money_receipt_data['user_name']			=	$this->session->userdata('user_name');
 		$money_receipt_data['sales_id']				=	$this->input->post('sales_id','',TRUE);
-		$sales 										=	$this->sales_model->get_sales_by_id($money_receipt_data['sales_id']);
-		$money_receipt_data['customer_id']			=	$sales->customer_id;
-		$money_receipt_data['customer_name']		=	$sales->customer_name;
+		
+		$sales_detail								=	$this->sales_model->get_sales_by_id($money_receipt_data['sales_id']);
+		$money_receipt_data['customer_id']			=	$sales_detail->customer_id;
+		$money_receipt_data['customer_name']		=	$sales_detail->customer_name;
+		$money_receipt_data['dealer_id']			=	$sales_detail->dealer_id;
+		$money_receipt_data['dealer_name']			=	$sales_detail->dealer_name;
 		
 		$money_receipt_data['received_amount']		=	$this->input->post('received_amount','',TRUE);
 		$money_receipt_data['money_receipt_date']	=	$this->input->post('money_receipt_date','',TRUE);
@@ -450,9 +456,13 @@ class Sales extends CI_Controller {
 		$money_receipt_data['user_id']				=	$this->session->userdata('user_id');
 		$money_receipt_data['user_name']			=	$this->session->userdata('user_name');
 		$money_receipt_data['sales_id']				=	$this->input->post('sales_id','',TRUE);
-		$sales 										=	$this->sales_model->get_sales_by_id($money_receipt_data['sales_id']);
-		$money_receipt_data['customer_id']			=	$sales->customer_id;
-		$money_receipt_data['customer_name']		=	$sales->customer_name;
+		
+		$sales_detail								=	$this->sales_model->get_sales_by_id($money_receipt_data['sales_id']);
+		$money_receipt_data['customer_id']			=	$sales_detail->customer_id;
+		$money_receipt_data['customer_name']		=	$sales_detail->customer_name;
+		$money_receipt_data['dealer_id']			=	$sales_detail->dealer_id;
+		$money_receipt_data['dealer_name']			=	$sales_detail->dealer_name;
+
 		$money_receipt_data['received_amount']		=	$this->input->post('received_amount','',TRUE);
 		$money_receipt_data['money_receipt_date']	=	$this->input->post('money_receipt_date','',TRUE);
 
@@ -767,13 +777,24 @@ class Sales extends CI_Controller {
 		$this->load->library('mypdf');
 		$pdf = $this->mypdf->load();
 
+		$invoice_balance 				=	0;
+		$paid_amount 					=	0;
+
 		$sales_data 					= 	array();
 		
 		$sales_data['sales']			=	$this->sales_model->get_sales_by_id($sales_id);
-		$sales_data['customer']		 	=	$this->sales_model->get_customer_by_id($sales_data['sales']->customer_id);
 		$sales_data['sales_detail']		=	$this->sales_model->get_sales_details_by_id($sales_id,$sales_data['sales']->warehouse_id);
-		$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_customer_id($sales_data['sales']->customer_id);
-		$paid_amount					=	$this->sales_model->get_paid_amount_by_customer_id($sales_data['sales']->customer_id);
+
+		if($sales_data['sales']->customer_id!=0){
+			$sales_data['customer']		 	=	$this->sales_model->get_customer_by_id($sales_data['sales']->customer_id);
+			$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_customer_id($sales_data['sales']->customer_id);
+			$paid_amount					=	$this->sales_model->get_paid_amount_by_customer_id($sales_data['sales']->customer_id);
+		}elseif ($sales_data['sales']->dealer_id!=0){
+			$sales_data['dealer']		 	=	$this->dealer_model->get_dealer_by_id($sales_data['sales']->dealer_id);
+			$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_dealer_id($sales_data['sales']->dealer_id);
+			$paid_amount					=	$this->sales_model->get_paid_amount_by_dealer_id($sales_data['sales']->dealer_id);
+		}
+		
 		$sales_data['balance'] 			=	$invoice_balance[0]->invoice_balance - $paid_amount->paid_amount;
 
 		$sales_data['total_in_words']	=	$this->convert_model->convert_number($sales_data['sales']->total_price);
@@ -974,6 +995,7 @@ class Sales extends CI_Controller {
 
 	public function delete_sales_return($sales_id)
 	{
+		
 		$this->sales_model->delete_sales($sales_id);
 		$this->delete_sales_detail($sales_id);
 		redirect('sales/view_sales','refresh');
