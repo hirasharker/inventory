@@ -664,10 +664,12 @@ class Sales extends CI_Controller {
 		$nav_data['dev_key']			=	"sales_report";
 		$nav_data['selected']			=	"individual_sales_report";
 		$nav_data['company_name']  		=   $this->company_model->get_company_by_id(1)->company_name;
-		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+		$nav_data['user_permission']	=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
 		$sales_data 					= 	array();
 		$sales_data['sales']			=	$this->sales_model->get_all_sales();
+		$sales_data['customer_list']	=	$this->sales_model->get_all_customers();
+		$sales_data['dealer_list']		=	$this->dealer_model->get_all_dealers();
 
 		// echo '<pre>';
 		// print_r($sales_data['sales']);
@@ -683,14 +685,20 @@ class Sales extends CI_Controller {
 	}
 
 	public function generate_individual_sales_statement(){
-		$customer_name 	=	$this->input->post('customer_name',TRUE);
+		$customer_id 	=	$this->input->post('customer_id',TRUE);
+		$dealer_id 	 	=	$this->input->post('dealer_id',TRUE);
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
 
 		$search_result 	= 	array();
 
-		$search_result['sales']			=	$this->sales_model->get_individual_sales_report_by_date_and_customer_name($customer_name,$from_date,$to_date);
-		$search_result['payments']		=	$this->sales_model->get_individual_money_receipt_by_date_and_customer_name($customer_name,$from_date,$to_date);
+		if($customer_id != ""){
+			$search_result['sales']			=	$this->sales_model->get_individual_sales_report_by_date_and_customer_id($customer_id,$from_date,$to_date);
+			$search_result['payments']		=	$this->sales_model->get_individual_money_receipt_by_date_and_customer_id($customer_id,$from_date,$to_date);
+		} elseif($dealer_id !=""){
+			$search_result['sales']			=	$this->sales_model->get_individual_sales_report_by_date_and_customer_name($dealer_id,$from_date,$to_date);
+			$search_result['payments']		=	$this->sales_model->get_individual_money_receipt_by_date_and_customer_name($dealer_id,$from_date,$to_date);
+		}
 
 		$output 						=	$this->load->view('report/individual_sales_table',$search_result,TRUE);
 

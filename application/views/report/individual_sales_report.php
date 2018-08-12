@@ -20,9 +20,41 @@
                     <div class="col-lg-6">
                         <form method="post" action="<?php echo base_url()?>sales/individual_sales_pdf" target="_blank">
                             <div class="form-group">
+                                <label>Sales Mode</label>
+                                <select class="form-control" name="sales_mode" id="salesMode">
+                                    <option value="">Select Mode</option>
+                                    <option value="1">Dealer Sale</option>
+                                    <option value="2">Regular Customer</option>
+                                    <!-- <option value="3">Quick Sale</option> -->
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="customer" style="display:none">
+                                <label>Select Customer</label>
+                                <select class="form-control select-tag" name="customer_id" id="customerId" style="width: 100% !important;">
+                                    <option value="">select customer</option>
+                                    <?php foreach($customer_list as $value){?>
+                                    <option value="<?php echo $value->customer_id; ?>"><?php echo $value->customer_name;?></option>
+                                <?php }?>
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="dealer" style="display:none">
+                                <label>Select Dealer</label>
+                                <select class="form-control select-tag" name="dealer_id" id="dealerId" style="width: 100% !important;">
+                                    <option value="">select dealer</option>
+                                    <?php foreach($dealer_list as $value){?>
+                                    <option value="<?php echo $value->dealer_id; ?>"><?php echo $value->dealer_name;?></option>
+                                <?php }?>
+                                </select>
+                            </div>
+
+
+
+                            <!-- <div class="form-group">
                                 <label>Customer Name</label>
                                 <input id="customer-name" class="form-control" placeholder = "Type customer name" name="customer_name" type="text">
-                            </div>
+                            </div> -->
                             <label>Select Date</label>
                             <div class="row">
                                 <div class="form-group col-lg-6 col-md-6">
@@ -76,24 +108,46 @@
     <!-- /. ROW  -->
 
 <script>
+    $( "#salesMode" ).change(function() {
+      // alert( "Handler for .change() called."+this.value);
+      var val = $('#salesMode option:selected').val();
+      if(val == 1){
+        $( "#dealer" ).show( 500 );
+        $( "#customer" ).hide( 500 );
+        $( "#customerId" ).val("");
+      }else if (val == 2){
+        $( "#customer" ).show( 500 );
+        $( "#dealer" ).hide( 500 );
+        $( "#dealerId" ).val("");
+      }else {
+        $( "#customer" ).hide( 500 );
+        $( "#dealer" ).hide( 500 );
+        $( "#customerId" ).val("");
+        $( "#dealerId" ).val("");
+      }
+
+    });
+
     $(function(){
-      $("#customer-name").autocomplete({
-        source: "<?php echo base_url();?>sales/generate_customer_name/"// path to the get_birds method
-      });
+      // $("#customer-name").autocomplete({
+      //   source: "<?php echo base_url();?>sales/generate_customer_name/"// path to the get_birds method
+      // });
     });
 </script>
 
 <script>
         $( "#search" ).click(function() {
           // alert( "Handler for .click() called." );
-            var customerName=document.getElementById('customer-name').value;
+            var customerId=$('#customerId option:selected').val();
+            var dealerId=$('#dealerId option:selected').val();
             var fromDate=document.getElementById('datepicker').value;
             var toDate=document.getElementById('datepicker2').value;
+            // alert(customerId+"/"+dealerId);
             $.ajax({
                 url: '<?php echo base_url();?>sales/generate_individual_sales_statement',
                 type:'POST',
                 dataType: 'json',
-                data: {customer_name : customerName, from_date : fromDate, to_date : toDate},
+                data: {customer_id : customerId, dealer_id : dealerId, from_date : fromDate, to_date : toDate},
                 success: function(output){
                     $("#table-container").html(output);
                 } // End of success function of ajax form
