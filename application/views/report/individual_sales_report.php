@@ -18,6 +18,7 @@
 
                 <div class="row">
                     <div class="col-lg-6">
+                        <!-- <form method="post" action="<?php echo base_url()?>sales/generate_individual_sales_statement" target="_blank"> -->
                         <form method="post" action="<?php echo base_url()?>sales/individual_sales_pdf" target="_blank">
                             <div class="form-group">
                                 <label>Sales Mode</label>

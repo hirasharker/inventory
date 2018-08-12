@@ -690,19 +690,28 @@ class Sales extends CI_Controller {
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
 
+		$invoice_balance 					=	0;
+		$paid_amount 						=	0;
+
 		$search_result 	= 	array();
 
 		if($customer_id != ""){
 			$search_result['sales']			=	$this->sales_model->get_individual_sales_report_by_date_and_customer_id($customer_id,$from_date,$to_date);
 			$search_result['payments']		=	$this->sales_model->get_individual_money_receipt_by_date_and_customer_id($customer_id,$from_date,$to_date);
+			$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_customer_id($customer_id);
+			$paid_amount					=	$this->sales_model->get_paid_amount_by_customer_id($customer_id);
 		} elseif($dealer_id !=""){
 			$search_result['sales']			=	$this->sales_model->get_individual_sales_report_by_date_and_customer_name($dealer_id,$from_date,$to_date);
 			$search_result['payments']		=	$this->sales_model->get_individual_money_receipt_by_date_and_customer_name($dealer_id,$from_date,$to_date);
+			$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_customer_id($customer_id);
+			$paid_amount					=	$this->sales_model->get_paid_amount_by_customer_id($customer_id);
 		}
 
-		$output 						=	$this->load->view('report/individual_sales_table',$search_result,TRUE);
+		$search_result['balance']			=	$invoice_balance[0]->invoice_balance - $paid_amount->paid_amount;
 
-        $error_message = 'Its a dummy error '.$customer_name.$from_date.$to_date;
+		$output 							=	$this->load->view('report/individual_sales_table',$search_result,TRUE);
+
+        $error_message = 'Its a dummy error '.$customer_id.$from_date.$to_date;
         echo json_encode($output);
 
 	}
