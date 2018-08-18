@@ -50,10 +50,15 @@
                         <label>Price</label>
                         <div class="form-group input-group">
                             <span class="input-group-addon">&#x9f3;</span>
-                            <input type="text" class="form-control" name="item_price" required>
+                            <input type="number" min="0" class="form-control" name="item_price" required>
                             <span class="input-group-addon">.00</span>
                         </div>
 
+                        <label>Product Life</label>
+                        <div class="form-group input-group">
+                            <input type="number" class="form-control" name="product_life" value="0" min="0">
+                            <span class="input-group-addon">days</span>
+                        </div>
 
                         <button type="submit" class="btn btn-primary">Save</button>
                         <button type="reset" class="btn btn-default">Reset</button>
@@ -128,10 +133,15 @@
                         <label>Price</label>
                         <div class="form-group input-group">
                             <span class="input-group-addon">&#x9f3;</span>
-                            <input type="text" class="form-control" name="item_price" required value="<?php echo $item->item_price;?>">
+                            <input type="number" min="0" class="form-control" name="item_price" required value="<?php echo $item->item_price;?>">
                             <span class="input-group-addon">.00</span>
                         </div>
 
+                        <label>Product Life</label>
+                        <div class="form-group input-group">
+                            <input type="number" min="0" class="form-control" name="product_life" value="<?php echo $item->product_life;?>">
+                            <span class="input-group-addon">days</span>
+                        </div>
 
                         <button type="submit" class="btn btn-primary">Save</button>
                         <button type="reset" class="btn btn-default">Reset</button>

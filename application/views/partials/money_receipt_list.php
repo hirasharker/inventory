@@ -39,7 +39,7 @@
                                             <td><?php echo $i; ?></td>
                                             <td><?php echo $value->money_receipt_id;?></td>
                                             <td><?php echo $value->sales_id;?></td>
-                                            <td><?php echo $value->customer_name;?></td>
+                                            <td><?php if($value->customer_name!=NULL){echo $value->customer_name;}else{ echo $value->dealer_name;} ?></td>
                                             <td class="center"><?php echo $value->received_amount;?></td>
                                             <td><?php echo $value->money_receipt_date;?></td>
                                             <td class="center">

@@ -86,6 +86,7 @@ class Item extends CI_Controller {
 		$item_data['group_name']	=	$this->group_model->get_group_by_id($item_data['group_id'])->group_name;
 		$item_data['description']	=	$this->input->post('description','',TRUE);
 		$item_data['item_price']	=	$this->input->post('item_price','',TRUE);
+		$item_data['product_life']	=	$this->input->post('product_life','',TRUE);
 		$item_data['unit']			=	$this->input->post('unit','',TRUE);
 
 		$result						=	$this->item_model->add_item($item_data);
@@ -105,6 +106,7 @@ class Item extends CI_Controller {
 		$item_data['group_name']	=	$this->group_model->get_group_by_id($item_data['group_id'])->group_name;
 		$item_data['description']	=	$this->input->post('description','',TRUE);
 		$item_data['item_price']	=	$this->input->post('item_price','',TRUE);
+		$item_data['product_life']	=	$this->input->post('product_life','',TRUE);
 		$item_data['unit']			=	$this->input->post('unit','',TRUE);
 
 		$result						=	$this->item_model->update_item($item_data, $item_id);

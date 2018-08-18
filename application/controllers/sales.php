@@ -701,10 +701,10 @@ class Sales extends CI_Controller {
 			$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_customer_id($customer_id);
 			$paid_amount					=	$this->sales_model->get_paid_amount_by_customer_id($customer_id);
 		} elseif($dealer_id !=""){
-			$search_result['sales']			=	$this->sales_model->get_individual_sales_report_by_date_and_customer_name($dealer_id,$from_date,$to_date);
-			$search_result['payments']		=	$this->sales_model->get_individual_money_receipt_by_date_and_customer_name($dealer_id,$from_date,$to_date);
-			$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_customer_id($customer_id);
-			$paid_amount					=	$this->sales_model->get_paid_amount_by_customer_id($customer_id);
+			$search_result['sales']			=	$this->sales_model->get_individual_sales_report_by_date_and_dealer_id($dealer_id,$from_date,$to_date);
+			$search_result['payments']		=	$this->sales_model->get_individual_money_receipt_by_date_and_dealer_id($dealer_id,$from_date,$to_date);
+			$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_dealer_id($dealer_id);
+			$paid_amount					=	$this->sales_model->get_paid_amount_by_dealer_id($dealer_id);
 		}
 
 		$search_result['balance']			=	$invoice_balance[0]->invoice_balance - $paid_amount->paid_amount;

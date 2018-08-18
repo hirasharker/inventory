@@ -38,7 +38,7 @@
                             </div>
 
 
-                            <div class="form-group">
+                            <div class="form-group select-tag">
                                 <label>Select Item</label>
                                 <select class="form-control" id="item" name="item_id">
                                     <option value="0">select</option>

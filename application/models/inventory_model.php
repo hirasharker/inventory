@@ -7,10 +7,10 @@
 
 class Inventory_Model extends CI_Model {
 
-    public function get_sales_by_item_name_and_date($item_name,$from_date,$to_date){
+    public function get_sales_by_item_id_and_date($item_id,$from_date,$to_date){
         $this->db->select('tbl_sales_detail.*,tbl_customer.customer_name');
         $this->db->from('tbl_sales_detail');
-        $this->db->where('item_name',$item_name);
+        $this->db->where('item_id',$item_id);
         $this->db->where('DATE(sales_date) >=',$from_date);
         $this->db->where('DATE(sales_date) <=',$to_date);
         $this->db->join('tbl_customer','tbl_customer.customer_id = tbl_sales_detail.customer_id');
@@ -20,10 +20,10 @@ class Inventory_Model extends CI_Model {
         return $result;
     }
 
-    public function get_purchase_by_item_name_and_date($item_name,$from_date,$to_date){
+    public function get_purchase_by_item_id_and_date($item_id,$from_date,$to_date){
         $this->db->select('*');
         $this->db->from('tbl_purchase_detail');
-        $this->db->where('item_name',$item_name);
+        $this->db->where('item_id',$item_id);
         $this->db->where('DATE(purchase_date) >=',$from_date);
         $this->db->where('DATE(purchase_date) <=',$to_date);
         $this->db->order_by('tbl_purchase_detail.time_stamp','asc');
@@ -32,46 +32,46 @@ class Inventory_Model extends CI_Model {
         return $result;
     }
 
-    public function get_item_purchase_quantity_by_item_name_and_date($item_name,$to_date){
+    public function get_item_purchase_quantity_by_item_id_and_date($item_id,$to_date){
         $this->db->select('sum(quantity) as purchase_quantity, sum(quantity*purchase_price)/sum(quantity) as item_rate, sum(purchase_price*quantity) as stock_value ');
         $this->db->from('tbl_purchase_detail');
-        $this->db->where('item_name',$item_name);
+        $this->db->where('item_id',$item_id);
         $this->db->where('purchase_date <=',$to_date);
-        $this->db->group_by('item_name');
+        $this->db->group_by('item_id');
         $result_query=$this->db->get();
         $result=$result_query->row();
         return $result;
     }
     
-    public function get_opening_item_purchase_quantity_by_item_name_and_date($item_name,$from_date){
+    public function get_opening_item_purchase_quantity_by_item_id_and_date($item_id,$from_date){
         $this->db->select('sum(quantity) as purchase_quantity, sum(quantity*purchase_price)/sum(quantity) as item_rate, sum(purchase_price*quantity) as stock_value ');
         $this->db->from('tbl_purchase_detail');
-        $this->db->where('item_name',$item_name);
+        $this->db->where('item_id',$item_id);
         $this->db->where('purchase_date <',$from_date);
-        $this->db->group_by('item_name');
+        $this->db->group_by('item_id');
         $result_query=$this->db->get();
         $result=$result_query->row();
         return $result;
     }
 
-    public function get_opening_item_sales_quantity_by_item_name_and_date($item_name,$from_date){
+    public function get_opening_item_sales_quantity_by_item_id_and_date($item_id,$from_date){
         $this->db->select('sum(quantity) as sales_quantity');
         $this->db->from('tbl_sales_detail');
-        $this->db->where('item_name',$item_name);
+        $this->db->where('item_id',$item_id);
         $this->db->where('sales_date <',$from_date);
-        $this->db->group_by('item_name');
+        $this->db->group_by('item_id');
         $result_query=$this->db->get();
         $result=$result_query->row();
         return $result;
     }
 
 
-    public function get_item_sales_quantity_by_item_name_and_date($item_name,$to_date){
+    public function get_item_sales_quantity_by_item_id_and_date($item_id,$to_date){
         $this->db->select('sum(quantity) as sales_quantity');
         $this->db->from('tbl_sales_detail');
-        $this->db->where('item_name',$item_name);
+        $this->db->where('item_id',$item_id);
         $this->db->where('sales_date <=',$to_date);
-        $this->db->group_by('item_name');
+        $this->db->group_by('item_id');
         $result_query=$this->db->get();
         $result=$result_query->row();
         return $result;

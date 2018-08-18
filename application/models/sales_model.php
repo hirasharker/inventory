@@ -71,6 +71,24 @@ class Sales_Model extends CI_Model {
         return $result;
     }
 
+    public function get_individual_sales_report_by_date_and_dealer_id($dealer_id,$from_date,$to_date){
+        $this->db->select('tbl_sales.sales_id, tbl_sales.dealer_id, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
+            , tbl_sales_detail.item_name, tbl_sales_detail.quantity, tbl_sales.sales_date
+            , (tbl_sales_detail.sales_price - tbl_sales_detail.individual_discount)*(1-.01*tbl_sales.overall_discount) as item_rate
+            , tbl_money_receipt.received_amount,0, tbl_money_receipt.money_receipt_date'); 
+        $this->db->from('tbl_sales');
+        $this->db->join('tbl_sales_detail','tbl_sales_detail.dealer_id = tbl_sales.dealer_id','left');
+        $this->db->join('tbl_money_receipt','tbl_money_receipt.dealer_id = tbl_sales.dealer_id','left');
+        $this->db->where('tbl_sales.sales_date >=',$from_date);
+        $this->db->where('tbl_sales.sales_date <=',$to_date);
+        $this->db->where('tbl_sales.dealer_id',$dealer_id);
+        $this->db->order_by('tbl_sales.time_stamp','desc');
+        $this->db->order_by('tbl_sales.dealer_id','desc');
+        $result_query=$this->db->get();
+        $result=$result_query->result();
+        return $result;
+    }
+
     public function get_group_sales_report_by_date($from_date,$to_date){
         $this->db->select('tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
             , tbl_sales_detail.item_name, tbl_sales_detail.quantity, tbl_sales.sales_date
@@ -249,6 +267,18 @@ class Sales_Model extends CI_Model {
         $this->db->where('money_receipt_date >=',$from_date);
         $this->db->where('money_receipt_date <=',$to_date);
         $this->db->where('customer_id',$customer_id);
+        $this->db->order_by('time_stamp','desc');
+        $result_query=$this->db->get();
+        $result=$result_query->result();
+        return $result;
+    }
+
+    public function get_individual_money_receipt_by_date_and_dealer_id($dealer_id,$from_date,$to_date){
+        $this->db->select('*');
+        $this->db->from('tbl_money_receipt');
+        $this->db->where('money_receipt_date >=',$from_date);
+        $this->db->where('money_receipt_date <=',$to_date);
+        $this->db->where('dealer_id',$dealer_id);
         $this->db->order_by('time_stamp','desc');
         $result_query=$this->db->get();
         $result=$result_query->result();

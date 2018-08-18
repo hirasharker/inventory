@@ -78,15 +78,22 @@ class Inventory extends CI_Controller {
 	}
 
 	public function generate_individual_inventory_detail(){
-		$item_name 		=	$this->input->post('item_name',TRUE);
+		$item_id 		=	$this->input->post('item_id',TRUE);
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
 
+		$purchase_quantity 	=	0;
+		$purchase_rate  	=	0;
+		$stock_value 		=	0;
+
+		$sales_quantity 	=	0;
+		$sales_price		=	0;
+
 		$search_result 	= 	array();
 
-		$opening_purchase_quantity 					=	$this->inventory_model->get_opening_item_purchase_quantity_by_item_name_and_date($item_name,$from_date);
+		$opening_purchase_quantity 					=	$this->inventory_model->get_opening_item_purchase_quantity_by_item_id_and_date($item_id,$from_date);
 
-		$opening_sales_quantity 					=	$this->inventory_model->get_opening_item_sales_quantity_by_item_name_and_date($item_name,$from_date);
+		$opening_sales_quantity 					=	$this->inventory_model->get_opening_item_sales_quantity_by_item_id_and_date($item_id,$from_date);
 
 		if($opening_purchase_quantity){
 			$search_result['opening_purchase_quantity']	=	$opening_purchase_quantity->purchase_quantity;
@@ -101,23 +108,35 @@ class Inventory extends CI_Controller {
 		}
 
 
-		$search_result['sales_data'] 	=	$this->inventory_model->get_sales_by_item_name_and_date($item_name,$from_date,$to_date);
+		$search_result['sales_data'] 	=	$this->inventory_model->get_sales_by_item_id_and_date($item_id,$from_date,$to_date);
 
-		$search_result['purchase_data'] =	$this->inventory_model->get_purchase_by_item_name_and_date($item_name,$from_date,$to_date);
+		$search_result['purchase_data'] =	$this->inventory_model->get_purchase_by_item_id_and_date($item_id,$from_date,$to_date);
 
-		$purchase_qty_and_price			=	$this->inventory_model->get_item_purchase_quantity_by_item_name_and_date($item_name,$to_date);
+		$sales_qty 						=	$this->inventory_model->get_item_sales_quantity_by_item_id_and_date($item_id,$to_date);
 
-		$sales_qty 						=	$this->inventory_model->get_item_sales_quantity_by_item_name_and_date($item_name,$to_date);
+		$purchase_qty_and_price			=	$this->inventory_model->get_item_purchase_quantity_by_item_id_and_date($item_id,$to_date);
 
-		$search_result['stock'] 		=	$purchase_qty_and_price->purchase_quantity - $sales_qty->sales_quantity;
+		$item_detail 					=	$this->item_model->get_item_by_id($item_id);
 
-		$search_result['item_rate']		=	$purchase_qty_and_price->item_rate;
+		if($purchase_qty_and_price != NULL){
+			$purchase_quantity 			=	$purchase_qty_and_price->purchase_quantity;
+			$purchase_rate 				=	$purchase_qty_and_price->item_rate;
+			$stock_value 				=	$purchase_qty_and_price->stock_value;
+		}
 
-		$search_result['stock_value']	=	$purchase_qty_and_price->stock_value;
+		// echo "<pre>";print_r($purchase_qty_and_price); echo "</pre>";exit();
+
+		$search_result['stock'] 		=	$item_detail->quantity;
+
+		$search_result['item_rate']		=	$purchase_rate;
+
+		$search_result['stock_value']	=	$stock_value;
+
+		// echo "<pre>";print_r($search_result); echo "</pre>";
 
 		$output 						=	$this->load->view('report/individual_inventory_table',$search_result,TRUE);
 
-        $error_message = 'Its a dummy error '.$item_name.$from_date.$to_date;
+        $error_message = 'Its a dummy error '.$item_id.$from_date.$to_date;
         echo json_encode($output);
 
 	}
@@ -226,92 +245,4 @@ class Inventory extends CI_Controller {
     	$this->pdf->load_view('report/group_inventory_pdf',$search_result);
 	}
 
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public function add_item()
-	{
-		$item_data					=	array();
-		$item_data['user_id']		=	$this->session->userdata('user_id');
-		$item_data['user_name']		=	$this->session->userdata('user_name');
-		$item_data['item_name']		=	$this->input->post('item_name','',TRUE);
-		$item_data['group_id']		=	$this->input->post('group_id','',TRUE);
-		$item_data['group_name']	=	$this->group_model->get_group_by_id($item_data['group_id'])->group_name;
-		$item_data['description']	=	$this->input->post('description','',TRUE);
-		$item_data['unit']			=	$this->input->post('unit','',TRUE);
-
-		$result						=	$this->item_model->add_item($item_data);
-
-		redirect('item/view_items','refresh');
-	}
-
-	public function update_item($item_id)
-	{
-		$item_data					=	array();
-		$item_data['user_id']		=	$this->session->userdata('user_id');
-		$item_data['user_name']		=	$this->session->userdata('user_name');
-		$item_data['item_name']		=	$this->input->post('item_name','',TRUE);
-		$item_data['group_id']		=	$this->input->post('group_id','',TRUE);
-		$item_data['group_name']	=	$this->group_model->get_group_by_id($item_data['group_id'])->group_name;
-		$item_data['description']	=	$this->input->post('description','',TRUE);
-		$item_data['unit']			=	$this->input->post('unit','',TRUE);
-
-		$result						=	$this->item_model->update_item($item_data, $item_id);
-
-		redirect('item/view_items','refresh');
-	}
-	public function delete_item($item_id)
-	{
-
-		$result			=	$this->purchase_model->get_purchase_detail_by_item_id($item_id);
-
-		if($result!=NULL){
-			$sdata	=	array();
-			$sdata['deletion_error']	= 'Sorry! can not delete '.$result[0]->item_name.'! you already have purchase invoices associated with '.$result[0]->item_name;
-			$this->session->set_userdata($sdata);
-			redirect('item/view_items','refresh');
-		}else{
-			$this->item_model->delete_item($item_id);
-		}
-
-		redirect('item/view_items','refresh');
-	}
 }
