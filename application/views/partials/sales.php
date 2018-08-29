@@ -251,6 +251,7 @@
             $(this).parent('div').remove(); //Remove field html
             if(count == 0){
               $('#itemHeader').remove();
+              $('#itemSummary').remove();
             }
 
             //-----AJAX FOR ADJUSTING SUBTOTAL
