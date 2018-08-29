@@ -296,6 +296,29 @@ class Sales extends CI_Controller {
 		die();
 	}
 
+	public function ajax_get_sales_total(){
+		$price 						=	$this->input->post('sales_price');
+
+		$qty 						=	$this->input->post('quantity');
+
+		$discount 					=	$this->input->post('discount');
+
+		$count 						=	count($price);
+
+		$sub_total 					=	0;
+
+		for ($i=0; $i < $count; $i++) { 
+			$sub_total				+=	($qty[$i] * $price[$i]);
+		}
+
+		$sub_total				=	$sub_total - ($sub_total * $discount * .01);
+		
+		echo json_encode($sub_total);
+		// a die here helps ensure a clean ajax call
+		die();
+	}
+
+
 	//---------------------CUSTOMER SECTION STARTS HERE
 	public function customer($customer_id = 0)
 	{

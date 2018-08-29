@@ -17,12 +17,14 @@
     $payable_permission             =   array();
     $customer_permission            =   array();
     $dealer_permission              =   array();
+    $do_permission                  =   array();
     $sales_invoice_permission       =   array();
     $money_receipt_permission       =   array();
     $receivable_permission          =   array();
     $sales_report_permission        =   array();
     $backup_permission              =   array(); 
     $warehouse_slot_permission      =   array();
+    $bank_permission                =   array();
     foreach ($user_permission as $value) {
         if($value->module_id==16){
             $warehouse_permission = $value;
@@ -69,6 +71,11 @@
         if($value->module_id==10){
             $money_receipt_permission = $value;
         }
+
+        if($value->module_id==20){
+            $bank_permission = $value;
+        }
+
         if($value->module_id==11){
             $receivable_permission = $value;
         }
@@ -80,6 +87,10 @@
         }
         if($value->module_id==13){
             $backup_permission = $value;
+        }
+
+        if($value->module_id==21){
+            $do_permission = $value;
         }
 
     }
@@ -294,7 +305,7 @@
                     <?php }?>
                 </ul>
             </li>
-            <li class="<?php if ($dev_key == "money_receipt" || $dev_key == "customer" || $dev_key == "dealer"|| $dev_key == "sales" || $dev_key == "receivable" || $dev_key == "sales_report") {echo 'active';} ?>">
+            <li class="<?php if ($dev_key == "money_receipt" || $dev_key == "customer" || $dev_key == "dealer"|| $dev_key == "bank"|| $dev_key == "sales_order" || $dev_key == "sales" || $dev_key == "receivable" || $dev_key == "sales_report") {echo 'active';} ?>">
                 <a href="<?php echo base_url();?>"><i class="fa fa-shopping-cart icon-flipped"></i></i> Sales<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level <?php if ($dev_key == "customer" || $dev_key == "sales") {echo 'collapse in';} ?>">
 
@@ -330,7 +341,38 @@
                             <?php }?>
                         </ul>
                     </li>
-                   
+
+                    <li class="<?php if ($dev_key == "bank") {echo 'active';} ?>">
+                        <a href="<?php echo base_url();?>">Bank<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level <?php if ($dev_key == "bank") {echo 'collapse in';} ?>">
+                            <?php if($bank_permission->permission_add==1){?>
+                            <li class="<?php if ($selected == "add_bank") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>bank/">Add Bank</a>
+                            </li>
+                            <?php }?>
+                            <?php if($bank_permission->permission_view==1){?>
+                            <li class="<?php if ($selected == "all_banks") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>bank/view_banks">All Bank</a>
+                            </li>
+                            <?php }?>
+                        </ul>
+                    </li>
+
+                    <li class="<?php if ($dev_key == "sales_order") {echo 'active';} ?>">
+                        <a href="<?php echo base_url();?>">Sales Order<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level <?php if ($dev_key == "sales_order") {echo 'collapse in';} ?>">
+                            <?php if($do_permission->permission_add==1){?>
+                            <li class="<?php if ($selected == "add_sales_order") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>sales_order/">Add Sales Order</a>
+                            </li>
+                            <?php }?>
+                            <?php if($do_permission->permission_view==1){?>
+                            <li class="<?php if ($selected == "all_sales_orders") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>sales_order/view_sales_orders">All Sales Orders</a>
+                            </li>
+                            <?php }?>
+                        </ul>
+                    </li>
 
                     <?php if($sales_invoice_permission->permission_add==1){?>
                     <li class="<?php if ($selected == "add_sales") {echo 'active-menu';} ?>">
@@ -363,6 +405,7 @@
 
 
                     
+
                     <li class="<?php if ($dev_key == "money_receipt") {echo 'active';} ?>">
                         <a href="<?php echo base_url();?>">Money Receipt<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level <?php if ($dev_key == "money_receipt") {echo 'collapse in';} ?>">

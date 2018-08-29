@@ -15,7 +15,7 @@
 </head>
 <body>
     <div id="wrapper">
-      <h2>Sales Invoice</h2>
+      <h2>Sales Order</h2>
       <div id="header">
         <div class="left">
           <table border="0">
@@ -53,12 +53,12 @@
         <div class="right">
           <table border="0">
             <tr>
-              <td >Date: </td>
-              <td style="padding-left: 10px;"><?php echo $sales->sales_date;?></td>
+              <td >Order Date: </td>
+              <td style="padding-left: 10px;"><?php echo $sales_order->sales_order_date;?></td>
             </tr>
             <tr>
-              <td>Invoice No:</td>
-              <td style="padding-left: 10px;">Sl#<?php echo $sales->sales_id;?></td>
+              <td>Order No:</td>
+              <td style="padding-left: 10px;">Sl#<?php echo $sales_order->sales_order_id;?></td>
             </tr>
           </table>
         </div>
@@ -74,35 +74,35 @@
             <th>Disc./Unit <br/>(in BDT)</th>
             <th>Amount <br/>(in BDT)</th>
           </tr>
-        <?php $i=1; $discount=0; foreach($sales_detail as $value){?>
+        <?php $i=1; $discount=0; foreach($sales_order_detail as $value){?>
           <tr>
             <td><?php echo $i;?></td>
             <td><?php echo $value->part_no." - ".$value->item_name;?></td>
             <td><?php echo $value->quantity;?></td>
-            <td><?php echo $value->sales_price;?></td>
+            <td><?php echo $value->sales_order_price;?></td>
             <td>Pcs</td>
             <td><?php echo $value->individual_discount;?></td>
-            <td><?php echo ($value->sales_price*$value->quantity)-$value->individual_discount;?></td>
+            <td><?php echo ($value->sales_order_price*$value->quantity)-$value->individual_discount;?></td>
           </tr>
         <?php $i++;  $discount += $value->individual_discount;}?>
           
           <tr>
             <td colspan="2" style="text-align: right;"><b>Sub Total:</b></td>
-            <td style="text-align: right;"><b><?php echo $sales->total_quantity;?> pcs</b></td>
+            <td style="text-align: right;"><b><?php echo $sales_order->total_quantity;?> pcs</b></td>
             <td colspan="2" style="text-align: right;"><b>Dis.Amt.:</b></td>
             <td style="text-align: right;"><b><?php echo $discount;?></b></td>
-            <td><b><?php echo $sales->sub_total;?></b></td>
+            <td><b><?php echo $sales_order->sub_total;?></b></td>
           </tr>
           <tr>
             <td style="border-right: none"></td>
             <td style="text-align: right; width: 39.88%; border-left: none;"><b>Add &amp; Total:</b></td>
-            <td  colspan="4" style="text-align: right; width: 42.3%">Sales Discount  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $sales->overall_discount;?>%</td>
-            <td  style="text-align: right;"><?php echo $sales->sub_total*$sales->overall_discount*.01;?></td>
+            <td  colspan="4" style="text-align: right; width: 42.3%">Sales Discount  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $sales_order->overall_discount;?>%</td>
+            <td  style="text-align: right;"><?php echo $sales_order->sub_total*$sales->overall_discount*.01;?></td>
           </tr>
           <tr>
             <td style="border-right: none"></td>
-            <td style="text-align: right; width: 39.88%; border-left: none; border-right:none;"><b>Invoice Total:</b></td>
-            <td  colspan="5" style="text-align: right; width: 53.24%; border-left: none;"><b><?php echo $sales->total_price;?></b></td>
+            <td style="text-align: right; width: 39.88%; border-left: none; border-right:none;"><b>Order Total:</b></td>
+            <td  colspan="5" style="text-align: right; width: 53.24%; border-left: none;"><b><?php echo $sales_order->total_price;?></b></td>
           </tr>
         </table>
       </div>
@@ -116,9 +116,9 @@
           </tr>
           <tr>
           <?php if(isset($customer)){?>
-            <td colspan="2" style="width : 70%; padding-bottom: .4in; padding-top: .2in;"><b>For&nbsp;<?php echo $sales->customer_name;?></b></td>
+            <td colspan="2" style="width : 70%; padding-bottom: .4in; padding-top: .2in;"><b>For&nbsp;<?php echo $sales_order->customer_name;?></b></td>
           <?php } elseif (isset($dealer)) {?>
-            <td colspan="2" style="width : 70%; padding-bottom: .4in; padding-top: .2in;"><b>For&nbsp;<?php echo $sales->dealer_name;?></b></td>
+            <td colspan="2" style="width : 70%; padding-bottom: .4in; padding-top: .2in;"><b>For&nbsp;<?php echo $sales_order->dealer_name;?></b></td>
           <?php }?>
             <td style="width : 30%; text-align: right;"><b>for <?php echo $company_detail->company_name;?></b></td>
           </tr>
