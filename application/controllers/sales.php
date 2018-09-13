@@ -7,6 +7,7 @@ class Sales extends CI_Controller {
 			redirect('login','refresh');
 		}
 		$this->load->model('sales_model','sales_model',TRUE);
+		$this->load->model('sales_order_model','sales_order_model',TRUE);
 		$this->load->model('dealer_model','dealer_model',TRUE);
 		$this->load->model('item_model','item_model',TRUE);
 		$this->load->model('stock_model','stock_model',TRUE);
@@ -41,7 +42,7 @@ class Sales extends CI_Controller {
 		$data['page_title']			=	"Inventory Management";
 
 		$nav_data					=	array();
-		$nav_data['dev_key']		=	"sales";
+		$nav_data['dev_key']		=	"sales_invoice";
 		$nav_data['selected']		=	"add_sales";
 		$nav_data['company_name']   =   $this->company_model->get_company_by_id(1)->company_name;
 		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
@@ -49,13 +50,15 @@ class Sales extends CI_Controller {
 		$sales_data					=	array();
 		
 		$sales_data['warehouse_list']	=	$this->warehouse_model->get_all_warehouses();
-		$sales_data['customer_list']=	$this->sales_model->get_all_customers();
-		$sales_data['dealer_list']	=	$this->dealer_model->get_all_dealers();
+		$sales_data['customer_list']	=	$this->sales_model->get_all_customers();
+		$sales_data['dealer_list']		=	$this->dealer_model->get_all_dealers();
+		$sales_data['sales_order_list']	=	$this->sales_order_model->get_all_sales_orders();
 
 		if($sales_id != 0){
 			$sales_data['sales']		=	$this->sales_model->get_sales_by_id($sales_id);
 			$sales_data['sales_detail']	=	$this->sales_model->get_sales_details_by_id($sales_id , $sales_data['sales']->warehouse_id);
 			$sales_data['item_list']	=	$this->stock_model->get_item_by_warehouse_id($sales_data['sales']->warehouse_id);
+			$sales_data['customer_type']	=	$sales_data['sales']->customer_type;
 		}else{
 			$sales_data['sales']		=	NULL;
 			$sales_data['sales_detail']	=	NULL;
@@ -76,7 +79,7 @@ class Sales extends CI_Controller {
 	{
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
-		$nav_data['dev_key']		=	"sales";
+		$nav_data['dev_key']		=	"sales_invoice";
 		$nav_data['selected']		=	"all_sales";
 		$nav_data['company_name']   =   $this->company_model->get_company_by_id(1)->company_name;
 		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
@@ -116,11 +119,21 @@ class Sales extends CI_Controller {
 		$sales_data						=	array();
 		$sales_data['user_id']			=	$this->session->userdata('user_id');
 		$sales_data['user_name']		=	$this->session->userdata('user_name');
+
+		$sales_data['customer_type']	=	$this->input->post('customer_type','',TRUE);
+
+		$sales_data['sales_date']		=	$this->input->post('sales_date','',TRUE);
+
+		$sales_against_order 			=	$this->input->post('sales_against_order','',TRUE);
+
+		if($sales_against_order == 1){
+			$sales_data['sales_order_id']=	$this->input->post('sales_order_id','',TRUE);
+			$this->add_sales_against_sales_order($sales_data['sales_order_id'], $sales_data['sales_date']);
+			redirect('sales','refresh');
+		}
 		
 		$sales_data['warehouse_id']		=	$this->input->post('warehouse_id','',TRUE);
 		$sales_data['warehouse_name']	=	$this->warehouse_model->get_warehouse_by_id($sales_data['warehouse_id'])->warehouse_name;
-
-		$sales_data['sales_mode']		=	$this->input->post('sales_mode','',TRUE);
 		
 		$sales_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
 		if($sales_data['customer_id']!= NULL){
@@ -132,7 +145,7 @@ class Sales extends CI_Controller {
 			$sales_data['dealer_name']		=	$this->dealer_model->get_dealer_by_id($sales_data['dealer_id'])->dealer_name;
 		}
 		
-		$sales_data['sales_date']		=	$this->input->post('sales_date','',TRUE);
+		
 		$sales_data['overall_discount']	=	$this->input->post('sales_discount','',TRUE);
 
 		$error_count					=	$this->input->post('count','',TRUE);
@@ -183,6 +196,76 @@ class Sales extends CI_Controller {
 		}else{
 			$this->index(0,$error_count);
 		}
+	}
+
+	public function add_sales_against_sales_order($sales_order_id, $sales_date){
+		$session_data 					=	array();
+		$sales_data						=	array();
+		$sales_data['user_id']			=	$this->session->userdata('user_id');
+		$sales_data['user_name']		=	$this->session->userdata('user_name');
+
+		$sales_data['sales_order_id']	=	$sales_order_id;
+
+		$sales_order 					=	$this->sales_order_model->get_sales_order_by_id($sales_order_id);
+		$sales_order_detail				=	$this->sales_order_model->get_sales_order_details_by_id($sales_order_id, $sales_order->warehouse_id);
+
+		$sales_data['customer_type']	=	$sales_order->customer_type;
+		$sales_data['warehouse_id']		=	$sales_order->warehouse_id;
+		$sales_data['warehouse_name']	=	$sales_order->warehouse_name;
+		
+		$sales_data['customer_id']		=	$sales_order->customer_id;
+		if($sales_data['customer_id']!= 0){
+			$sales_data['customer_name']	=	$this->sales_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
+		}
+		
+		$sales_data['dealer_id']		=	$sales_order->dealer_id;
+		if($sales_data['dealer_id']!= 0){
+			$sales_data['dealer_name']		=	$this->dealer_model->get_dealer_by_id($sales_data['dealer_id'])->dealer_name;
+		}
+		
+		$sales_data['sales_date']		=	$sales_date;
+		$sales_data['overall_discount']	=	$sales_order->overall_discount;
+
+		
+		$i 								=	0;
+
+		$result 						=	0;
+
+		foreach($sales_order_detail as $value) {
+			$stock						=	$this->item_model->get_item_by_id($value->item_id)->quantity;
+        	if($value->quantity > $stock){
+        		$session_data['error_message']	=	'You only have '.$stock.' '.$value->item_name.' left in stock!!';
+
+        		$this->session->set_userdata($session_data);
+        		redirect('sales','refresh');
+        	}
+
+        	$sales_detail_data				=	array();
+
+        	if($i==0){
+        		$result										=	$this->sales_model->add_sales($sales_data);
+        	}
+        	$sales_detail_data['warehouse_id']			=	$sales_data['warehouse_id'];
+			$sales_detail_data['dealer_id']				=	$sales_data['dealer_id'];
+			$sales_detail_data['customer_id']			=	$sales_data['customer_id'];
+			$sales_detail_data['sales_id']				=	$result;
+			$sales_detail_data['item_id']				=	$value->item_id;
+			$sales_detail_data['item_name']				=	$value->item_name;
+			$sales_detail_data['sales_price']			=	$value->sales_order_price;
+			$sales_detail_data['individual_discount']	=	$value->individual_discount;
+			$sales_detail_data['overall_discount']		=	$sales_data['overall_discount'];
+			$sales_detail_data['sales_date']			=	$sales_date;
+			$sales_detail_data['quantity']				=	$value->quantity;
+			$detail_result								=	$this->sales_model->add_sales_detail($sales_detail_data);
+
+			$this->item_model->subtract_item_quantity($value->item_id , $value->quantity);
+
+			$this->stock_model->subtract_stock_quantity($value->item_id, $sales_detail_data['warehouse_id'], $value->quantity);
+
+			$i++;
+		} //foreach
+
+		redirect('sales/view_sales','refresh');
 	}
 
 	public function update_sales($sales_id)
@@ -311,11 +394,18 @@ class Sales extends CI_Controller {
 			$sub_total				+=	($qty[$i] * $price[$i]);
 		}
 
-		$sub_total				=	$sub_total - ($sub_total * $discount * .01);
+		$total_price				=	$sub_total - ($sub_total * $discount * .01);
 		
-		echo json_encode($sub_total);
+		
+		$result_summary 		=	array();
+
+		$result_summary['total_price']	=	$total_price;
+
+		$result_summary['sub_total']	=	$sub_total;
+
+		$result_summary['discount']		=	($sub_total * $discount * .01);
+		echo json_encode($result_summary);
 		// a die here helps ensure a clean ajax call
-		die();
 	}
 
 

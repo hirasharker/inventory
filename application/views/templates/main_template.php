@@ -128,6 +128,9 @@
 
     <script>
             $(document).ready(function () {
+                if(performance.navigation.type == 2){
+                   location.reload(true);
+                }
                 $('.select-tag').select2();
                  $('#datatable-buttons1').DataTable( {
                         "bProcessing"   :   true,

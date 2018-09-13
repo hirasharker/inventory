@@ -9,7 +9,7 @@ class Sales_Model extends CI_Model {
 
 
     public function get_all_sales(){
-        $this->db->select('tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
+        $this->db->select('tbl_sales.sales_id, tbl_sales.sales_order_id,  tbl_sales.customer_type, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
             , tbl_sales.sales_date, GROUP_CONCAT(tbl_sales_detail.item_name SEPARATOR ",") as item_name, (sum(tbl_sales_detail.sales_price * tbl_sales_detail.quantity-tbl_sales_detail.individual_discount))*(1-.01*tbl_sales.overall_discount) as total_price'); 
         $this->db->from('tbl_sales');
         $this->db->join('tbl_sales_detail','tbl_sales_detail.sales_id = tbl_sales.sales_id');

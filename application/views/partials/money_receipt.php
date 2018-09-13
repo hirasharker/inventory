@@ -16,15 +16,31 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-5">
-                        <form role="form" method="post" action="<?php echo base_url();?>sales/add_money_receipt">
-                            <label>Invoice No</label>
+                        <form role="form" method="post" action="<?php echo base_url();?>money_receipt/add_money_receipt">
+                            
 
-                            <div class="form-group input-group">
-                             
-                                <span class="input-group-addon">&#x9f3;</span>
-                                <input type="text" class="form-control" id="sales_id" name="sales_id" value="<?php echo set_value('sales_id'); ?>">
-                                <span class="input-group-addon">.00</span>
+                            <div class="form-group">
+                                <label>Type of Payment</label>
+                                <select class="form-control" name="payment_mode" id="paymentMode">
+                                    <option value="2">Select Mode</option>
+                                    <option value="0">Advance Against Sales Order</option>
+                                    <option value="1">Payment Against Sales Invoice</option>
+                                </select>
                             </div>
+
+
+
+                            <div class="form-group sales-order-id" style="display:none;">
+                                <label>Sales Order No</label>
+                                <input type="text" class="form-control" id="salesOrderId" name="sales_order_id" value="<?php echo set_value('sales_order_id'); ?>">
+                            </div>
+
+                            <div class="form-group sales-id" style="display:none;">
+                                <label>Invoice No</label>
+                                <input type="text" class="form-control" id="salesId" name="sales_id" value="<?php echo set_value('sales_id'); ?>">
+                            </div>
+
+                            
 
                             <label>Received Amount</label>
 
@@ -65,6 +81,27 @@
     </div>
     <!-- /.col-lg-12 -->
 </div>
+
+<script type="text/javascript">
+    $( "#paymentMode" ).change(function() {
+          // alert( "Handler for .change() called."+this.value);
+          var val = $('#paymentMode option:selected').val();
+          if(val == 0){
+            $( ".sales-order-id" ).show( 500 );
+            $( ".sales-id" ).hide( 500 );
+            $( "#salesId" ).val("");
+          }else if (val == 1){
+            $( ".sales-id" ).show( 500 );
+            $( ".sales-order-id" ).hide( 500 );
+            $( "#salesOrderId" ).val("");
+          }else if(val== 2){
+            $( ".sales-id" ).hide( 500 );
+            $( ".sales-order-id" ).hide( 500 );
+            $( "#salesId" ).val("");
+            $( "#salesOrderId" ).val("");
+          }
+    });
+</script>
 <?php }else{?>
 <div class="row">
     <div class="col-md-12">
@@ -83,7 +120,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-5">
-                        <form role="form" method="post" action="<?php echo base_url();?>sales/update_money_receipt/<?php echo $money_receipt->money_receipt_id?>">
+                        <form role="form" method="post" action="<?php echo base_url();?>money_receipt/update_money_receipt/<?php echo $money_receipt->money_receipt_id?>">
                             <label>Invoice No</label>
 
                             <div class="form-group input-group">
@@ -136,8 +173,13 @@
 <?php }?>
 <script>
     $(function(){
-      $("#sales_id").autocomplete({
+      $("#salesId").autocomplete({
         source: "<?php echo base_url();?>sales/generate_sales_id/"// path to the get_birds method
       });
+
+      $("#salesOrderId").autocomplete({
+        source: "<?php echo base_url();?>sales_order/generate_sales_order_id/"// path to the get_birds method
+      });
+
     });
 </script>

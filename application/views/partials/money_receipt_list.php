@@ -44,12 +44,12 @@
                                             <td><?php echo $value->money_receipt_date;?></td>
                                             <td class="center">
                                             <?php if($permission->permission_edit==1){?>
-                                            <a href="<?php echo base_url();?>sales/money_receipt/<?php echo $value->money_receipt_id;?>"> edit </a> | 
+                                            <a href="<?php echo base_url();?>money_receipt/<?php echo $value->money_receipt_id;?>"> edit </a> | 
                                             <?php }else{?>
                                             <label style="color:#aea4a4; font-weight:normal;">edit</label>|
                                             <?php }?>
                                             <?php if($permission->permission_delete==1){?>
-                                            <a data-href="<?php echo base_url();?>sales/delete_money_receipt/<?php echo $value->money_receipt_id;?>" data-toggle="modal" data-target="#confirm-delete"> delete </a>
+                                            <a data-href="<?php echo base_url();?>money_receipt/delete_money_receipt/<?php echo $value->money_receipt_id;?>" data-toggle="modal" data-target="#confirm-delete"> delete </a>
                                             <?php }else{?>
                                             <label style="color:#aea4a4; font-weight:normal;">delete</label>
                                             <?php }?>

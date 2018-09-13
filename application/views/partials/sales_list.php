@@ -46,7 +46,11 @@
                                             <td><?php echo $value->sales_date;?></td>
                                             <td class="center">
                                             <?php if($permission->permission_edit==1){?>
-                                            <a href="<?php echo base_url();?>sales/index/<?php echo $value->sales_id;?>"> edit </a> | 
+                                                <?php if($value->sales_order_id == ''){?>
+                                                    <a href="<?php echo base_url();?>sales/index/<?php echo $value->sales_id;?>"> edit </a> | 
+                                                <?php } else {?>
+                                                    <a href="<?php echo base_url();?>sales_order/index/<?php echo $value->sales_order_id;?>"> edit </a> | 
+                                                <?php } //if($value->customer_type == 4) ends ?>
                                             <?php }else{?>
                                             <label style="color:#aea4a4; font-weight:normal;">edit</label>|
                                             <?php }?>

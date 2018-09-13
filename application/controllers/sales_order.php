@@ -77,7 +77,7 @@ class Sales_Order extends CI_Controller {
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 		$nav_data['dev_key']		=	"sales_order";
-		$nav_data['selected']		=	"all_sales_order";
+		$nav_data['selected']		=	"all_sales_orders";
 		$nav_data['company_name']   =   $this->company_model->get_company_by_id(1)->company_name;
 		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
@@ -98,6 +98,7 @@ class Sales_Order extends CI_Controller {
 	      $this->sales_order_model->get_sales_order_like_id($sales_order_id);
 	    }
 	}
+	
 
 	public function ajax_count_item(){
 		$count						=	$this->input->post('count',TRUE);
@@ -111,6 +112,27 @@ class Sales_Order extends CI_Controller {
         echo json_encode($data['error_content']);
 	}
 
+	public function ajax_get_sales_order_by_id(){
+		$sales_order_id = $this->input->post('sales_order_id');
+		$sales_order 	=	$this->sales_order_model->get_sales_order_by_id($sales_order_id);
+
+		echo json_encode($sales_order);
+		// a die here helps ensure a clean ajax call
+		die();
+	}
+
+	public function ajax_get_sales_order_detail_by_id(){
+		$sales_order_id = 	$this->input->post('sales_order_id');
+		$sales_order 	=	$this->sales_order_model->get_sales_order_by_id($sales_order_id);
+		$warehouse_id 	=	$sales_order->warehouse_id;
+
+		$sales_order_detail 		=	$this->sales_order_model->get_sales_order_details_by_id($sales_order_id,$warehouse_id);
+
+		echo json_encode($sales_order_detail);
+		// a die here helps ensure a clean ajax call
+		die();
+	}
+
 	public function add_sales_order()
 	{
 		$sales_order_data						=	array();
@@ -120,7 +142,7 @@ class Sales_Order extends CI_Controller {
 		$sales_order_data['warehouse_id']		=	$this->input->post('warehouse_id','',TRUE);
 		$sales_order_data['warehouse_name']		=	$this->warehouse_model->get_warehouse_by_id($sales_order_data['warehouse_id'])->warehouse_name;
 
-		$sales_order_data['sales_mode']			=	$this->input->post('sales_mode','',TRUE);
+		$sales_order_data['customer_type']			=	$this->input->post('customer_type','',TRUE);
 		
 		$sales_order_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
 		if($sales_order_data['customer_id']	!= NULL){
@@ -260,7 +282,7 @@ class Sales_Order extends CI_Controller {
 				$this->stock_model->subtract_stock_quantity($sales_order_detail_data['item_id'], $sales_order_data['warehouse_id'], $sales_order_detail_data['quantity']);
 			}
 
-			redirect('sales_order/view_sales_order','refresh');
+			redirect('sales_order/view_sales_orders','refresh');
 		}else{
 			$this->index($sales_order_id,$error_count);
 		}
@@ -312,9 +334,17 @@ class Sales_Order extends CI_Controller {
 			$sub_total				+=	($qty[$i] * $price[$i]);
 		}
 
-		$sub_total				=	$sub_total - ($sub_total * $discount * .01);
+		$total_price				=	$sub_total - ($sub_total * $discount * .01);
 		
-		echo json_encode($sub_total);
+		
+		$result_summary 		=	array();
+
+		$result_summary['total_price']	=	$total_price;
+
+		$result_summary['sub_total']	=	$sub_total;
+
+		$result_summary['discount']		=	($sub_total * $discount * .01);
+		echo json_encode($result_summary);
 		// a die here helps ensure a clean ajax call
 		die();
 	}

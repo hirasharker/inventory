@@ -25,6 +25,7 @@
     $backup_permission              =   array(); 
     $warehouse_slot_permission      =   array();
     $bank_permission                =   array();
+    $warranty_claim_approval_1      =   array();
     foreach ($user_permission as $value) {
         if($value->module_id==16){
             $warehouse_permission = $value;
@@ -65,7 +66,7 @@
             $sales_invoice_permission = $value;
         }
         if($value->module_id==17){
-            $sales_return_permission = $value;
+            $warranty_claim_permission = $value;
         }
 
         if($value->module_id==10){
@@ -91,6 +92,15 @@
 
         if($value->module_id==21){
             $do_permission = $value;
+        }
+        if($value->module_id==22){
+            $warranty_claim_approval_1 = $value;
+        }
+        if($value->module_id==23){
+            $warranty_claim_approval_2 = $value;
+        }
+        if($value->module_id==24){
+            $warranty_claim_approval_3 = $value;
         }
 
     }
@@ -305,7 +315,10 @@
                     <?php }?>
                 </ul>
             </li>
-            <li class="<?php if ($dev_key == "money_receipt" || $dev_key == "customer" || $dev_key == "dealer"|| $dev_key == "bank"|| $dev_key == "sales_order" || $dev_key == "sales" || $dev_key == "receivable" || $dev_key == "sales_report") {echo 'active';} ?>">
+            <li class="<?php if ($dev_key == "money_receipt" || $dev_key == "customer" || 
+                                $dev_key == "dealer"|| $dev_key == "bank"|| $dev_key == "sales_order" || 
+                                $dev_key == "sales_invoice" ||$dev_key == "sales" || $dev_key == "receivable" || 
+                                $dev_key == "sales_report") {echo 'active';} ?>">
                 <a href="<?php echo base_url();?>"><i class="fa fa-shopping-cart icon-flipped"></i></i> Sales<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level <?php if ($dev_key == "customer" || $dev_key == "sales") {echo 'collapse in';} ?>">
 
@@ -374,34 +387,28 @@
                         </ul>
                     </li>
 
-                    <?php if($sales_invoice_permission->permission_add==1){?>
-                    <li class="<?php if ($selected == "add_sales") {echo 'active-menu';} ?>">
-                        <a href="<?php echo base_url();?>sales">Add Sales Invoice</a>
-                    </li>
-                    <?php }?>
-                    <?php if($sales_invoice_permission->permission_view==1){?>
-                    <li class="<?php if ($selected == "all_sales") {echo 'active-menu';} ?>">
-                        <a href="<?php echo base_url();?>sales/view_sales">Sales Invoice List</a>
-                    </li>
-                    <?php }?>
-
-
-
-                    <li class="<?php if ($dev_key == "sales_return") {echo 'active';} ?>">
-                        <a href="<?php echo base_url();?>">Sales Return<span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level <?php if ($dev_key == "money_receipt") {echo 'collapse in';} ?>">
-                            <?php if($sales_return_permission->permission_add==1){?>
-                            <li class="<?php if ($selected == "add_sales_return") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/sales_return">Add Sales Return</a>
+                    <li class="<?php if ($dev_key == "sales_invoice") {echo 'active';} ?>">
+                        <a href="<?php echo base_url();?>">Sales Invoice<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level <?php if ($dev_key == "sales_invoice") {echo 'collapse in';} ?>">
+                            <?php if($sales_invoice_permission->permission_add==1){?>
+                            <li class="<?php if ($selected == "add_sales") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>sales">Add Sales Invoice</a>
                             </li>
                             <?php }?>
-                            <?php if($sales_return_permission->permission_view==1){?>
-                            <li class="<?php if ($selected == "all_sales_returns") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/view_sales_returns">All Sales Return</a>
+                            <?php if($sales_invoice_permission->permission_view==1){?>
+                            <li class="<?php if ($selected == "all_sales") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>sales/view_sales">Sales Invoice List</a>
                             </li>
                             <?php }?>
                         </ul>
                     </li>
+
+
+                    
+
+
+
+                    
 
 
                     
@@ -411,12 +418,12 @@
                         <ul class="nav nav-third-level <?php if ($dev_key == "money_receipt") {echo 'collapse in';} ?>">
                             <?php if($money_receipt_permission->permission_add==1){?>
                             <li class="<?php if ($selected == "add_money_receipt") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/money_receipt">Add Money Receipt</a>
+                                <a href="<?php echo base_url();?>money_receipt/">Add Money Receipt</a>
                             </li>
                             <?php }?>
                             <?php if($money_receipt_permission->permission_view==1){?>
                             <li class="<?php if ($selected == "all_money_receipts") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/view_money_receipts">All Money Receipts</a>
+                                <a href="<?php echo base_url();?>money_receipt/view_money_receipts">All Money Receipts</a>
                             </li>
                             <?php }?>
                         </ul>
@@ -453,6 +460,70 @@
                     <?php }?>
                 </ul>
             </li>
+
+            <li class="<?php if ($dev_key == "warranty_claim" || $dev_key == "warranty_claim_report") {echo 'active';} ?>">
+                <a href="<?php echo base_url();?>"><i class="fa fa-sitemap"></i> Warranty Claim Management<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level <?php if ($dev_key == "warranty_claim" || $dev_key == "warranty_claim_report") {echo 'collapse in';} ?>">
+
+
+                    <?php if($warranty_claim_permission->permission_add==1 || $warranty_claim_permission->permission_view==1){?>
+                    <li class="<?php if ($dev_key == "warranty_claim") {echo 'active';} ?>">
+                        <a href="<?php echo base_url();?>">Warranty Claim<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level <?php if ($dev_key == "warranty") {echo 'collapse in';} ?>">
+                            <?php if($warranty_claim_permission->permission_add==1){?>
+                            <li class="<?php if ($selected == "add_warranty_claim") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>warranty_claim">Add Claim</a>
+                            </li>
+                            <?php }?>
+                            <?php if($warranty_claim_permission->permission_view==1){?>
+                            <li class="<?php if ($selected == "all_warranty_claims") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>warranty_claim/view_warranty_claims">All Claims</a>
+                            </li>
+                             <?php }?>
+                        </ul>
+                    </li>
+                    <?php }?>
+
+                    <?php if($warranty_claim_approval_1->permission_allow==1 || $warranty_claim_approval_2->permission_allow==1){?>
+                    <li class="<?php if ($dev_key == "warranty_claim_approval") {echo 'active';} ?>">
+                        <a href="<?php echo base_url();?>">Claim Approvals<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level <?php if ($dev_key == "warranty") {echo 'collapse in';} ?>">
+                            <?php if($warranty_claim_approval_1->permission_allow==1){?>
+                            <li class="<?php if ($selected == "approval_1") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>warranty_claim">Approvals 1</a>
+                            </li>
+                            <?php }?>
+                            <?php if($warranty_claim_approval_2->permission_allow==1){?>
+                            <li class="<?php if ($selected == "approval_2") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>warranty_claim/view_warranty_claims">Approvals 2</a>
+                            </li>
+                             <?php }?>
+                        </ul>
+                    </li>
+                    <?php }?>
+
+
+                    
+                    <li class="<?php if ($dev_key == "warranty_claim_report") {echo 'active';} ?>">
+                        <a href="<?php echo base_url();?>">Warranty Claim Status Report<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level <?php if ($dev_key == "warranty_claim_report") {echo 'collapse in';} ?>">
+                            <?php if($group_permission->permission_add==1){?>
+                            <li class="<?php if ($selected == "add_group") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>group">Claim Status</a>
+                            </li>
+                            <?php }?>
+                            <?php if($group_permission->permission_view==1){?>
+                            <li class="<?php if ($selected == "all_groups") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>group/view_groups">Settlement Status</a>
+                            </li>
+                             <?php }?>
+                        </ul>
+                    </li>
+                   
+                    
+                </ul>
+            </li>
+
             <?php if($this->session->userdata('user_type')==1){?>
 
             
