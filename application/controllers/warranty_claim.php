@@ -136,6 +136,129 @@ class Warranty_Claim extends CI_Controller {
 
 	//---------------------warranty_claim SECTION ENDS HERE
 
+	//-------------------- warranty_claim_approval SECTION
+
+	public function warranty_claim_approval_1()
+	{
+		$data								=	array();
+		$data['page_title']					=	"Inventory Management";
+		$nav_data['dev_key']				=	"warranty_claim_approval";
+		$nav_data['selected']				=	"approval_1";
+		$nav_data['company_name']   		=   $this->company_model->get_company_by_id(1)->company_name;
+		$nav_data['user_permission'] 		=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+
+		$warranty_claim_data								=	array();
+		$warranty_claim_data['waiting_list']				=	$this->warranty_claim_model->get_warranty_claim_by_status($approval_status = 0);
+		$warranty_claim_data['approved_list']				=	$this->warranty_claim_model->get_warranty_claim_by_status($approval_status = 1);
+		$warranty_claim_data['denied_list']					=	$this->warranty_claim_model->get_warranty_claim_by_status($approval_status = -1);
+		$warranty_claim_data['wc_type_list']				=	$this->warranty_claim_model->get_all_warranty_claim_types();
+		$warranty_claim_data['permission']					= 	$this->module_model->get_permission_by_module_id_and_user_id(22,$this->session->userdata('user_id'));
+		$warranty_claim_data['url']							=	'approve_warranty_claim_1';
+
+		$data['navigation']					=	$this->load->view('templates/navigation',$nav_data,TRUE);
+		$data['footer']						=	$this->load->view('templates/footer','',TRUE);
+		$data['content']					=	$this->load->view('partials/warranty_claim_approval',$warranty_claim_data,TRUE);
+
+		$this->load->view('templates/main_template',$data);
+	}
+
+	public function warranty_claim_approval_2()
+	{
+		$data								=	array();
+		$data['page_title']					=	"Inventory Management";
+		$nav_data['dev_key']				=	"warranty_claim_approval";
+		$nav_data['selected']				=	"approval_2";
+		$nav_data['company_name']   		=   $this->company_model->get_company_by_id(1)->company_name;
+		$nav_data['user_permission'] 		=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+
+		$warranty_claim_data								=	array();
+		$warranty_claim_data['waiting_list']				=	$this->warranty_claim_model->get_warranty_claim_by_status($approval_status = 1);
+		$warranty_claim_data['approved_list']				=	$this->warranty_claim_model->get_warranty_claim_by_status($approval_status = 2);
+		$warranty_claim_data['denied_list']					=	$this->warranty_claim_model->get_warranty_claim_by_status($approval_status = -2);
+		$warranty_claim_data['wc_type_list']				=	$this->warranty_claim_model->get_all_warranty_claim_types();
+		$warranty_claim_data['permission']					= 	$this->module_model->get_permission_by_module_id_and_user_id(23,$this->session->userdata('user_id'));
+		$warranty_claim_data['url']							=	'warranty_claim_approval_2';
+
+		$data['navigation']					=	$this->load->view('templates/navigation',$nav_data,TRUE);
+		$data['footer']						=	$this->load->view('templates/footer','',TRUE);
+		$data['content']					=	$this->load->view('partials/warranty_claim_approval',$warranty_claim_data,TRUE);
+
+		$this->load->view('templates/main_template',$data);
+	}
+
+	public function warranty_claim_approval_3()
+	{
+		$data								=	array();
+		$data['page_title']					=	"Inventory Management";
+		$nav_data['dev_key']				=	"warranty_claim_approval";
+		$nav_data['selected']				=	"approval_3";
+		$nav_data['company_name']   		=   $this->company_model->get_company_by_id(1)->company_name;
+		$nav_data['user_permission'] 		=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+
+		$warranty_claim_data								=	array();
+		$warranty_claim_data['waiting_list']				=	$this->warranty_claim_model->get_warranty_claim_by_status($approval_status = 2);
+		$warranty_claim_data['approved_list']				=	$this->warranty_claim_model->get_warranty_claim_by_status($approval_status = 3);
+		$warranty_claim_data['denied_list']					=	$this->warranty_claim_model->get_warranty_claim_by_status($approval_status = -3);
+		$warranty_claim_data['wc_type_list']				=	$this->warranty_claim_model->get_all_warranty_claim_types();
+		$warranty_claim_data['permission']					= 	$this->module_model->get_permission_by_module_id_and_user_id(24,$this->session->userdata('user_id'));
+		$warranty_claim_data['url']							=	'warranty_claim_approval_3';
+
+		$data['navigation']					=	$this->load->view('templates/navigation',$nav_data,TRUE);
+		$data['footer']						=	$this->load->view('templates/footer','',TRUE);
+		$data['content']					=	$this->load->view('partials/warranty_claim_approval',$warranty_claim_data,TRUE);
+
+		$this->load->view('templates/main_template',$data);
+	}
+
+	public function approve_warranty_claim(){
+		$warranty_claim_data								=	array();
+
+		$warranty_claim_data 								=	array();
+		$warranty_claim_data['Warranty_Claim_id']			=	$this->input->post('warranty_claim_id','',TRUE);
+
+		$warranty_claim_detail 								=	$this->warranty_claim_model->get_warranty_claim_by_id($warranty_claim_data['Warranty_Claim_id']);
+
+		$warranty_claim_data['approval_status']				=	$warranty_claim_detail->approval_status + 1;
+
+		switch ($warranty_claim_data['approval_status']) {
+			case '1':
+				$warranty_claim_data['authorized_user_id_1']		=	$this->session->userdata('user_id');
+				$warranty_claim_data['approval_time_stamp_1']		=	date('Y-m-d G:i:s');
+				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['Warranty_Claim_id']);
+
+				if($update_result != 0){
+					redirect('warranty_claim/warranty_claim_approval_1');
+				}
+				break;
+			
+			case '2':
+				$warranty_claim_data['authorized_user_id_2']		=	$this->session->userdata('user_id');
+				$warranty_claim_data['approval_time_stamp_2']		=	date('Y-m-d G:i:s');
+				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['Warranty_Claim_id']);
+
+				if($update_result != 0){
+					redirect('warranty_claim/warranty_claim_approval_2');
+				}
+				break;
+
+			case '3':
+				$warranty_claim_data['authorized_user_id_3']		=	$this->session->userdata('user_id');
+				$warranty_claim_data['approval_time_stamp_3']		=	date('Y-m-d G:i:s');
+				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['Warranty_Claim_id']);
+
+				if($update_result != 0){
+					redirect('warranty_claim/warranty_claim_approval_3');
+				}
+				break;
+			default :
+				break;
+		}
+		
+	}
+
+
+	//-------------------- warranty_claim_approval SECTION ENDS HERE
+
 	//---------------------- AJAX SECTION
 	
 	public function ajax_get_item_list_by_sales_id(){

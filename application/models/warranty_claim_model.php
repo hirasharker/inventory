@@ -18,6 +18,18 @@ class Warranty_Claim_Model extends CI_Model {
         $result=$result_query->result();
         return $result;
     }
+    
+    public function get_warranty_claim_by_status($approval_status){
+        $this->db->select('tbl_warranty_claim.*,tbl_item.item_name, tbl_item.part_no, tbl_item.unit , tbl_sales.customer_type,
+            tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name');
+        $this->db->from('tbl_warranty_claim');
+        $this->db->join('tbl_item','tbl_warranty_claim.item_id = tbl_item.item_id');
+        $this->db->join('tbl_sales','tbl_warranty_claim.sales_id = tbl_sales.sales_id');
+        $this->db->where('tbl_warranty_claim.approval_status',$approval_status);
+        $result_query=$this->db->get();
+        $result=$result_query->result();
+        return $result;
+    }
 
     public function get_warranty_claim_by_id($warranty_claim_id){
         $this->db->select('*');
@@ -49,6 +61,8 @@ class Warranty_Claim_Model extends CI_Model {
         $result=$result_query->result();
         return $result;
     }
+
+
     
     public function add_warranty_claim($data){
         $this->db->insert('tbl_warranty_claim',$data);
@@ -60,6 +74,8 @@ class Warranty_Claim_Model extends CI_Model {
         
         $this->db->where('warranty_claim_id',$warranty_claim_id);
         $this->db->update('tbl_warranty_claim',$data);
+        $result     =   $this->db->affected_rows();
+        return $result;
     }
    
     public function delete_warranty_claim($warranty_claim_id){
