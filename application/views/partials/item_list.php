@@ -31,6 +31,7 @@
                                 <th>Item Name</th>
                                 <th>Unit</th>
                                 <th>Quantity</th>
+                                <th>Flawed Qty</th>
                                 <th>Rate</th>
                                 <th>Action</th>
                             </tr>
@@ -44,6 +45,7 @@
                                 <td><?php echo $value->item_name;?></td>
                                 <td><?php echo $value->unit; ?></td>
                                 <td class="center"><?php echo $value->quantity.' '.$value->unit;?></td>
+                                <td class="center"><?php echo $value->broken_quantity.' '.$value->unit;?></td>
                                 <td class="center"><?php echo $value->item_price;?></td>
                                 <td class="center">
                                 <?php if($permission->permission_edit==1){?>

@@ -22,7 +22,7 @@
                             <div class="form-group input-group">
                              
                                 <span class="input-group-addon">&#x9f3;</span>
-                                <input type="text" class="form-control" id="purchase_id" name="purchase_id" value="<?php echo set_value('purchase_id'); ?>">
+                                <input type="text" class="form-control" id="purchase_id" name="purchase_id" value="<?php echo set_value('purchase_id'); ?>" required>
                                 <span class="input-group-addon">.00</span>
                             </div>
 
@@ -31,7 +31,7 @@
                             <div class="form-group input-group">
                              
                                 <span class="input-group-addon">&#x9f3;</span>
-                                <input type="text" class="form-control" name="paid_amount" value="<?php echo set_value('paid_amount'); ?>">
+                                <input type="text" class="form-control" name="paid_amount" value="<?php echo set_value('paid_amount'); ?>" required>
                                 <span class="input-group-addon">.00</span>
                             </div>
                            
@@ -43,7 +43,7 @@
                             </div> -->
                             <label>Payment Date</label>
                             <div class="input-group date" data-provide="datepicker">
-                                <input type="text" class="form-control"  id="datepicker" name="payment_date" value="<?php echo set_value('payment_date'); ?>">
+                                <input type="text" class="form-control"  id="datepicker" name="payment_date" value="<?php echo set_value('payment_date'); ?>" required>
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>

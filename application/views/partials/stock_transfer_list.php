@@ -38,13 +38,16 @@
                                         <tr class="gradeA">
                                             <td><?php echo $i; ?></td>
                                             <td><?php echo $value->stock_transfer_id;?></td>
+                                            <td>
                                             <?php foreach($warehouse_list as $w_value){ if($w_value->warehouse_id == $value->previous_warehouse_id){?>
-                                                <td><?php echo $w_value->warehouse_name;?></td>
+                                                <?php echo $w_value->warehouse_name;?>
                                             <?php } }?>
-
+                                            </td>
+                                            <td>
                                             <?php foreach($warehouse_list as $w_value){ if($w_value->warehouse_id == $value->current_warehouse_id){?>
-                                                <td><?php echo $w_value->warehouse_name;?></td>
+                                                <?php echo $w_value->warehouse_name;?>
                                             <?php } }?>
+                                            </td>
                                             <td><?php echo $value->stock_transfer_date;?></td>
                                             <td class="center">
                                             <?php if($permission->permission_edit==1){?>

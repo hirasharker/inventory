@@ -31,11 +31,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Address</label>
-                                <textarea class="form-control" rows="2" name="present_address"></textarea>
+                                <textarea class="form-control" rows="2" name="present_address" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input class="form-control" placeholder = "Phone" name="phone_no">
+                                <input class="form-control" placeholder = "Phone" name="phone_no" required>
                             </div>
                             
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -78,7 +78,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Dealer's Name</label>
-                                <input class="form-control" placeholder = "Dealer's Name" name="dealer_name" value="<?php echo $dealer_detail->dealer_name; ?>">
+                                <input class="form-control" placeholder = "Dealer's Name" name="dealer_name" value="<?php echo $dealer_detail->dealer_name; ?>" required>
                             </div>
                             <div class="form-group">
                                 <label>Dealer Category</label>
@@ -90,11 +90,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Address</label>
-                                <textarea class="form-control" rows="2" name="present_address"><?php echo $dealer_detail->present_address; ?></textarea>
+                                <textarea class="form-control" rows="2" name="present_address" required><?php echo $dealer_detail->present_address; ?></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input class="form-control" placeholder = "Phone" name="phone_no" value="<?php echo $dealer_detail->phone_no; ?>">
+                                <input class="form-control" placeholder = "Phone" name="phone_no" value="<?php echo $dealer_detail->phone_no; ?>" required>
                             </div>
                             
                             <button type="submit" class="btn btn-primary">Save</button>

@@ -7,6 +7,7 @@ class Inventory extends CI_Controller {
 			redirect('login','refresh');
 		}
 		$this->load->model('inventory_model','inventory_model',TRUE);
+		$this->load->model('warehouse_model','warehouse_model',TRUE);
 		$this->load->model('group_model','group_model',TRUE);
 		$this->load->model('item_model','item_model',TRUE);
 		$this->load->model('company_model','company_model',TRUE);
@@ -39,6 +40,7 @@ class Inventory extends CI_Controller {
 		$nav_data['selected']		=	"individual_report";
 		$nav_data['company_name']   =   $this->company_model->get_company_by_id(1)->company_name;
 		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+
 
 		$item_data					=	array();
 		$item_data['item_list']		=	$this->item_model->get_all_items();
@@ -243,6 +245,86 @@ class Inventory extends CI_Controller {
 		$search_result['total_sales_quantity']		=	$this->inventory_model->get_sales_quantity_by_date($to_date);
 
     	$this->pdf->load_view('report/group_inventory_pdf',$search_result);
+	}
+
+	//----------------WAREHOUSE INVENTORY---------------
+
+	public function warehouse_inventory()
+	{
+		$data						=	array();
+		$data['page_title']			=	"Inventory Management";
+		$nav_data['dev_key']		=	"inventory";
+		$nav_data['selected']		=	"warehouse_inventory";
+		$nav_data['company_name']   =   $this->company_model->get_company_by_id(1)->company_name;
+		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+
+		$warehouse_inventory_data	=	array();
+		$warehouse_inventory_data['warehouse_list'] =	$this->warehouse_model->get_all_warehouses();
+
+		$data['navigation']			=	$this->load->view('templates/navigation',$nav_data,TRUE);
+		$data['footer']				=	$this->load->view('templates/footer','',TRUE);
+		$data['content']			=	$this->load->view('report/warehouse_inventory_report',$warehouse_inventory_data,TRUE);
+
+		$this->load->view('templates/main_template',$data);
+	}
+
+	public function generate_warehouse_inventory_detail(){
+		$warehouse_id 	=	$this->input->post('warehouse_id',TRUE);
+		$from_date 		=	$this->input->post('from_date',TRUE);
+		$to_date 		=	$this->input->post('to_date',TRUE);
+
+		$search_result 	= 	array();
+
+		$search_result['purchase_data'] 			=	$this->inventory_model->get_group_purchase_inventory_data_by_date_and_warehouse_id($warehouse_id, $from_date,$to_date);
+
+		$search_result['sales_data'] 				=	$this->inventory_model->get_group_sales_inventory_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date);
+
+		$search_result['total_purchase_quantity']	=	$this->inventory_model->get_purchase_quantity_by_date($to_date);
+
+		$search_result['total_sales_quantity']		=	$this->inventory_model->get_sales_quantity_by_date($to_date);
+
+		$output 								=	$this->load->view('report/warehouse_inventory_table',$search_result,TRUE);
+
+        $error_message = 'Its a dummy error '.$from_date.$to_date;
+
+        echo json_encode($output);
+
+	}
+
+	public function warehouse_inventory_pdf(){
+		// $this->load->library('pdf'); // DOMPDF
+
+		$warehouse_id 	=	$this->input->post('warehouse_id',TRUE);
+		$from_date 		=	$this->input->post('from_date',TRUE);
+		$to_date 		=	$this->input->post('to_date',TRUE);
+
+		$search_result 	= 	array();
+
+		$search_result['purchase_data'] 			=	$this->inventory_model->get_group_purchase_inventory_data_by_date_and_warehouse_id($warehouse_id, $from_date,$to_date);
+
+		$search_result['sales_data'] 				=	$this->inventory_model->get_group_sales_inventory_data_by_date_and_warehouse_id($warehouse_id, $from_date,$to_date);
+
+		$search_result['total_purchase_quantity']	=	$this->inventory_model->get_purchase_quantity_by_date($to_date);
+
+		$search_result['total_sales_quantity']		=	$this->inventory_model->get_sales_quantity_by_date($to_date);
+
+		// echo '<pre>'; print_r($search_result); echo '</pre>'; exit();
+
+		// $this->load->view('report/warehouse_inventory_pdf',$search_result);
+
+    	// $this->pdf->load_view('report/warehouse_inventory_pdf',$search_result); // DOMPDF
+
+    	$data 										= 	[];
+        
+        $html 										=	$this->load->view('report/warehouse_inventory_pdf',$search_result,TRUE);
+ 
+        $pdfFilePath 								= 	"warehouse_inventory.pdf";
+ 
+        $this->load->library('m_pdf');
+ 
+        $this->m_pdf->pdf->WriteHTML($html);
+ 
+        $this->m_pdf->pdf->Output($pdfFilePath, "D");   
 	}
 
 }

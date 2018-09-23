@@ -67,6 +67,12 @@ class Item_Model extends CI_Model {
         $this->db->set('quantity','quantity-'.$quantity,FALSE);
         $this->db->update('tbl_item');
     }
+
+    public function add_broken_item_quantity($item_id, $quantity){
+        $this->db->where('item_id',$item_id);
+        $this->db->set('broken_quantity','broken_quantity+'.$quantity,FALSE);
+        $this->db->update('tbl_item');
+    }
    
     public function delete_item($item_id){
         $this->db->where('item_id',$item_id);

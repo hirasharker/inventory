@@ -74,26 +74,7 @@
           </div>
         </div>
         <!-- Modal Delete End -->
-        <!-- Modal Delete       -->
-        <div class="modal fade" id="confirm-deny" role="dialog">
-          <div class="modal-dialog modal-sm">
-          
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Do you want to deny?</h4>
-              </div>
-              
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger btn-ok">Deny</a>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-        <!-- Modal Delete End -->
+        
 
      <!-- /. WRAPPER  -->
     <!-- JS Scripts-->
@@ -146,7 +127,7 @@
           });
 
           $('#confirm-deny').on('show.bs.modal', function(e) {
-          $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+          // $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
           });
 
       });

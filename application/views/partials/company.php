@@ -18,15 +18,15 @@
                                     <form role="form" method="post" action="<?php echo base_url();?>company/update_company">
                                         <div class="form-group">
                                             <label>Company Name</label>
-                                            <input class="form-control" placeholder = "Company Name" name="company_name" value="<?php echo $company->company_name;?>">
+                                            <input class="form-control" placeholder = "Company Name" name="company_name" value="<?php echo $company->company_name;?>" required>
                                         </div>
                                         <div class="form-group">
                                             <label>Address</label>
-                                            <textarea class="form-control" rows="2" name="address"><?php echo $company->address;?></textarea>
+                                            <textarea class="form-control" rows="2" name="address" required><?php echo $company->address;?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>Phone</label>
-                                            <input class="form-control" placeholder = "Phone" name="phone" value="<?php echo $company->phone;?>">
+                                            <input class="form-control" placeholder = "Phone" name="phone" value="<?php echo $company->phone;?>" required>
                                         </div>
                                         
                                         <button type="submit" class="btn btn-primary">Update</button>

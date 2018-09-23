@@ -15,14 +15,14 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-10">
                         <?php echo form_open('stock_transfer/add_stock_transfer');?>
                         <!-- <form role="form" method="post" action="<?php echo base_url();?>purchase/add_purchase"> -->
 
 
                             <div class="form-group">
                                 <label>Transferred From</label>
-                                <select class="form-control" name="previous_warehouse_id" id="previous_warehouse">
+                                <select class="form-control" name="previous_warehouse_id" id="previous_warehouse" required>
                                     <option value="">Select Warehouse</option>
                                     <?php foreach($warehouse_list as $value){?>
                                     <option value="<?php echo $value->warehouse_id; ?>"><?php echo $value->warehouse_name;?></option>
@@ -32,15 +32,15 @@
 
                             <div class="form-group">
                                 <label>Transferred To</label>
-                                <select class="form-control" name="current_warehouse_id" id="current_warehouse">
+                                <select class="form-control" name="current_warehouse_id" id="current_warehouse" required>
                                    
                                 </select>
                             </div>
 
 
-                            <div class="form-group select-tag">
+                            <div class="form-group">
                                 <label>Select Item</label>
-                                <select class="form-control" id="item" name="item_id">
+                                <select class="form-control select-tag" id="item" name="item_id">
                                     <option value="0">select</option>
                                 
                                 </select>
@@ -112,6 +112,7 @@
 
 
           
+         
           if($('#item').val()!="NULL"){
               $('#item').empty();
           }
@@ -122,7 +123,7 @@
 
           $.ajax({
               type: "POST",
-              url: "<?php echo base_url()?>stock_transfer/get_item_by_warehouse_id/",
+              url: "<?php echo base_url()?>sales/get_item_by_warehouse_id/",
               data: { 'warehouseId': previousWarehouseId  },
               success: function(data){
                   // Parse the returned json data
@@ -132,11 +133,12 @@
 
                   $.each(opts, function(i, d) {
                       // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
-                      $('#item').append('<option value="' + d.item_id + '" quantity = "'+ d.quantity +'">' + d.item_name + '</option>');
+                      $('#item').append('<option itemName="' + d.item_name + '" value="' + d.item_id + '" stockQuantity = "'+ d.quantity +'" itemPrice = "'+d.item_price+'">' +d.part_no+"-"+ d.item_name + '</option>');
 
                   });
-              }
-          });
+                }
+            });
+        
 
 
         });
@@ -146,8 +148,18 @@
          $( "#item" ).change(function() {
           // alert( "Handler for .change() called."+this.value);
           var itemName = $('#item option:selected').text();
-          var quantity = $(this).find('option:selected').attr('quantity');
+          var quantity = $(this).find('option:selected').attr('stockQuantity');
           count = document.getElementById('count').value;
+          if(count == 0){
+            var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
+            +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem"></label></div>'
+            +'<div class="col-lg-3"><label class="lblItem">QTY</label></div>'
+            +'<div class="col-lg-1"><label class="lblItem">Stock</label></div>'
+            +'</div>';
+            
+            $('#create').append(itemHeader);
+          }
           var val = $('#item option:selected').val();
               if(val!=0){
                 $.ajax({
@@ -168,7 +180,7 @@
                 +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
                 +'</div>'
                 +'<div class="col-lg-4">'
-                +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div><div class="col-lg-1"><label class="quantity">'+quantity+'</label></div>'
+                +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div><div class="col-lg-2"><label class="quantity">('+quantity+')</label></div>'
                 +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
                 if(this.value != 0){
@@ -222,7 +234,7 @@
 
                             <div class="form-group">
                                 <label>Transferred From</label>
-                                <select class="form-control" name="previous_warehouse_id" id="previous_warehouse">
+                                <select class="form-control" name="previous_warehouse_id" id="previous_warehouse" required>
                                     <option value="">Select Warehouse</option>
                                     <?php foreach($warehouse_list as $value){?>
                                     <option value="<?php echo $value->warehouse_id; ?>"><?php echo $value->warehouse_name;?></option>
@@ -232,7 +244,7 @@
 
                             <div class="form-group">
                                 <label>Transferred To</label>
-                                <select class="form-control" name="current_warehouse_id" id="current_warehouse">
+                                <select class="form-control" name="current_warehouse_id" id="current_warehouse" required>
                                    
                                 </select>
                             </div>

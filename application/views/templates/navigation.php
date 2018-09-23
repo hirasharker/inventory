@@ -257,6 +257,9 @@
                             <li class="<?php if ($selected == "group_inventory") {echo 'active-menu';} ?>">
                                 <a href="<?php echo base_url();?>inventory/group_inventory">Group Inventory</a>
                             </li>
+                            <li class="<?php if ($selected == "warehouse_inventory") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>inventory/warehouse_inventory">Warehouse Inventory</a>
+                            </li>
                         </ul>
                     </li>
                     <?php }?>
@@ -508,13 +511,13 @@
                         <a href="<?php echo base_url();?>">Warranty Claim Status Report<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level <?php if ($dev_key == "warranty_claim_report") {echo 'collapse in';} ?>">
                             <?php if($group_permission->permission_add==1){?>
-                            <li class="<?php if ($selected == "add_group") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>group">Claim Status</a>
+                            <li class="<?php if ($selected == "claim_status_report") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>report_warranty_claim">Claim Status</a>
                             </li>
                             <?php }?>
                             <?php if($group_permission->permission_view==1){?>
-                            <li class="<?php if ($selected == "all_groups") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>group/view_groups">Settlement Status</a>
+                            <li class="<?php if ($selected == "settlement_status_report") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>report_warranty_claim/warranty_claim_settlemt_status">Settlement Status</a>
                             </li>
                              <?php }?>
                         </ul>

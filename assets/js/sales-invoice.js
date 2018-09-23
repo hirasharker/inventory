@@ -150,6 +150,7 @@ $( "#orderId" ).change(function() {
    
   }else {
     resetForm();
+    disableInputFields();
      $('#salesOrderId').show("500");
   }
 
@@ -175,10 +176,18 @@ function processSalesOrder(salesOrder){
     $('#customerId').val(salesOrder.customer_id);
     $('#customerId').trigger('change');
     $( "#customer" ).show( 500 );
+  }else{
+    $( "#customer" ).hide( 500 );
+    $('#customerId').val("0");
+    $('#customerId').trigger('change');
   }
   if(salesOrder.dealer_id!= "0"){
     $( "#dealer" ).show( 500 );
     $('#dealerId').val(salesOrder.dealer_id);
+    $('#dealerId').trigger('change');
+  }else{
+    $( "#dealer" ).hide( 500 );
+    $('#dealerId').val("0");
     $('#dealerId').trigger('change');
   }
   $('#sub-total').val(salesOrder.total_price);

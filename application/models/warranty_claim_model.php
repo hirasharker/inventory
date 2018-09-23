@@ -84,7 +84,7 @@ class Warranty_Claim_Model extends CI_Model {
     }
 
     public function get_item_by_sales_id($sales_id){
-        $this->db->select('tbl_item.*');
+        $this->db->select('tbl_item.*, tbl_sales_detail.quantity as sales_quantity');
         $this->db->from('tbl_sales_detail');
         $this->db->join('tbl_item','tbl_sales_detail.item_id = tbl_item.item_id');
         $this->db->where('tbl_sales_detail.sales_id',$sales_id);
@@ -132,6 +132,48 @@ class Warranty_Claim_Model extends CI_Model {
     }
 
     ////----warranty_claim_type SECTION ENDS HERE-----
+
+    //------warranty_claim_report SECTION--------------
+
+    public function get_warranty_claim_status($claim_status, $warranty_claim_type_id, $from_date, $to_date) {
+        $this->db->select('tbl_warranty_claim.*,tbl_item.item_name, tbl_item.part_no, tbl_item.unit , tbl_sales.customer_type,
+            tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name, tbl_sales.sales_date');
+        $this->db->from('tbl_warranty_claim');
+        $this->db->join('tbl_item','tbl_warranty_claim.item_id = tbl_item.item_id');
+        $this->db->join('tbl_sales','tbl_warranty_claim.sales_id = tbl_sales.sales_id');
+
+        if($claim_status != ''){
+            switch ($claim_status) {
+                case '1':
+                    $this->db->where('tbl_warranty_claim.approval_status >= 0 
+                                    and tbl_warranty_claim.approval_status <= 2');
+                    break;
+
+                case '2':
+                    $this->db->where('tbl_warranty_claim.approval_status >= 2');
+                    break;
+
+                case '3':
+                    $this->db->where('tbl_warranty_claim.approval_status < 0');
+                    break;
+                
+                default:
+                    break;
+            }
+            
+        }
+
+        if($warranty_claim_type_id != ''){
+            $this->db->where('tbl_warranty_claim.warranty_claim_type_id',$warranty_claim_type_id);
+        }
+
+        $this->db->where('tbl_warranty_claim.time_stamp >=',$from_date);
+        $this->db->where('tbl_warranty_claim.time_stamp <=',$to_date);
+
+        $result_query=$this->db->get();
+        $result=$result_query->result();
+        return $result;
+    }
     
 }
 ?>

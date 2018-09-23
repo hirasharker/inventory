@@ -81,17 +81,7 @@ class Inventory_Model extends CI_Model {
 
     //---------GROUP INVENTORY----------------
 
-    // public function get_group_inventory_data_by_date($from_date,$to_date){
-    //     $this->db->select('sum(tbl_purchase_detail.quantity) as purchase_quantity
-    //         ,sum(tbl_sales_detail.quantity) as sales_quantity
-    //         ,tbl_purchase_detail.item_name, tbl_purchase_detail.item_id' );
-    //     $this->db->from('tbl_purchase_detail');
-    //     $this->db->group_by('tbl_purchase_detail.item_id');
-    //     $this->db->join('tbl_sales_detail','tbl_sales_detail.item_id = tbl_purchase_detail.item_id');
-    //     $result_query = $this->db->get();
-    //     $result = $result_query->result();
-    //     return $result;
-    // }
+   
     public function get_group_purchase_inventory_data_by_date($from_date,$to_date){
         $this->db->distinct();
         $this->db->select('coalesce(sum(distinct(tbl_purchase_detail.quantity)),0) as purchase_quantity
@@ -140,6 +130,45 @@ class Inventory_Model extends CI_Model {
         $this->db->group_by('tbl_sales_detail.item_id');
         $result_query=$this->db->get();
         $result=$result_query->result();
+        return $result;
+    }
+
+    //--------warehouse_inventory SECTION -------------------------
+    public function get_group_purchase_inventory_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date){
+        $this->db->distinct();
+        $this->db->select('coalesce(sum(distinct(tbl_purchase_detail.quantity)),0) as purchase_quantity
+            ,coalesce(sum(purchase_price*tbl_purchase_detail.quantity)/sum(tbl_purchase_detail.quantity),0) as item_rate
+            ,tbl_purchase_detail.item_name, tbl_purchase_detail.item_id');
+        $this->db->from('tbl_purchase_detail');
+        $this->db->group_by('tbl_purchase_detail.item_id');
+
+        if($warehouse_id != ''){
+            $this->db->where('tbl_purchase_detail.warehouse_id',$warehouse_id);
+        }
+        $this->db->where('tbl_purchase_detail.purchase_date >=',$from_date);
+        $this->db->where('tbl_purchase_detail.purchase_date <=',$to_date);
+
+        $result_query = $this->db->get();
+        $result = $result_query->result();
+        return $result;
+    }
+
+    public function get_group_sales_inventory_data_by_date_and_warehouse_id($warehouse_id, $from_date,$to_date){
+        $this->db->distinct();
+        $this->db->select('coalesce(sum(distinct(tbl_sales_detail.quantity)),0) as sales_quantity
+            ,tbl_sales_detail.item_name, tbl_sales_detail.item_id');
+        $this->db->from('tbl_sales_detail');
+        $this->db->group_by('tbl_sales_detail.item_id');
+
+        if($warehouse_id != ''){
+            $this->db->where('tbl_sales_detail.warehouse_id',$warehouse_id);
+        }
+
+        $this->db->where('tbl_sales_detail.sales_date >=',$from_date);
+        $this->db->where('tbl_sales_detail.sales_date <=',$to_date);
+
+        $result_query = $this->db->get();
+        $result = $result_query->result();
         return $result;
     }
 

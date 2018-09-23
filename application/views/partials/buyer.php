@@ -18,15 +18,15 @@
                                     <form role="form">
                                         <div class="form-group">
                                             <label>Buyer's Name</label>
-                                            <input class="form-control" placeholder = "Buyer's Name">
+                                            <input class="form-control" placeholder = "Buyer's Name" required>
                                         </div>
                                         <div class="form-group">
                                             <label>Address</label>
-                                            <textarea class="form-control" rows="2"></textarea>
+                                            <textarea class="form-control" rows="2" required></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>Phone</label>
-                                            <input class="form-control" placeholder = "Phone">
+                                            <input class="form-control" placeholder = "Phone" required>
                                         </div>
                                         
                                         <button type="submit" class="btn btn-primary">Save</button>

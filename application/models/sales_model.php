@@ -119,6 +119,16 @@ class Sales_Model extends CI_Model {
         return $result;
     }
 
+    public function get_items_by_sales_id($sales_id){
+        $this->db->select('tbl_item.*');
+        $this->db->from('tbl_sales_detail');
+        $this->db->join('tbl_item','tbl_sales_detail.item_id = tbl_item.item_id');
+        $this->db->where('tbl_sales_detail.sales_id',$sales_id);
+        $result_query   =   $this->db->get();
+        $result         =   $result_query->result();
+        return $result;
+    }
+
     public function get_sales_like_id($sales_id){
         $this->db->select('sales_id');
         $this->db->like('sales_id', $sales_id);
@@ -198,6 +208,13 @@ class Sales_Model extends CI_Model {
         $this->db->delete('tbl_sales_detail');
     }
 
+    public function subtract_item_quantity_from_sales_detail($sales_id, $item_id, $quantity){
+        $this->db->where('sales_id',$sales_id);
+        $this->db->where('item_id',$item_id);
+        $this->db->set('quantity','quantity-'.$quantity,FALSE);
+        $this->db->update('tbl_sales_detail');
+    }
+
     /////----CUSTOMER SECTION START HERE...................
 
     public function get_all_customers(){
@@ -237,91 +254,6 @@ class Sales_Model extends CI_Model {
     }
 
     ////----CUSTOMER SECTION ENDS HERE-----
-
-    //------Money Receipt------------------
-
-    public function get_all_money_receipts(){
-        $this->db->select('*');
-        $this->db->from('tbl_money_receipt');
-        $this->db->order_by('time_stamp','desc');
-        $result_query=$this->db->get();
-        $result=$result_query->result();
-        return $result;
-    }
-
-    public function get_all_money_receipts_by_date_and_customer_name($customer_name,$from_date,$to_date){
-        $this->db->select('*');
-        $this->db->from('tbl_money_receipt');
-        $this->db->where('money_receipt_date >=',$from_date);
-        $this->db->where('money_receipt_date <=',$to_date);
-        $this->db->where('customer_name',$customer_name);
-        $this->db->order_by('time_stamp','desc');
-        $result_query=$this->db->get();
-        $result=$result_query->result();
-        return $result;
-    }
-
-    public function get_individual_money_receipt_by_date_and_customer_id($customer_id,$from_date,$to_date){
-        $this->db->select('*');
-        $this->db->from('tbl_money_receipt');
-        $this->db->where('money_receipt_date >=',$from_date);
-        $this->db->where('money_receipt_date <=',$to_date);
-        $this->db->where('customer_id',$customer_id);
-        $this->db->order_by('time_stamp','desc');
-        $result_query=$this->db->get();
-        $result=$result_query->result();
-        return $result;
-    }
-
-    public function get_individual_money_receipt_by_date_and_dealer_id($dealer_id,$from_date,$to_date){
-        $this->db->select('*');
-        $this->db->from('tbl_money_receipt');
-        $this->db->where('money_receipt_date >=',$from_date);
-        $this->db->where('money_receipt_date <=',$to_date);
-        $this->db->where('dealer_id',$dealer_id);
-        $this->db->order_by('time_stamp','desc');
-        $result_query=$this->db->get();
-        $result=$result_query->result();
-        return $result;
-    }
-
-    public function get_all_money_receipts_by_date($from_date,$to_date){
-        $this->db->select('*');
-        $this->db->from('tbl_money_receipt');
-        $this->db->where('money_receipt_date >=',$from_date);
-        $this->db->where('money_receipt_date <=',$to_date);
-        $this->db->order_by('time_stamp','desc');
-        $result_query=$this->db->get();
-        $result=$result_query->result();
-        return $result;
-    }
-
-    public function get_money_receipt_by_id($money_receipt_id){
-        $this->db->select('*');
-        $this->db->from('tbl_money_receipt');
-        $this->db->where('money_receipt_id',$money_receipt_id);
-        $result_query=$this->db->get();
-        $result=$result_query->row();
-        return $result;
-    }
-
-    public function add_money_receipt($data){
-        $this->db->insert('tbl_money_receipt',$data);
-        $result = $this->db->insert_id();
-        return $result;
-    }
-   
-    public function update_money_receipt($data,$money_receipt_id){
-        $this->db->where('money_receipt_id',$money_receipt_id);
-        $this->db->update('tbl_money_receipt',$data);
-    }
-   
-    public function delete_money_receipt($money_receipt_id){
-        $this->db->where('money_receipt_id',$money_receipt_id);
-        $this->db->delete('tbl_money_receipt');
-    }
-
-
 
 
     /////-----------------BALANCE---------

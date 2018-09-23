@@ -19,12 +19,12 @@
                         <form role="form" method="post" action="<?php echo base_url();?>bank/add_bank">
                             <div class="form-group">
                                 <label>Bank Name</label>
-                                <input class="form-control" placeholder = "Bank Name" name="bank_name">
+                                <input class="form-control" placeholder = "Bank Name" name="bank_name" required>
                             </div>
 
                             <div class="form-group">
                                 <label>Bank Code</label>
-                                <input class="form-control" placeholder = "Bank Code" name="bank_code">
+                                <input class="form-control" placeholder = "Bank Code" name="bank_code" required>
                             </div>
                             
                             <div class="form-group">

@@ -17,7 +17,7 @@
         <!-- Advanced Tables -->
         <div class="panel panel-default">
             <div class="panel-heading">
-                 Items are listed here..
+                 Claims are listed here..
             </div>
             <div class="panel-body">
                 <div class="table-responsive">

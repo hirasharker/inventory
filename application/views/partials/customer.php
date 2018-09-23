@@ -19,15 +19,15 @@
                         <form role="form" method="post" action="<?php echo base_url();?>sales/add_customer">
                             <div class="form-group">
                                 <label>Customer's Name</label>
-                                <input class="form-control" placeholder = "customer's Name" name="customer_name">
+                                <input class="form-control" placeholder = "customer's Name" name="customer_name" required>
                             </div>
                             <div class="form-group">
                                 <label>Address</label>
-                                <textarea class="form-control" rows="2" name="address"></textarea>
+                                <textarea class="form-control" rows="2" name="address" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input class="form-control" placeholder = "Phone" name="phone_no">
+                                <input class="form-control" placeholder = "Phone" name="phone_no" required>
                             </div>
                             
                             <button type="submit" class="btn btn-primary">Save</button>

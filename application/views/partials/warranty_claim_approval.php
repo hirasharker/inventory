@@ -83,15 +83,13 @@
                                                 <?php if($permission->permission_allow==1){?>
                                                 <form class="form" method="post" action="<?php echo base_url().'warranty_claim/approve_warranty_claim/';?>">
                                                     <input type="hidden" name="warranty_claim_id" value="<?php echo $value->warranty_claim_id;?>">
-                                                    <a href="#" class="approve"> approve </a> | 
+                                                    <a href="#" class="approve"> approve </a>
                                                 </form>
                                                 <?php }else{?>
-                                                <label style="color:#aea4a4; font-weight:normal;">approve</label>|
+                                                <label style="color:#aea4a4; font-weight:normal;">approve</label>
                                                 <?php }?>
                                                 <?php if($permission->permission_allow==1){?>
-                                                <a data-href="<?php echo base_url();?>warranty_claim/deny_warranty_claim/<?php echo $value->warranty_claim_id;?>" data-toggle="modal" data-target="#confirm-deny"> deny </a>
-                                                <?php }else{?>
-                                                <label style="color:#aea4a4; font-weight:normal;">deny</label>
+                                                | <a class="deny" data-id="<?php echo $value->warranty_claim_id;?>" data-href="<?php echo base_url();?>warranty_claim/deny_warranty_claim/<?php echo $value->warranty_claim_id;?>" data-toggle="modal" data-target="#confirm-deny"> deny </a>
                                                 <?php }?>
                                                 </td>
                                             </tr>
@@ -156,19 +154,7 @@
                                                     }    
                                                 }?></td>
                                                 <td class="center">
-                                                <?php if($permission->permission_allow==1){?>
-                                                <form class="form" method="post" action="<?php echo base_url().'warranty_claim/approve_warranty_claim/';?>">
-                                                    <input type="hidden" name="warranty_claim_id" value="<?php echo $value->warranty_claim_id;?>">
-                                                    <a href="#" class="approve"> approve </a> | 
-                                                </form>
-                                                <?php }else{?>
-                                                <label style="color:#aea4a4; font-weight:normal;">approve</label>|
-                                                <?php }?>
-                                                <?php if($permission->permission_allow==1){?>
-                                                <a data-href="<?php echo base_url();?>warranty_claim/deny_warranty_claim/<?php echo $value->warranty_claim_id;?>" data-toggle="modal" data-target="#confirm-deny"> deny </a>
-                                                <?php }else{?>
-                                                <label style="color:#aea4a4; font-weight:normal;">deny</label>
-                                                <?php }?>
+                                                    
                                                 </td>
                                             </tr>
 
@@ -202,6 +188,7 @@
                                                 <th>Documents</th>
                                                 <th>Quantity</th>
                                                 <th>Types of Warranty</th>
+                                                <th>Comment</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -231,6 +218,22 @@
                                                         echo $wt_value->warranty_claim_type_name;
                                                     }    
                                                 }?></td>
+                                                <td><?php
+                                                    switch ($value->approval_status) {
+                                                        case '-1':
+                                                             echo $value->comment_1; 
+                                                            break;
+                                                         case '-2':
+                                                             echo $value->comment_2; 
+                                                            break;
+                                                         case '-3':
+                                                             echo $value->comment_3; 
+                                                            break;
+                                                        default:
+                                                            # code...
+                                                            break;
+                                                    }
+                                                ?></td>
                                                 <td class="center">
                                                 <?php if($permission->permission_allow==1){?>
                                                 <form class="form" method="post" action="<?php echo base_url().'warranty_claim/approve_warranty_claim/';?>">
@@ -239,11 +242,6 @@
                                                 </form>
                                                 <?php }else{?>
                                                 <label style="color:#aea4a4; font-weight:normal;">approve</label>|
-                                                <?php }?>
-                                                <?php if($permission->permission_allow==1){?>
-                                                <a data-href="<?php echo base_url();?>warranty_claim/deny_warranty_claim/<?php echo $value->warranty_claim_id;?>" data-toggle="modal" data-target="#confirm-deny"> deny </a>
-                                                <?php }else{?>
-                                                <label style="color:#aea4a4; font-weight:normal;">deny</label>
                                                 <?php }?>
                                                 </td>
                                             </tr>
@@ -265,14 +263,49 @@
     <!-- /. ROW  -->
 </div>
 
+<!-- Modal Deny       -->
+<div class="modal fade" id="confirm-deny" role="dialog">
+  <div class="modal-dialog modal-sm">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+    <form method="post" action="<?php echo base_url();?>warranty_claim/deny_warranty_claim/">
+        <input type="hidden" name="warranty_claim_id" id="denied-claim-id" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Do you want to deny?</h4>
+        </div>
+        <div class="modal-body">
+            <label>Reason for Denial?</label>
+            <textarea name="comment"></textarea>
+        </div>
+          
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <!-- <a class="btn btn-danger btn-ok" type="submit">Deny</a> -->
+            <input class="btn btn-danger" type="submit" value="Deny" />
+        </div>
+    </form>
+    </div>
+    
+  </div>
+</div>
+<!-- Modal Deny End -->
+
 <script type="text/javascript">
     $(document).ready( function () {
        
     });
 
     $( ".approve" ).click(function( event ) {
-      // alert( "Handler for .submit() called." );
       var form = $(this).parent('form:first');
       form.submit();
     });
+
+    $(".deny").click(function(){
+        var warrantyClaimId     =   $(this).data('id');
+        document.getElementById('denied-claim-id').value = warrantyClaimId;
+    });
+
+
 </script>

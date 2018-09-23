@@ -30,8 +30,12 @@ class Stock_Model extends CI_Model {
         $this->db->update('tbl_stock');
     }
 
-    
-
+    public function add_broken_stock_quantity($item_id, $warehouse_id, $quantity){
+        $this->db->where('item_id',$item_id);
+        $this->db->where('warehouse_id',$warehouse_id);
+        $this->db->set('broken_quantity','broken_quantity+'.$quantity,FALSE);
+        $this->db->update('tbl_stock');
+    }
 
     public function get_stock_by_item_and_warehouse_id($item_id, $warehouse_id){
         $this->db->select('*');
