@@ -1,9 +1,9 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 
-class Mypdfl {
+class Mypdf {
 
-	function mypdfl()
+	function mypdf()
 
 	{
 
@@ -23,14 +23,11 @@ class Mypdfl {
 
 		{
 
-			$param = '"en-GB-x","A4","","",10,10,10,10,6,3,L';
+			$param = '"en-GB-x","A4","","",10,10,10,10,6,3';
 
 		}
 
-		$mpdf = new mPDF('utf-8', 'A4-L');
-
-		// return new mPDF($param);
-		return $mpdf;
+		return new mPDF($param);
 
 	}
 
