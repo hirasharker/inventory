@@ -129,32 +129,48 @@ class Money_Receipt extends CI_Controller {
 		}
 	}
 
-	public function update_money_receipt($money_receipt_id)
+	public function update_money_receipt()
 	{
+		$money_receipt_id 							=	$this->input->post('money_receipt_id','',TRUE);
+
 		$money_receipt_data							=	array();
 		$money_receipt_data['user_id']				=	$this->session->userdata('user_id');
 		$money_receipt_data['user_name']			=	$this->session->userdata('user_name');
-		$money_receipt_data['sales_id']				=	$this->input->post('sales_id','',TRUE);
-		
-		$sales_detail								=	$this->sales_model->get_sales_by_id($money_receipt_data['sales_id']);
+
+		$payment_mode 								=	$this->input->post('payment_mode');
+
+		$session_data 								=	array();
+		if($payment_mode == 2){
+			$session_data['error']					=	"Select Payment Mode!!!";
+			$this->session->set_userdata($session_data);
+			redirect('money_receipt','refresh');
+		}elseif ($payment_mode == 0) {
+			$money_receipt_data['sales_order_id']	=	$this->input->post('sales_order_id','',TRUE);
+			$sales_detail							=	$this->sales_order_model->get_sales_order_by_id($money_receipt_data['sales_order_id']);
+		}elseif ($payment_mode == 1) {
+			$money_receipt_data['sales_id']			=	$this->input->post('sales_id','',TRUE);
+			$sales_detail							=	$this->sales_model->get_sales_by_id($money_receipt_data['sales_id']);
+		}
+
+		$money_receipt_data['payment_mode']			=	$payment_mode;
 		$money_receipt_data['customer_id']			=	$sales_detail->customer_id;
 		$money_receipt_data['customer_name']		=	$sales_detail->customer_name;
 		$money_receipt_data['dealer_id']			=	$sales_detail->dealer_id;
 		$money_receipt_data['dealer_name']			=	$sales_detail->dealer_name;
-
+		
 		$money_receipt_data['received_amount']		=	$this->input->post('received_amount','',TRUE);
 		$money_receipt_data['money_receipt_date']	=	$this->input->post('money_receipt_date','',TRUE);
 
-		$this->form_validation->set_rules('sales_id', 'Invoice No', 'required|integer');
+		// $this->form_validation->set_rules('sales_id', 'Invoice No', 'required|integer');
 		$this->form_validation->set_rules('received_amount', 'received amount', 'required|numeric');
 		$this->form_validation->set_rules('money_receipt_date', 'receipt date', 'required');
 
         if ($this->form_validation->run() != FALSE) {
 
-			$result				=	$this->mr_model->update_money_receipt($money_receipt_data,$money_receipt_id);
+			$result				=	$this->mr_model->update_money_receipt($money_receipt_data, $money_receipt_id);
 			redirect('money_receipt/view_money_receipts','refresh');
 		}else{
-			$this->money_receipt($money_receipt_id);
+			redirect('money_receipt','refresh');
 		}
 	}
 	public function delete_money_receipt($money_receipt_id)

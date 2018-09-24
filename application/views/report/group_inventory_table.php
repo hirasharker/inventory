@@ -16,12 +16,13 @@
             <th class="text-center">Value</th>
         </tr>
 
-        <?php foreach($purchase_data as $value){?>
+       
         <tr class="gradeA">
+            <?php foreach($purchase_data as $value){?>
             <td class="text-center"><?php echo $value->item_name?></td>
             
             <td class="text-center"><?php echo $value->purchase_quantity;?></td>
-            
+            <?php }?> 
             <?php $sales_quantity = 0; foreach($sales_data as $s_value){ if($value->item_id==$s_value->item_id){ $sales_quantity= $s_value->sales_quantity;}}?>
 
             <td class="text-center"><?php echo $sales_quantity;?></td>
@@ -40,6 +41,6 @@
             <td class="text-center"><?php echo $value->item_rate;?></td>
             <td class="text-center"><?php echo $value->item_rate * $stock;?></td>
         </tr>
-        <?php }?> 
+       
     </tbody>
 </table>

@@ -7,7 +7,10 @@
 
 class Bank_Model extends CI_Model {
 
-
+    /**
+     * [get_all_banks description]
+     * @return ArrayList [description]
+     */
     public function get_all_banks(){
         $this->db->select('*');
         $this->db->from('tbl_bank');
@@ -16,7 +19,11 @@ class Bank_Model extends CI_Model {
         $result=$result_query->result();
         return $result;
     }
-
+    /**
+     * [get_bank_by_id description]
+     * @param  int $bank_id [description]
+     * @return Array
+     */
     public function get_bank_by_id($bank_id){
         $this->db->select('*');
         $this->db->from('tbl_bank');

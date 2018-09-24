@@ -153,6 +153,8 @@ class Purchase extends CI_Controller {
 
 			$purchase_detail_data['warehouse_id']		=	$purchase_data['warehouse_id'];
 
+			$purchase_detail_data['purchase_date']		=	$purchase_data['purchase_date'];
+
 			for ($i=0; $i < $error_count ; $i++) { 
 				// $purchase_detail_data['purchase_id']		=	$result;
 				$purchase_detail_data['purchase_id']		=	$purchase_data['purchase_id'];
@@ -278,17 +280,15 @@ class Purchase extends CI_Controller {
 
 			$this->purchase_model->update_purchase($purchase_data,$purchase_id);
 
-
-
 			$this->delete_purchase_detail($purchase_id);
-
-
 
 			$count							=	$this->input->post('count','',TRUE);
 
 			$purchase_detail_data				=	array();
 
 			$purchase_detail_data['warehouse_id']		=	$purchase_data['warehouse_id'];
+
+			$purchase_detail_data['purchase_date']		=	$purchase_data['purchase_date'];
 
 			for ($i=0; $i < $count ; $i++) { 
 				$purchase_detail_data['purchase_id']		=	$purchase_id;

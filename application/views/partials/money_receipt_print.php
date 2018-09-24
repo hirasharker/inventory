@@ -155,7 +155,7 @@
                     <div class="t m0 x17 h12 y15 ff1 fs6 fc0 sc0 ls0 ws0">Received By </div>
                 </div>
                 <div class="c x1 y1a wf h4">
-                    <div class="t m0 x2 h5 y13 ff2 fs1 fc0 sc0 ls0 ws0">Signature</div>
+                    <div class="t m0 x2 h5 y13 ff2 fs1 fc0 sc0 ls0 ws0"></div>
                 </div>
                 <div class="c x7 y1a w13 h4">
                     <div class="t m0 x11 h11 y11 ff2 fs5 fc2 sc0 ls0 ws0">[42]</div>
@@ -167,13 +167,13 @@
                     <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0"> Money Order</div>
                 </div>
                 <div class="c x1 y1b w4 h4">
-                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0">[Name]</div>
+                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0">Name</div>
                 </div>
                 <div class="c x4 y1b w16 h4">
                     <div class="t m0 x2 h5 y13 ff2 fs1 fc0 sc0 ls0 ws0"><?php echo $user_detail->first_name.' '.$user_detail->last_name;?></div>
                 </div>
                 <div class="c x1 y1c w4 h4">
-                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0">[Address]</div>
+                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0">Address</div>
                 </div>
                 <div class="c x4 y1d w17 h15">
                     <div class="t m0 x2 h8 y1e ff2 fs2 fc0 sc0 ls0 ws0">Sonartori Tower (14th - 18th fl)</div>
@@ -199,7 +199,7 @@
                     <div class="t m0 x5 h8 y23 ff2 fs2 fc0 sc0 ls0 ws0">BDT<span class="_ _0"> </span>0.00</div>
                 </div>
                 <div class="c x1 y24 w4 h4">
-                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0">[Phone]</div>
+                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0">Phone</div>
                 </div>
                 <div class="c x4 y24 w17 h4">
                     <div class="t m0 x2 h5 y13 ff2 fs1 fc0 sc0 ls0 ws0"><?php echo $user_detail->phone;?></div>

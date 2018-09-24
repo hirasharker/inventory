@@ -18,7 +18,8 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <form method="post" action="<?php echo base_url()?>inventory/group_inventory_pdf" target="_blank">
+                        <!-- <form method="post" action="<?php echo base_url()?>inventory/group_inventory_pdf" target="_blank"> -->
+                        <form method="post" action="<?php echo base_url()?>inventory/generate_group_inventory_detail" target="_blank">
                             <label>Select Date</label>
                             <div class="row">
                                 <div class="form-group col-lg-6 col-md-6">

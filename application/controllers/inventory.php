@@ -219,6 +219,7 @@ class Inventory extends CI_Controller {
 		$search_result['total_purchase_quantity']	=	$this->inventory_model->get_purchase_quantity_by_date($to_date);
 
 		$search_result['total_sales_quantity']		=	$this->inventory_model->get_sales_quantity_by_date($to_date);
+		// print_r($search_result);exit();
 
 		$output 								=	$this->load->view('report/group_inventory_table',$search_result,TRUE);
 

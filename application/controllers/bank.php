@@ -32,6 +32,12 @@ class Bank extends CI_Controller {
 	
 
 	//---------------------bank SECTION STARTS HERE
+	
+	/**
+	 * [index description]
+	 * @param  integer $bank_id [description]
+	 * @return void           	[description]
+	 */
 	public function index($bank_id = 0)
 	{
 		$data							=	array();
@@ -54,6 +60,7 @@ class Bank extends CI_Controller {
 
 		$this->load->view('templates/main_template',$data);
 	}
+
 	public function view_banks()
 	{
 		$data								=	array();
