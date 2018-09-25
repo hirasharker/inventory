@@ -10,6 +10,8 @@ class Inventory extends CI_Controller {
 		$this->load->model('warehouse_model','warehouse_model',TRUE);
 		$this->load->model('group_model','group_model',TRUE);
 		$this->load->model('item_model','item_model',TRUE);
+		$this->load->model('stock_model','stock_model',TRUE);
+		$this->load->model('stock_transfer_model','stock_transfer_model',TRUE);
 		$this->load->model('company_model','company_model',TRUE);
 		$this->load->model('purchase_model','purchase_model',TRUE);
 		$this->load->model('module_model','module_model',TRUE);
@@ -212,6 +214,8 @@ class Inventory extends CI_Controller {
 
 		$search_result 	= 	array();
 
+		$search_result['item_data']					=	$this->item_model->get_all_items();
+
 		$search_result['purchase_data'] 			=	$this->inventory_model->get_group_purchase_inventory_data_by_date($from_date,$to_date);
 
 		$search_result['sales_data'] 				=	$this->inventory_model->get_group_sales_inventory_data_by_date($from_date,$to_date);
@@ -219,9 +223,9 @@ class Inventory extends CI_Controller {
 		$search_result['total_purchase_quantity']	=	$this->inventory_model->get_purchase_quantity_by_date($to_date);
 
 		$search_result['total_sales_quantity']		=	$this->inventory_model->get_sales_quantity_by_date($to_date);
-		// print_r($search_result);exit();
+		
 
-		$output 								=	$this->load->view('report/group_inventory_table',$search_result,TRUE);
+		$output 									=	$this->load->view('report/group_inventory_table',$search_result,TRUE);
 
         $error_message = 'Its a dummy error '.$from_date.$to_date;
 
@@ -230,12 +234,12 @@ class Inventory extends CI_Controller {
 	}
 
 	public function group_inventory_pdf(){
-		$this->load->library('pdf');
-
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
 
 		$search_result 	= 	array();
+
+		$search_result['item_data']					=	$this->item_model->get_all_items();
 
 		$search_result['purchase_data'] 			=	$this->inventory_model->get_group_purchase_inventory_data_by_date($from_date,$to_date);
 
@@ -245,7 +249,15 @@ class Inventory extends CI_Controller {
 
 		$search_result['total_sales_quantity']		=	$this->inventory_model->get_sales_quantity_by_date($to_date);
 
-    	$this->pdf->load_view('report/group_inventory_pdf',$search_result);
+    	$html 										=	$this->load->view('report/group_inventory_pdf',$search_result,TRUE);
+ 
+        $pdfFilePath 								= 	"group_inventory.pdf";
+ 
+        $this->load->library('m_pdf');
+ 
+        $this->m_pdf->pdf->WriteHTML($html);
+ 
+        $this->m_pdf->pdf->Output($pdfFilePath, "D");  
 	}
 
 	//----------------WAREHOUSE INVENTORY---------------
@@ -276,15 +288,24 @@ class Inventory extends CI_Controller {
 
 		$search_result 	= 	array();
 
+		$search_result['item_data']					=	$this->stock_model->get_all_items_by_warehouse_id($warehouse_id);
+		
+
 		$search_result['purchase_data'] 			=	$this->inventory_model->get_group_purchase_inventory_data_by_date_and_warehouse_id($warehouse_id, $from_date,$to_date);
 
 		$search_result['sales_data'] 				=	$this->inventory_model->get_group_sales_inventory_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date);
+
+		$search_result['sent_stock_data'] 			=	$this->stock_transfer_model->get_sent_stock_transfer_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date);
+
+		$search_result['received_stock_data'] 		=	$this->stock_transfer_model->get_received_stock_transfer_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date);
 
 		$search_result['total_purchase_quantity']	=	$this->inventory_model->get_purchase_quantity_by_date($to_date);
 
 		$search_result['total_sales_quantity']		=	$this->inventory_model->get_sales_quantity_by_date($to_date);
 
-		$output 								=	$this->load->view('report/warehouse_inventory_table',$search_result,TRUE);
+		// echo '<pre>';print_r($search_result);echo '</pre>';exit();
+
+		$output 									=	$this->load->view('report/warehouse_inventory_table',$search_result,TRUE);
 
         $error_message = 'Its a dummy error '.$from_date.$to_date;
 
@@ -293,38 +314,41 @@ class Inventory extends CI_Controller {
 	}
 
 	public function warehouse_inventory_pdf(){
-		// $this->load->library('pdf'); // DOMPDF
-
 		$warehouse_id 	=	$this->input->post('warehouse_id',TRUE);
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
 
+		$warehouse_detail 							=	$this->warehouse_model->get_warehouse_by_id($warehouse_id);
+
 		$search_result 	= 	array();
+
+		$search_result['item_data']					=	$this->stock_model->get_all_items_by_warehouse_id($warehouse_id);
+		
 
 		$search_result['purchase_data'] 			=	$this->inventory_model->get_group_purchase_inventory_data_by_date_and_warehouse_id($warehouse_id, $from_date,$to_date);
 
-		$search_result['sales_data'] 				=	$this->inventory_model->get_group_sales_inventory_data_by_date_and_warehouse_id($warehouse_id, $from_date,$to_date);
+		$search_result['sales_data'] 				=	$this->inventory_model->get_group_sales_inventory_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date);
+
+		$search_result['sent_stock_data'] 			=	$this->stock_transfer_model->get_sent_stock_transfer_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date);
+
+		$search_result['received_stock_data'] 		=	$this->stock_transfer_model->get_received_stock_transfer_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date);
 
 		$search_result['total_purchase_quantity']	=	$this->inventory_model->get_purchase_quantity_by_date($to_date);
 
 		$search_result['total_sales_quantity']		=	$this->inventory_model->get_sales_quantity_by_date($to_date);
 
-		// echo '<pre>'; print_r($search_result); echo '</pre>'; exit();
-
-		// $this->load->view('report/warehouse_inventory_pdf',$search_result);
-
-    	// $this->pdf->load_view('report/warehouse_inventory_pdf',$search_result); // DOMPDF
-
-    	$data 										= 	[];
-        
         $html 										=	$this->load->view('report/warehouse_inventory_pdf',$search_result,TRUE);
  
         $pdfFilePath 								= 	"warehouse_inventory.pdf";
  
         $this->load->library('m_pdf');
- 
+
+ 		$this->m_pdf->pdf->SetHeader('Warehouse Stock Report of '.$warehouse_detail->warehouse_name);
+
+ 		$this->m_pdf->pdf->AddPage('L');
+
         $this->m_pdf->pdf->WriteHTML($html);
- 
+
         $this->m_pdf->pdf->Output($pdfFilePath, "D");   
 	}
 

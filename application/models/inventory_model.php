@@ -80,7 +80,7 @@ class Inventory_Model extends CI_Model {
 
 
     //---------GROUP INVENTORY----------------
-
+    
    
     public function get_group_purchase_inventory_data_by_date($from_date,$to_date){
         $this->db->distinct();

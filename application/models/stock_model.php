@@ -85,6 +85,19 @@ class Stock_Model extends CI_Model {
         $this->db->where('stock_id',$stock_id);
         $this->db->delete('tbl_stock');
     }
-    
+
+    //---------------- Warehouse Inventory Model Section ---------------------------
+    public function get_all_items_by_warehouse_id($warehouse_id){
+        $this->db->select('tbl_item.*,tbl_stock.quantity as stock_quantity, tbl_stock.broken_quantity');
+        $this->db->from('tbl_stock');
+        $this->db->join('tbl_item','tbl_item.item_id = tbl_stock.item_id');
+        if($warehouse_id != ''){
+           $this->db->where('tbl_stock.warehouse_id',$warehouse_id); 
+        }
+        // $this->db->where('tbl_stock.quantity !=',0);
+        $result_query=$this->db->get();
+        $result=$result_query->result();
+        return $result;
+    }
 }
 ?>

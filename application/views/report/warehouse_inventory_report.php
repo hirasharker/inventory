@@ -19,12 +19,11 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <form method="post" action="<?php echo base_url()?>inventory/warehouse_inventory_pdf" target="_blank">
-                        <!-- <form method="post" action="<?php echo base_url()?>inventory/generate_individual_inventory_detail" target="_blank"> -->
                         <!-- <form role="form" method="post" action="<?php echo base_url();?>purchase/add_purchase"> -->
                            <div class="form-group">
                                 <label>Select warehouse</label>
-                                <select class="form-control select-tag" id="warehouseId" name="warehouse_id" required>
-                                    <option value="">All</option>
+                                <select class="form-control select-tag" id="warehouseId" name="warehouse_id">
+                                    <!-- <option value="">All</option> -->
                                 <?php foreach($warehouse_list as $value){?>
                                     <option value="<?php echo $value->warehouse_id; ?>"><?php echo $value->warehouse_name;?></option>
                                 <?php }?>
