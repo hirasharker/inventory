@@ -18,7 +18,7 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <form method="post" action="<?php echo base_url()?>sales/group_receivable_pdf" target="_blank">
+                        <form method="post" action="<?php echo base_url()?>report_sales/group_receivable_pdf" target="_blank">
                         <!-- <form role="form" method="post" action="<?php echo base_url();?>purchase/add_purchase"> -->
                            <!--  <div class="form-group">
                                 <label>Select Item</label>
@@ -87,7 +87,7 @@
             var fromDate=document.getElementById('datepicker').value;
             var toDate=document.getElementById('datepicker2').value;
             $.ajax({
-                url: '<?php echo base_url();?>sales/generate_group_receivable_statement',
+                url: '<?php echo base_url();?>report_sales/generate_group_receivable_statement',
                 type:'POST',
                 dataType: 'json',
                 data: {from_date : fromDate, to_date : toDate},

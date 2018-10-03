@@ -43,12 +43,12 @@
                                             <td class="center"><?php echo $value->phone_no;?></td>
                                             <td class="center">
                                             <?php if($permission->permission_edit==1){?>
-                                            <a href="<?php echo base_url();?>sales/customer/<?php echo $value->customer_id;?>"> edit </a> | 
+                                            <a href="<?php echo base_url();?>customer/customer/<?php echo $value->customer_id;?>"> edit </a> | 
                                             <?php }else{?>
                                             <label style="color:#aea4a4; font-weight:normal;">edit</label>|
                                             <?php }?>
                                             <?php if($permission->permission_delete==1){?>
-                                            <a data-href="<?php echo base_url();?>sales/delete_customer/<?php echo $value->customer_id;?>" data-toggle="modal" data-target="#confirm-delete"> delete </a></td>
+                                            <a data-href="<?php echo base_url();?>customer/delete_customer/<?php echo $value->customer_id;?>" data-toggle="modal" data-target="#confirm-delete"> delete </a></td>
                                             <?php }else{?>
                                             <label style="color:#aea4a4; font-weight:normal;">delete</label>
                                             <?php }?>

@@ -7,8 +7,10 @@ class Sales extends CI_Controller {
 			redirect('login','refresh');
 		}
 		$this->load->model('sales_model','sales_model',TRUE);
+		$this->load->model('money_receipt_model','mr_model',TRUE);
 		$this->load->model('sales_order_model','sales_order_model',TRUE);
 		$this->load->model('dealer_model','dealer_model',TRUE);
+		$this->load->model('customer_model','customer_model',TRUE);
 		$this->load->model('item_model','item_model',TRUE);
 		$this->load->model('stock_model','stock_model',TRUE);
 		$this->load->model('warehouse_model','warehouse_model',TRUE);
@@ -50,9 +52,9 @@ class Sales extends CI_Controller {
 		$sales_data					=	array();
 		
 		$sales_data['warehouse_list']	=	$this->warehouse_model->get_all_warehouses();
-		$sales_data['customer_list']	=	$this->sales_model->get_all_customers();
+		$sales_data['customer_list']	=	$this->customer_model->get_all_customers();
 		$sales_data['dealer_list']		=	$this->dealer_model->get_all_dealers();
-		$sales_data['sales_order_list']	=	$this->sales_order_model->get_all_sales_orders();
+		$sales_data['sales_order_list']	=	$this->sales_order_model->get_all_unused_sales_orders();
 
 		if($sales_id != 0){
 			$sales_data['sales']		=	$this->sales_model->get_sales_by_id($sales_id);
@@ -137,7 +139,7 @@ class Sales extends CI_Controller {
 		
 		$sales_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
 		if($sales_data['customer_id']!= NULL){
-			$sales_data['customer_name']	=	$this->sales_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
+			$sales_data['customer_name']	=	$this->customer_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
 		}
 		
 		$sales_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
@@ -215,7 +217,7 @@ class Sales extends CI_Controller {
 		
 		$sales_data['customer_id']		=	$sales_order->customer_id;
 		if($sales_data['customer_id']!= 0){
-			$sales_data['customer_name']	=	$this->sales_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
+			$sales_data['customer_name']	=	$this->customer_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
 		}
 		
 		$sales_data['dealer_id']		=	$sales_order->dealer_id;
@@ -279,7 +281,7 @@ class Sales extends CI_Controller {
 
 		$sales_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
 		if($sales_data['customer_id']!= NULL){
-			$sales_data['customer_name']	=	$this->sales_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
+			$sales_data['customer_name']	=	$this->customer_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
 		}
 		
 		$sales_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
@@ -421,7 +423,7 @@ class Sales extends CI_Controller {
 
 		$customer_data					=	array();
 		if($customer_id!=0){
-			$customer_data['customer']	=	$this->sales_model->get_customer_by_id($customer_id);	
+			$customer_data['customer']	=	$this->customer_model->get_customer_by_id($customer_id);	
 		}else{
 			$customer_data['customer']	=	NULL;
 		}
@@ -442,7 +444,7 @@ class Sales extends CI_Controller {
 		$nav_data['user_permission'] 		=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
 		$customer_data						=	array();
-		$customer_data['customer_list']		=	$this->sales_model->get_all_customers();
+		$customer_data['customer_list']		=	$this->customer_model->get_all_customers();
 		$customer_data['permission']		= 	$this->module_model->get_permission_by_module_id_and_user_id(8,$this->session->userdata('user_id'));
 
 		$data['navigation']					=	$this->load->view('templates/navigation',$nav_data,TRUE);
@@ -461,7 +463,7 @@ class Sales extends CI_Controller {
 		$customer_data['address']			=	$this->input->post('address','',TRUE);
 		$customer_data['phone_no']			=	$this->input->post('phone_no','',TRUE);
 
-		$result								=	$this->sales_model->add_customer($customer_data);
+		$result								=	$this->customer_model->add_customer($customer_data);
 
 		redirect('sales/view_customers','refresh');
 	}
@@ -475,14 +477,14 @@ class Sales extends CI_Controller {
 		$customer_data['address']			=	$this->input->post('address','',TRUE);
 		$customer_data['phone_no']			=	$this->input->post('phone_no','',TRUE);
 
-		$result								=	$this->sales_model->update_customer($customer_data,$customer_id);
+		$result								=	$this->customer_model->update_customer($customer_data,$customer_id);
 
 		redirect('sales/view_customers','refresh');
 	}
 	public function delete_customer($customer_id)
 	{
 		
-		$this->sales_model->delete_customer($customer_id);
+		$this->customer_model->delete_customer($customer_id);
 
 		redirect('sales/view_customers','refresh');
 	}
@@ -648,15 +650,9 @@ class Sales extends CI_Controller {
 		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
 		$sales_data 					= 	array();
+		// $sales_data 					=	$this->
 		$sales_data['sales']			=	$this->sales_model->get_all_sales();
-		$sales_data['money_receipt']	=	$this->sales_model->get_all_money_receipts();
-
-
-		// echo '<pre>';
-		// print_r($sales_data['sales']);
-		// print_r($sales_data['money_receipt']);
-		// echo '</pre>';
-		// exit();
+		$sales_data['money_receipt']	=	$this->mr_model->get_all_money_receipts();
 
 		$data['navigation']			=	$this->load->view('templates/navigation',$nav_data,TRUE);
 		$data['footer']				=	$this->load->view('templates/footer','',TRUE);
@@ -672,7 +668,7 @@ class Sales extends CI_Controller {
 
 		$search_result 	= 	array();
 
-		$search_result['sales']			=	$this->sales_model->get_all_sales_by_date_and_customer_name($customer_name,$from_date,$to_date);
+		$search_result['sales']			=	$this->sales_model->get_all_sales_by_date_and_customer_id_or_($customer_name,$from_date,$to_date);
 		$search_result['money_receipt']	=	$this->sales_model->get_all_money_receipts_by_date_and_customer_name($customer_name,$from_date,$to_date);
 
 		$output 						=	$this->load->view('report/individual_receivable_table',$search_result,TRUE);
@@ -781,7 +777,7 @@ class Sales extends CI_Controller {
 
 		$sales_data 					= 	array();
 		$sales_data['sales']			=	$this->sales_model->get_all_sales();
-		$sales_data['customer_list']	=	$this->sales_model->get_all_customers();
+		$sales_data['customer_list']	=	$this->customer_model->get_all_customers();
 		$sales_data['dealer_list']		=	$this->dealer_model->get_all_dealers();
 
 		// echo '<pre>';
@@ -920,7 +916,7 @@ class Sales extends CI_Controller {
 		$sales_data['sales_detail']		=	$this->sales_model->get_sales_details_by_id($sales_id,$sales_data['sales']->warehouse_id);
 
 		if($sales_data['sales']->customer_id!=0){
-			$sales_data['customer']		 	=	$this->sales_model->get_customer_by_id($sales_data['sales']->customer_id);
+			$sales_data['customer']		 	=	$this->customer_model->get_customer_by_id($sales_data['sales']->customer_id);
 			$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_customer_id($sales_data['sales']->customer_id);
 			$paid_amount					=	$this->sales_model->get_paid_amount_by_customer_id($sales_data['sales']->customer_id);
 		}elseif ($sales_data['sales']->dealer_id!=0){
@@ -959,7 +955,7 @@ class Sales extends CI_Controller {
 
 		$sales_data					=	array();
 		$sales_data['item_list']	=	$this->item_model->get_all_items();
-		$sales_data['customer_list']=	$this->sales_model->get_all_customers();
+		$sales_data['customer_list']=	$this->customer_model->get_all_customers();
 
 		if($sales_id != 0){
 			$sales_data['sales']		=	$this->sales_model->get_sales_by_id($sales_id);
@@ -1008,7 +1004,7 @@ class Sales extends CI_Controller {
 		$sales_data['user_name']		=	$this->session->userdata('user_name');
 		
 		$sales_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
-		$sales_data['customer_name']	=	$this->sales_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
+		$sales_data['customer_name']	=	$this->customer_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
 		
 		$sales_data['sales_date']		=	$this->input->post('sales_date','',TRUE);
 		$sales_data['overall_discount']	=	$this->input->post('sales_discount','',TRUE);
@@ -1066,7 +1062,7 @@ class Sales extends CI_Controller {
 		
 
 		$sales_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
-		$sales_data['customer_name']	=	$this->sales_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
+		$sales_data['customer_name']	=	$this->customer_model->get_customer_by_id($sales_data['customer_id'])->customer_name;
 
 		
 		$sales_data['sales_date']		=	$this->input->post('sales_date','',TRUE);

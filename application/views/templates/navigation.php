@@ -347,12 +347,12 @@
                         <ul class="nav nav-third-level <?php if ($dev_key == "customer") {echo 'collapse in';} ?>">
                             <?php if($customer_permission->permission_add==1){?>
                             <li class="<?php if ($selected == "add_customer") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/customer">Add Customer</a>
+                                <a href="<?php echo base_url();?>customer">Add Customer</a>
                             </li>
                             <?php }?>
                             <?php if($customer_permission->permission_view==1){?>
                             <li class="<?php if ($selected == "all_customers") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/view_customers">All Customers</a>
+                                <a href="<?php echo base_url();?>customer/view_customers">All Customers</a>
                             </li>
                             <?php }?>
                         </ul>
@@ -407,15 +407,6 @@
                     </li>
 
 
-                    
-
-
-
-                    
-
-
-                    
-
                     <li class="<?php if ($dev_key == "money_receipt") {echo 'active';} ?>">
                         <a href="<?php echo base_url();?>">Money Receipt<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level <?php if ($dev_key == "money_receipt") {echo 'collapse in';} ?>">
@@ -440,10 +431,10 @@
                         <a href="<?php echo base_url();?>">Receivable<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level <?php if ($dev_key == "recievable_status") {echo 'collapse in';} ?>">
                             <li class="<?php if ($selected == "individual_receivable") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/individual_receivable">Individual Statement</a>
+                                <a href="<?php echo base_url();?>report_sales/individual_receivable">Individual Statement</a>
                             </li>
                             <li class="<?php if ($selected == "group_receivable") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/group_receivable">Group Statement</a>
+                                <a href="<?php echo base_url();?>report_sales/group_receivable">Group Statement</a>
                             </li>
                         </ul>
                     </li>
@@ -453,10 +444,10 @@
                         <a href="<?php echo base_url();?>">Sales Report<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level <?php if ($dev_key == "sales_report") {echo 'collapse in';} ?>">
                             <li class="<?php if ($selected == "individual_sales_report") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/individual_sales_report">Individual Sales Report</a>
+                                <a href="<?php echo base_url();?>report_sales/individual_sales_report">Individual Sales Report</a>
                             </li>
                             <li class="<?php if ($selected == "group_sales_report") {echo 'active-menu';} ?>">
-                                <a href="<?php echo base_url();?>sales/group_sales_report">Group Sales Report</a>
+                                <a href="<?php echo base_url();?>report_sales/group_sales_report">Group Sales Report</a>
                             </li>
                         </ul>
                     </li>

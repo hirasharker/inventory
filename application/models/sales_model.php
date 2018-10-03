@@ -22,22 +22,20 @@ class Sales_Model extends CI_Model {
     }
 
     public function get_all_sales_by_date($from_date,$to_date){
-        $this->db->select('tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name,tbl_sales.user_id, tbl_sales.user_name
-            , tbl_sales.sales_date, GROUP_CONCAT(tbl_sales_detail.item_name SEPARATOR ",") as item_name, (sum(tbl_sales_detail.sales_price * tbl_sales_detail.quantity-tbl_sales_detail.individual_discount))*(1-.01*tbl_sales.overall_discount) as total_price'); 
+        $this->db->select('tbl_sales.sales_id, tbl_sales.sales_order_id, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name, tbl_sales.sales_date, GROUP_CONCAT(tbl_sales_detail.item_name SEPARATOR ",") as item_name, (sum(tbl_sales_detail.sales_price * tbl_sales_detail.quantity-tbl_sales_detail.individual_discount))*(1-.01*tbl_sales.overall_discount) as total_price'); 
         $this->db->from('tbl_sales');
         $this->db->join('tbl_sales_detail','tbl_sales_detail.sales_id = tbl_sales.sales_id');
         $this->db->group_by('tbl_sales_detail.sales_id');
         $this->db->where('tbl_sales.sales_date >=',$from_date);
         $this->db->where('tbl_sales.sales_date <=',$to_date);
         $this->db->order_by('tbl_sales.time_stamp','desc');
-        $this->db->order_by('tbl_sales.customer_name','desc');
         $result_query=$this->db->get();
         $result=$result_query->result();
         return $result;
     }
 
-    public function get_all_sales_by_date_and_customer_name($customer_name,$from_date,$to_date){
-        $this->db->select('tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name,tbl_sales.user_id, tbl_sales.user_name
+    public function get_all_sales_by_date_and_customer_id_or_dealer_id($customer_id, $dealer_id, $from_date, $to_date){
+        $this->db->select('tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
             , tbl_sales.sales_date, GROUP_CONCAT(tbl_sales_detail.item_name SEPARATOR ",") as item_name
             , (sum(tbl_sales_detail.sales_price * tbl_sales_detail.quantity-tbl_sales_detail.individual_discount))*(1-.01*tbl_sales.overall_discount) as total_price'); 
         $this->db->from('tbl_sales');
@@ -45,7 +43,12 @@ class Sales_Model extends CI_Model {
         $this->db->group_by('tbl_sales_detail.sales_id');
         $this->db->where('tbl_sales.sales_date >=',$from_date);
         $this->db->where('tbl_sales.sales_date <=',$to_date);
-        $this->db->where('tbl_sales.customer_name',$customer_name);
+        if($customer_id != ""){
+            $this->db->where('tbl_sales.customer_id',$customer_id);
+        }
+        if($dealer_id != ""){
+            $this->db->where('tbl_sales.dealer_id',$dealer_id);
+        }
         $this->db->order_by('tbl_sales.time_stamp','desc');
         $this->db->order_by('tbl_sales.customer_name','desc');
         $result_query=$this->db->get();
@@ -215,45 +218,7 @@ class Sales_Model extends CI_Model {
         $this->db->update('tbl_sales_detail');
     }
 
-    /////----CUSTOMER SECTION START HERE...................
-
-    public function get_all_customers(){
-        $this->db->select('*');
-        $this->db->from('tbl_customer');
-        $this->db->order_by('time_stamp','asc');
-        $result_query=$this->db->get();
-        $result=$result_query->result();
-        return $result;
-    }
-
-    public function get_customer_by_id($customer_id){
-        $this->db->select('*');
-        $this->db->from('tbl_customer');
-        $this->db->where('customer_id',$customer_id);
-        $result_query=$this->db->get();
-        $result=$result_query->row();
-        return $result;
-    }
     
-    
-    public function add_customer($data){
-        $this->db->insert('tbl_customer',$data);
-        $result = $this->db->insert_id();
-        return $result;
-    }
-   
-    public function update_customer($data,$customer_id){
-        
-        $this->db->where('customer_id',$customer_id);
-        $this->db->update('tbl_customer',$data);
-    }
-   
-    public function delete_customer($customer_id){
-        $this->db->where('customer_id',$customer_id);
-        $this->db->delete('tbl_customer');
-    }
-
-    ////----CUSTOMER SECTION ENDS HERE-----
 
 
     /////-----------------BALANCE---------

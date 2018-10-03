@@ -16,7 +16,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-5">
-                        <form role="form" method="post" action="<?php echo base_url();?>sales/add_customer">
+                        <form role="form" method="post" action="<?php echo base_url();?>customer/add_customer">
                             <div class="form-group">
                                 <label>Customer's Name</label>
                                 <input class="form-control" placeholder = "customer's Name" name="customer_name" required>
@@ -62,7 +62,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-5">
-                        <form role="form" method="post" action="<?php echo base_url();?>sales/update_customer/<?php echo $customer->customer_id;?>">
+                        <form role="form" method="post" action="<?php echo base_url();?>customer_name/update_customer/<?php echo $customer->customer_id;?>">
                             <div class="form-group">
                                 <label>Customer Code</label>
                                 <input class="form-control" disabled value="<?php echo $customer->customer_id;?>">

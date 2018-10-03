@@ -13,24 +13,38 @@
             </tr>
         </thead>
         <tbody>
-            <?php $i=1; $balance = 0; foreach($sales as $value){$balance = $value->total_price;?>
+            <?php $i=1; $balance = 0; foreach($sales_data as $value){$balance = $value->total_price;?>
             <tr class="gradeA">
                 <td><?php echo $i; ?></td>
                 <td><a href="<?php echo base_url().'sales/sales_invoice/'.$value->sales_id;?>" target="_blank"><?php echo $value->sales_id;?></a></td>
                 <td>---</td>
-                <td><a href="<?php echo base_url().'sales/customer/'.$value->customer_id;?>" target="_blank"><?php echo $value->customer_name;?></a></td>
+                <td>
+                <?php if($value->customer_id!=0){?>
+                    <a href="<?php echo base_url().'customer/index/'.$value->customer_id;?>" target="_blank"><?php echo $value->customer_name;?></a>
+                <?php }?>
+                <?php if($value->dealer_id!=0){?>
+                    <a href="<?php echo base_url().'dealer/index/'.$value->dealer_id;?>" target="_blank"><?php echo $value->dealer_name;?></a>
+                <?php }?>
+                </td>
                 <td><?php echo $value->sales_date;?></td>
                 <td><?php echo $value->total_price;?></td>
                 <td>---</td>
                 <td class="center"><?php echo $balance;?></td>
             </tr>
-                <?php foreach($money_receipt as $mr_value){?>
-                <?php if($value->sales_id == $mr_value->sales_id){ $i++; ?>
+                <?php foreach($money_receipt_data as $mr_value){?>
+                <?php if($value->customer_id == $mr_value->customer_id || $value->dealer_id == $mr_value->dealer_id){ $i++; ?>
                 <tr class="gradeA">
                     <td><?php echo $i; ?></td>
                     <td>---</td>
-                    <td><a href="<?php echo base_url().'sales/money_receipt/'.$mr_value->money_receipt_id;?>" target="_blank"><?php echo $mr_value->money_receipt_id;?></td>
-                    <td><a href="<?php echo base_url().'sales/customer/'.$mr_value->customer_id;?>" target="_blank"><?php echo $mr_value->customer_name;?></a></td>
+                    <td><a href="<?php echo base_url().'money_receipt/index/'.$mr_value->money_receipt_id;?>" target="_blank"><?php echo $mr_value->money_receipt_id;?></td>
+                    <td>
+                    <?php if($value->customer_id!=0){?>
+                        <a href="<?php echo base_url().'customer/index/'.$value->customer_id;?>" target="_blank"><?php echo $value->customer_name;?></a>
+                    <?php }?>
+                    <?php if($value->dealer_id!=0){?>
+                        <a href="<?php echo base_url().'dealer/index/'.$value->dealer_id;?>" target="_blank"><?php echo $value->dealer_name;?></a>
+                    <?php }?>
+                    </td>
                     <td><?php echo $mr_value->money_receipt_date;?></td>
                     <td>---</td>
                     <td><?php echo $mr_value->received_amount;?></td>

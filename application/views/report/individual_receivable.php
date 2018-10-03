@@ -18,22 +18,37 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <form method="post" action="<?php echo base_url()?>sales/individual_receivable_pdf" target="_blank">
-                        <!-- <form method="post" action="<?php echo base_url()?>inventory/individual_report_pdf"> -->
-                        <!-- <form role="form" method="post" action="<?php echo base_url();?>purchase/add_purchase"> -->
-                           <!--  <div class="form-group">
-                                <label>Select Item</label>
-                                <select class="form-control" id="item" name="item_id" required>
-                                    <option value="">select</option>
-                                <?php foreach($item_list as $value){?>
-                                    <option value="<?php echo $value->item_id; ?>"><?php echo $value->item_name;?></option>
+                        <form method="post" action="<?php echo base_url()?>report_sales/individual_receivable_pdf" target="_blank">
+                        <!-- <form method="post" action="<?php echo base_url()?>report_sales/generate_individual_receivable_statement" target="_blank"> -->
+                            
+                            <div class="form-group">
+                                <label>Type of Customer</label>
+                                <select class="form-control" name="customer_type" id="customerType" required>
+                                    <option value="">Select</option>
+                                    <option value="1">Dealer</option>
+                                    <option value="2">Regular Customer</option>
+                                    <!-- <option value="3">Quick Sale</option> -->
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="customer" style="display:none">
+                                <label>Select Customer</label>
+                                <select class="form-control select-tag" name="customer_id" id="customerId" style="width: 100% !important;">
+                                    <option value="">select customer</option>
+                                    <?php foreach($customer_list as $value){?>
+                                    <option value="<?php echo $value->customer_id; ?>"><?php echo $value->customer_name;?></option>
                                 <?php }?>
                                 </select>
-                            </div> -->
+                            </div>
 
-                            <div class="form-group">
-                                <label>Customer Name</label>
-                                <input id="customer-name" class="form-control" placeholder = "Type customer name" name="customer_name" type="text">
+                            <div class="form-group" id="dealer" style="display:none">
+                                <label>Select Dealer</label>
+                                <select class="form-control select-tag" name="dealer_id" id="dealerId" style="width: 100% !important;">
+                                    <option value="">select dealer</option>
+                                    <?php foreach($dealer_list as $value){?>
+                                    <option value="<?php echo $value->dealer_id; ?>"><?php echo $value->dealer_name;?></option>
+                                <?php }?>
+                                </select>
                             </div>
                             <label>Select Date</label>
                             <div class="row">
@@ -88,25 +103,47 @@
     <!-- /. ROW  -->
 
 <script>
-    $(function(){
-      $("#customer-name").autocomplete({
-        source: "<?php echo base_url();?>sales/generate_customer_name/"// path to the get_birds method
-      });
+    $( "#customerType" ).change(function() {
+      // alert( "Handler for .change() called."+this.value);
+      var val = $('#customerType option:selected').val();
+      if(val == 1){
+        $( "#dealer" ).show( 500 );
+        $( "#customer" ).hide( 500 );
+        $( "#customerId" ).val("");
+        $( "#customerId" ).change();
+      }else if (val == 2){
+        $( "#customer" ).show( 500 );
+        $( "#dealer" ).hide( 500 );
+        $( "#dealerId" ).val("");
+        $( "#dealerId" ).change();
+      }else {
+        $( "#customer" ).hide( 500 );
+        $( "#dealer" ).hide( 500 );
+        $( "#customerId" ).val("");
+        $( "#dealerId" ).val("");
+      }
+
     });
+
 </script>
 
 <script>
         $( "#search" ).click(function() {
-          // alert( "Handler for .click() called." );
-            var customerName=document.getElementById('customer-name').value;
-            var fromDate=document.getElementById('datepicker').value;
-            var toDate=document.getElementById('datepicker2').value;
+            var dealerId       =    0;
+            var customerId     =    0;
+            $("#table-container").html("");
+            
+            dealerId       =    $('#dealerId option:selected').val();
+            customerId     =    $('#customerId option:selected').val();
+            var fromDate       =    document.getElementById('datepicker').value;
+            var toDate         =    document.getElementById('datepicker2').value;
             $.ajax({
-                url: '<?php echo base_url();?>sales/generate_individual_receivable_statement',
+                url: '<?php echo base_url();?>report_sales/generate_individual_receivable_statement',
                 type:'POST',
                 dataType: 'json',
-                data: {customer_name : customerName, from_date : fromDate, to_date : toDate},
+                data: {customer_id : customerId, dealer_id : dealerId, from_date : fromDate, to_date : toDate},
                 success: function(output){
+                    // console.log('success');
                     $("#table-container").html(output);
                 } // End of success function of ajax form
             }); // End of ajax call

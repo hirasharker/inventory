@@ -77,7 +77,7 @@ $this->enableImports = false;			// Adding mPDFI functions
 $this->collapseBlockMargins = true; 	// Allows top and bottom margins to collapse between block elements
 $this->progressBar = 0;				// Shows progress-bars whilst generating file 0 off, 1 simple, 2 advanced
 $this->progbar_heading = 'mPDF file progress';
-$this->progbar_altHTML = '';			// Should include <html> and <body> but NOT end tags
+$this->progbar_altHTML = '<html><body>Creating PDF file. Please wait...';			// Should include <html> and <body> but NOT end tags
 							// Can incude <head> and link to stylesheet etc.
 							// e.g. '<html><body><p><img src="loading.gif" /> Creating PDF file. Please wait...</p>';
 
