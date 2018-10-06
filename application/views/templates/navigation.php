@@ -325,7 +325,7 @@
                 <a href="<?php echo base_url();?>"><i class="fa fa-shopping-cart icon-flipped"></i></i> Sales<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level <?php if ($dev_key == "customer" || $dev_key == "sales") {echo 'collapse in';} ?>">
 
-                    <li class="<?php if ($dev_key == "dealer") {echo 'active';} ?>">
+                    <!-- <li class="<?php if ($dev_key == "dealer") {echo 'active';} ?>">
                         <a href="<?php echo base_url();?>">Dealer<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level <?php if ($dev_key == "dealer") {echo 'collapse in';} ?>">
                             <?php if($dealer_permission->permission_add==1){?>
@@ -339,7 +339,7 @@
                             </li>
                             <?php }?>
                         </ul>
-                    </li>
+                    </li> -->
 
                    
                     <li class="<?php if ($dev_key == "customer") {echo 'active';} ?>">

@@ -34,8 +34,8 @@ class Sales_Model extends CI_Model {
         return $result;
     }
 
-    public function get_all_sales_by_date_and_customer_id_or_dealer_id($customer_id, $dealer_id, $from_date, $to_date){
-        $this->db->select('tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
+    public function get_all_sales_by_date_and_customer_id($customer_id, $from_date, $to_date){
+        $this->db->select('tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.user_id, tbl_sales.user_name
             , tbl_sales.sales_date, GROUP_CONCAT(tbl_sales_detail.item_name SEPARATOR ",") as item_name
             , (sum(tbl_sales_detail.sales_price * tbl_sales_detail.quantity-tbl_sales_detail.individual_discount))*(1-.01*tbl_sales.overall_discount) as total_price'); 
         $this->db->from('tbl_sales');
@@ -45,9 +45,6 @@ class Sales_Model extends CI_Model {
         $this->db->where('tbl_sales.sales_date <=',$to_date);
         if($customer_id != ""){
             $this->db->where('tbl_sales.customer_id',$customer_id);
-        }
-        if($dealer_id != ""){
-            $this->db->where('tbl_sales.dealer_id',$dealer_id);
         }
         $this->db->order_by('tbl_sales.time_stamp','desc');
         $this->db->order_by('tbl_sales.customer_name','desc');

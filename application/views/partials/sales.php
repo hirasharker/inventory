@@ -37,7 +37,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Type of Customer</label>
                                 <select class="form-control" name="customer_type" id="customerType">
                                     <option value="">Select Type</option>
@@ -45,9 +45,9 @@
                                     <option value="2">Regular Customer</option>
                                     <option value="3">Anonymous</option>
                                 </select>
-                            </div>
+                            </div> -->
 
-                            <div class="form-group" id="customer" style="display:none">
+                            <div class="form-group" id="customer" style="display:block">
                                 <label>Select Customer</label>
                                 <select class="form-control select-tag" name="customer_id" id="customerId" style="width: 100% !important;">
                                     <option value="">select customer</option>
@@ -57,7 +57,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group" id="dealer" style="display:none">
+                            <!-- <div class="form-group" id="dealer" style="display:none">
                                 <label>Select Dealer</label>
                                 <select class="form-control select-tag" name="dealer_id" id="dealerId" style="width: 100% !important;">
                                     <option value="">select dealer</option>
@@ -65,7 +65,7 @@
                                     <option value="<?php echo $value->dealer_id;?>"><?php echo $value->dealer_name;?></option>
                                 <?php }?>
                                 </select>
-                            </div>
+                            </div> -->
 
                             <div class="form-group">
                                 <label>Select Warehouse</label>
@@ -402,7 +402,7 @@ $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is
                     <div class="col-lg-9">
                         <form role="form" method="post" action="<?php echo base_url();?>sales/update_sales/<?php echo $sales->sales_id;?>">
 
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Type of Customer</label>
                                 <select class="form-control" name="customer_type" id="customerType">
                                     <option value="">Select Type</option>
@@ -410,9 +410,9 @@ $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is
                                     <option value="2" <?php if($sales->customer_type==2){echo "selected";}?>>Regular Customer</option>
                                     <option value="3" <?php if($sales->customer_type==3){echo "selected";}?>>Anonymus</option>
                                 </select>
-                            </div>
+                            </div> -->
 
-                            <div class="form-group" id="customer" style="display:none">
+                            <div class="form-group" id="customer" style="display:block">
                                 <label>Select Customer</label>
                                 <select class="form-control" name="customer_id" id="customerId">
                                     <option value="">select customer</option>
@@ -422,7 +422,7 @@ $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is
                                 </select>
                             </div>
 
-                            <div class="form-group" id="dealer" style="display:none">
+                            <!-- <div class="form-group" id="dealer" style="display:none">
                                 <label>Select Dealer</label>
                                 <select class="form-control" name="dealer_id" id="dealerId">
                                     <option value="">select dealer</option>
@@ -430,7 +430,7 @@ $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is
                                     <option <?php if($sales->dealer_id==$value->dealer_id){ echo "selected";}?> value="<?php echo $value->dealer_id; ?>"><?php echo $value->dealer_name;?></option>
                                 <?php }?>
                                 </select>
-                            </div>
+                            </div> -->
 
                             <div class="form-group">
                                 <label>Select Warehouse</label>
@@ -615,7 +615,6 @@ $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is
             $( "#customerId" ).val("");
             $( "#dealerId" ).val("");
           }
-
         });
 
 

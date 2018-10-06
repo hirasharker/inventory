@@ -142,17 +142,17 @@ class Sales_Order extends CI_Controller {
 		$sales_order_data['warehouse_id']		=	$this->input->post('warehouse_id','',TRUE);
 		$sales_order_data['warehouse_name']		=	$this->warehouse_model->get_warehouse_by_id($sales_order_data['warehouse_id'])->warehouse_name;
 
-		$sales_order_data['customer_type']			=	$this->input->post('customer_type','',TRUE);
+		$sales_order_data['customer_type']		=	$this->input->post('customer_type','',TRUE);
 		
 		$sales_order_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
 		if($sales_order_data['customer_id']	!= NULL){
 			$sales_order_data['customer_name']	=	$this->sales_order_model->get_customer_by_id($sales_order_data['customer_id'])->customer_name;
 		}
 		
-		$sales_order_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
-		if($sales_order_data['dealer_id']!= NULL){
-			$sales_order_data['dealer_name']	=	$this->dealer_model->get_dealer_by_id($sales_order_data['dealer_id'])->dealer_name;
-		}
+		// $sales_order_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
+		// if($sales_order_data['dealer_id']!= NULL){
+		// 	$sales_order_data['dealer_name']	=	$this->dealer_model->get_dealer_by_id($sales_order_data['dealer_id'])->dealer_name;
+		// }
 		
 		$sales_order_data['sales_order_date']	=	$this->input->post('sales_order_date','',TRUE);
 		$sales_order_data['overall_discount']	=	$this->input->post('sales_order_discount','',TRUE);
@@ -183,7 +183,7 @@ class Sales_Order extends CI_Controller {
 			$sales_order_detail_data				=	array();
 
 			$sales_order_detail_data['warehouse_id']				=	$sales_order_data['warehouse_id'];
-			$sales_order_detail_data['dealer_id']					=	$sales_order_data['dealer_id'];
+			// $sales_order_detail_data['dealer_id']					=	$sales_order_data['dealer_id'];
 			$sales_order_detail_data['customer_id']					=	$sales_order_data['customer_id'];
 
 			for ($i=0; $i < $error_count ; $i++) { 
@@ -221,10 +221,10 @@ class Sales_Order extends CI_Controller {
 			$sales_order_data['customer_name']	=	$this->sales_order_model->get_customer_by_id($sales_order_data['customer_id'])->customer_name;
 		}
 		
-		$sales_order_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
-		if($sales_order_data['dealer_id']!= NULL){
-			$sales_order_data['dealer_name']		=	$this->dealer_model->get_dealer_by_id($sales_order_data['dealer_id'])->dealer_name;
-		}
+		// $sales_order_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
+		// if($sales_order_data['dealer_id']!= NULL){
+		// 	$sales_order_data['dealer_name']		=	$this->dealer_model->get_dealer_by_id($sales_order_data['dealer_id'])->dealer_name;
+		// }
 		
 		$sales_order_data['sales_order_date']		=	$this->input->post('sales_order_date','',TRUE);
 		$sales_order_data['overall_discount']	=	$this->input->post('sales_order_discount','',TRUE);
@@ -486,8 +486,8 @@ class Sales_Order extends CI_Controller {
 		$sales_order_detail								=	$this->sales_order_model->get_sales_order_by_id($money_receipt_data['sales_order_id']);
 		$money_receipt_data['customer_id']			=	$sales_order_detail->customer_id;
 		$money_receipt_data['customer_name']		=	$sales_order_detail->customer_name;
-		$money_receipt_data['dealer_id']			=	$sales_order_detail->dealer_id;
-		$money_receipt_data['dealer_name']			=	$sales_order_detail->dealer_name;
+		// $money_receipt_data['dealer_id']			=	$sales_order_detail->dealer_id;
+		// $money_receipt_data['dealer_name']			=	$sales_order_detail->dealer_name;
 		
 		$money_receipt_data['received_amount']		=	$this->input->post('received_amount','',TRUE);
 		$money_receipt_data['money_receipt_date']	=	$this->input->post('money_receipt_date','',TRUE);

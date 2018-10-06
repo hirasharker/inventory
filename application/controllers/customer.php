@@ -88,7 +88,7 @@ class Customer extends CI_Controller {
 		$customer_data['customer_type']		=	$this->input->post('customer_type','',TRUE);
 		$customer_data['customer_name']		=	$this->input->post('customer_name','',TRUE);
 		$customer_data['customer_category']	=	$this->input->post('customer_category','',TRUE);
-		$customer_data['address']			=	$this->input->post('address','',TRUE);
+		$customer_data['present_address']	=	$this->input->post('present_address','',TRUE);
 		$customer_data['phone_no']			=	$this->input->post('phone_no','',TRUE);
 
 		$result								=	$this->customer_model->add_customer($customer_data);
@@ -101,8 +101,10 @@ class Customer extends CI_Controller {
 		$customer_data						=	array();
 		$customer_data['user_id']			=	$this->session->userdata('user_id');
 		$customer_data['user_name']			=	$this->session->userdata('user_name');
+		$customer_data['customer_type']		=	$this->input->post('customer_type','',TRUE);
 		$customer_data['customer_name']		=	$this->input->post('customer_name','',TRUE);
-		$customer_data['address']			=	$this->input->post('address','',TRUE);
+		$customer_data['customer_category']	=	$this->input->post('customer_category','',TRUE);
+		$customer_data['present_address']	=	$this->input->post('present_address','',TRUE);
 		$customer_data['phone_no']			=	$this->input->post('phone_no','',TRUE);
 
 		$result								=	$this->customer_model->update_customer($customer_data,$customer_id);

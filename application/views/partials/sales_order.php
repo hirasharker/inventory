@@ -19,16 +19,16 @@
                        <?php echo form_open('sales_order/add_sales_order');?>
                        <!-- <form role="form" method="get" action="#"> -->
 
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Type of Customer</label>
                                 <select class="form-control" name="customer_type" id="customerType">
                                     <option value="">Select Type</option>
                                     <option value="1">Dealer</option>
                                     <option value="2">Regular Customer</option>
                                 </select>
-                            </div>
+                            </div> -->
 
-                            <div class="form-group" id="customer" style="display:none">
+                            <div class="form-group" id="customer" style="display:block">
                                 <label>Select Customer</label>
                                 <select class="form-control select-tag" name="customer_id" id="customerId" style="width: 100% !important;">
                                     <option value="">select customer</option>
@@ -38,7 +38,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group" id="dealer" style="display:none">
+                            <!-- <div class="form-group" id="dealer" style="display:none">
                                 <label>Select Dealer</label>
                                 <select class="form-control select-tag" name="dealer_id" id="dealerId" style="width: 100% !important;">
                                     <option value="">select dealer</option>
@@ -46,7 +46,7 @@
                                     <option value="<?php echo $value->dealer_id; ?>"><?php echo $value->dealer_name;?></option>
                                 <?php }?>
                                 </select>
-                            </div>
+                            </div> -->
 
                             <div class="form-group">
                                 <label>Select Warehouse</label>
@@ -57,7 +57,6 @@
                                 <?php }?>
                                 </select>
                             </div>
-
 
                             <div class="form-group">
                                 <label>Select Item</label>
@@ -394,16 +393,16 @@
                     <div class="col-lg-9">
                         <form role="form" method="post" action="<?php echo base_url();?>sales_order/update_sales_order/<?php echo $sales_order->sales_order_id;?>">
 
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Type of Customer</label>
                                 <select class="form-control" name="customer_type" id="customerType">
                                     <option value="">Select Type</option>
                                     <option value="1" <?php if($sales_order->customer_type==1){echo "selected";}?>>Dealer Sale</option>
                                     <option value="2" <?php if($sales_order->customer_type==2){echo "selected";}?>>Regular Customer</option>
                                 </select>
-                            </div>
+                            </div> -->
 
-                            <div class="form-group" id="customer" style="display:none">
+                            <div class="form-group" id="customer" style="display:block">
                                 <label>Select Customer</label>
                                 <select class="form-control" name="customer_id" id="customerId">
                                     <option value="">select customer</option>
@@ -413,7 +412,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group" id="dealer" style="display:none">
+                            <!-- <div class="form-group" id="dealer" style="display:none">
                                 <label>Select Dealer</label>
                                 <select class="form-control" name="dealer_id" id="dealerId">
                                     <option value="">select dealer</option>
@@ -421,7 +420,7 @@
                                     <option <?php if($sales_order->dealer_id==$value->dealer_id){ echo "selected";}?> value="<?php echo $value->dealer_id; ?>"><?php echo $value->dealer_name;?></option>
                                 <?php }?>
                                 </select>
-                            </div>
+                            </div> -->
 
                             <div class="form-group">
                                 <label>Select Warehouse</label>

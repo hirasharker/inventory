@@ -22,9 +22,6 @@
                 <?php if($value->customer_id!=0){?>
                     <a href="<?php echo base_url().'customer/index/'.$value->customer_id;?>" target="_blank"><?php echo $value->customer_name;?></a>
                 <?php }?>
-                <?php if($value->dealer_id!=0){?>
-                    <a href="<?php echo base_url().'dealer/index/'.$value->dealer_id;?>" target="_blank"><?php echo $value->dealer_name;?></a>
-                <?php }?>
                 </td>
                 <td><?php echo $value->sales_date;?></td>
                 <td><?php echo $value->total_price;?></td>
@@ -40,9 +37,6 @@
                     <td>
                     <?php if($value->customer_id!=0){?>
                         <a href="<?php echo base_url().'customer/index/'.$value->customer_id;?>" target="_blank"><?php echo $value->customer_name;?></a>
-                    <?php }?>
-                    <?php if($value->dealer_id!=0){?>
-                        <a href="<?php echo base_url().'dealer/index/'.$value->dealer_id;?>" target="_blank"><?php echo $value->dealer_name;?></a>
                     <?php }?>
                     </td>
                     <td><?php echo $mr_value->money_receipt_date;?></td>

@@ -17,16 +17,13 @@ class Money_Receipt_Model extends CI_Model {
         return $result;
     }
 
-    public function get_all_money_receipts_by_date_and_customer_id_or_dealer_id($customer_id, $dealer_id,$from_date,$to_date){
+    public function get_all_money_receipts_by_date_and_customer_id($customer_id ,$from_date,$to_date){
         $this->db->select('*');
         $this->db->from('tbl_money_receipt');
         $this->db->where('money_receipt_date >=',$from_date);
         $this->db->where('money_receipt_date <=',$to_date);
         if($customer_id != ""){
             $this->db->where('customer_id',$customer_id); 
-        }
-        if($dealer_id != ""){
-            $this->db->where('dealer_id',$dealer_id);
         }
         $this->db->order_by('time_stamp','desc');
         $result_query=$this->db->get();

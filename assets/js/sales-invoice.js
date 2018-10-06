@@ -2,42 +2,42 @@
     Author : Hira Sharker
 ---------------------------------------------------------  */
 
-$( "#customerType" ).change(function() {
-  resetForm();
-  var val = $('#customerType option:selected').val();
-  if(val == 1){
-    $( "#dealer" ).show( 500 );
-    $( "#customer" ).hide( 500 );
-    $( "#salesOrderId" ).hide(500);
-    $( "#customerId" ).val("");
-    $( "#orderId" ).val("");
-  }else if (val == 2){
-    $( "#customer" ).show( 500 );
-    $( "#dealer" ).hide( 500 );
-    $( "#salesOrderId" ).hide(500);
-    $( "#dealerId" ).val("");
-    $( "#orderId" ).val("");
-  }else if (val == 4){
-    $( "#salesOrderId" ).show(500);
-  }else {
-    $( "#customer" ).hide( 500 );
-    $( "#dealer" ).hide( 500 );
-    $( "#salesOrderId" ).hide(500);
-    $( "#customerId" ).val("");
-    $( "#dealerId" ).val("");
-  }
-}); // customerType.change..........
+// $( "#customerType" ).change(function() {
+//   resetForm();
+//   var val = $('#customerType option:selected').val();
+//   if(val == 1){
+//     $( "#dealer" ).show( 500 );
+//     $( "#customer" ).hide( 500 );
+//     $( "#salesOrderId" ).hide(500);
+//     $( "#customerId" ).val("");
+//     $( "#orderId" ).val("");
+//   }else if (val == 2){
+//     $( "#customer" ).show( 500 );
+//     $( "#dealer" ).hide( 500 );
+//     $( "#salesOrderId" ).hide(500);
+//     $( "#dealerId" ).val("");
+//     $( "#orderId" ).val("");
+//   }else if (val == 4){
+//     $( "#salesOrderId" ).show(500);
+//   }else {
+//     $( "#customer" ).hide( 500 );
+//     $( "#dealer" ).hide( 500 );
+//     $( "#salesOrderId" ).hide(500);
+//     $( "#customerId" ).val("");
+//     $( "#dealerId" ).val("");
+//   }
+// }); // customerType.change..........
 
 $("#salesAgainstOrder").click( function(){
   if( $(this).is(':checked') ) {
-    $('#customerType').val('');
-    $('#customerType').prop('disabled',true);
+    // $('#customerType').val('');
+    // $('#customerType').prop('disabled',true);
     resetForm();
     disableInputFields();
     $( "#salesOrderId" ).show(500);
   }else {
-    $('#customerType').val('');
-    $('#customerType').prop('disabled',false);
+    // $('#customerType').val('');
+    // $('#customerType').prop('disabled',false);
     resetForm();
   }
    
@@ -45,7 +45,7 @@ $("#salesAgainstOrder").click( function(){
 });
 
 
-$( "#item" ).change(function() {
+$( "#item" ).change(function(){
   // alert( "Handler for .change() called."+this.value);
   // var itemName = $('#item option:selected').text();
   var element = $(this).find('option:selected'); 
@@ -162,11 +162,6 @@ $( ".reset" ).click(function() {
   resetForm();
 });
 
-
-
-
-
-
 function processSalesOrder(salesOrder){
   $('#warehouseId').val(salesOrder.warehouse_id);
   $('#discount').val(salesOrder.overall_discount);
@@ -181,15 +176,15 @@ function processSalesOrder(salesOrder){
     $('#customerId').val("0");
     $('#customerId').trigger('change');
   }
-  if(salesOrder.dealer_id!= "0"){
-    $( "#dealer" ).show( 500 );
-    $('#dealerId').val(salesOrder.dealer_id);
-    $('#dealerId').trigger('change');
-  }else{
-    $( "#dealer" ).hide( 500 );
-    $('#dealerId').val("0");
-    $('#dealerId').trigger('change');
-  }
+  // if(salesOrder.dealer_id!= "0"){
+  //   $( "#dealer" ).show( 500 );
+  //   $('#dealerId').val(salesOrder.dealer_id);
+  //   $('#dealerId').trigger('change');
+  // }else{
+  //   $( "#dealer" ).hide( 500 );
+  //   $('#dealerId').val("0");
+  //   $('#dealerId').trigger('change');
+  // }
   $('#sub-total').val(salesOrder.total_price);
  
 }
@@ -203,7 +198,7 @@ function disableInputFields(){
   $('#discount').prop('readonly',true);
   $('#orderDate').prop('disabled',true);
   $('#customerId').prop('disabled',true);
-  $('#dealerId').prop('disabled',true);
+  // $('#dealerId').prop('disabled',true);
   $('#item').prop('disabled',true);
 }
 
@@ -211,7 +206,7 @@ function enableInputFields(){
   $('#warehouseId').prop('disabled',false);
   $('#discount').prop('readonly',false);
   $('#customerId').prop('disabled',false);
-  $('#dealerId').prop('disabled',false);
+  // $('#dealerId').prop('disabled',false);
   $('#item').prop('disabled',false);
 }
 
@@ -223,11 +218,11 @@ function setDefaultValue (){
   $('#datepicker').val('');
   $('#customerId').val('0');
   $('#customerId').trigger('change');
-  $('#dealerId').val('0');
-  $('#dealerId').trigger('change');
+  // $('#dealerId').val('0');
+  // $('#dealerId').trigger('change');
   $('#item').val('0');
-  $("#customer").hide( 500 );
-  $("#dealer").hide( 500 );
+  // $("#customer").hide( 500 );
+  // $("#dealer").hide( 500 );
   $("#salesOrderId").hide( 500 );
   $("#orderDateContainer").hide( 500 );
 

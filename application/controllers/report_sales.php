@@ -68,7 +68,7 @@ class Report_Sales extends CI_Controller {
 		$nav_data['dev_key']			=	"receivable";
 		$nav_data['selected']			=	"individual_receivable";
 		$nav_data['company_name']  		=   $this->company_model->get_company_by_id(1)->company_name;
-		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+		$nav_data['user_permission']	=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
 		$sales_data 					= 	array();
 		// $sales_data 					=	$this->
@@ -85,15 +85,18 @@ class Report_Sales extends CI_Controller {
 	}
 
 	public function generate_individual_receivable_statement(){
-		$customer_id 	=	$this->input->post('customer_id',TRUE);
-		$dealer_id 		=	$this->input->post('dealer_id',TRUE);
+		$customer_id 	=	$this->input->post('customer_id','',TRUE);
+		$dealer_id 		=	$this->input->post('dealer_id','',TRUE);
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
 
+		if($customer_id == ""){
+			$customer_id =	$dealer_id;
+		}
 		$search_result 	= 	array();
 
-		$search_result['sales_data']			=	$this->sales_model->get_all_sales_by_date_and_customer_id_or_dealer_id($customer_id, $dealer_id, $from_date, $to_date);
-		$search_result['money_receipt_data']	=	$this->mr_model->get_all_money_receipts_by_date_and_customer_id_or_dealer_id($customer_id, $dealer_id,$from_date,$to_date);
+		$search_result['sales_data']			=	$this->sales_model->get_all_sales_by_date_and_customer_id($customer_id, $from_date, $to_date);
+		$search_result['money_receipt_data']	=	$this->mr_model->get_all_money_receipts_by_date_and_customer_id($customer_id, $from_date,$to_date);
 		// echo '<pre>'; print_r($search_result);echo '</pre>'; exit();
 		$output 						=	$this->load->view('report/individual_receivable_table',$search_result,TRUE);
 
@@ -111,10 +114,13 @@ class Report_Sales extends CI_Controller {
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
 
+		if($customer_id == ""){
+			$customer_id =	$dealer_id;
+		}
 		$search_result 	= 	array();
 
-		$search_result['sales_data']			=	$this->sales_model->get_all_sales_by_date_and_customer_id_or_dealer_id($customer_id, $dealer_id, $from_date, $to_date);
-		$search_result['money_receipt_data']	=	$this->mr_model->get_all_money_receipts_by_date_and_customer_id_or_dealer_id($customer_id, $dealer_id,$from_date,$to_date);
+		$search_result['sales_data']			=	$this->sales_model->get_all_sales_by_date_and_customer_id($customer_id, $dealer_id, $from_date, $to_date);
+		$search_result['money_receipt_data']	=	$this->mr_model->get_all_money_receipts_by_date_and_customer_id($customer_id, $from_date,$to_date);
 		// echo '<pre>'; print_r($search_result);echo '</pre>'; exit();
         $html 										=	$this->load->view('report/individual_receivable_pdf',$search_result,TRUE);
  

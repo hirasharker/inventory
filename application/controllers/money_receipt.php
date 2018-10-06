@@ -71,7 +71,7 @@ class Money_Receipt extends CI_Controller {
 		$nav_data['dev_key']			=	"money_receipt";
 		$nav_data['selected']			=	"all_money_receipts";
 		$nav_data['company_name']   	=   $this->company_model->get_company_by_id(1)->company_name;
-		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+		$nav_data['user_permission']	=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
 		$money_receipt_data				=	array();
 		$money_receipt_data['money_receipt_list']	=	$this->mr_model->get_all_money_receipts();
@@ -110,8 +110,8 @@ class Money_Receipt extends CI_Controller {
 		$money_receipt_data['payment_mode']			=	$payment_mode;
 		$money_receipt_data['customer_id']			=	$sales_detail->customer_id;
 		$money_receipt_data['customer_name']		=	$sales_detail->customer_name;
-		$money_receipt_data['dealer_id']			=	$sales_detail->dealer_id;
-		$money_receipt_data['dealer_name']			=	$sales_detail->dealer_name;
+		// $money_receipt_data['dealer_id']			=	$sales_detail->dealer_id;
+		// $money_receipt_data['dealer_name']			=	$sales_detail->dealer_name;
 		
 		$money_receipt_data['received_amount']		=	$this->input->post('received_amount','',TRUE);
 		$money_receipt_data['money_receipt_date']	=	$this->input->post('money_receipt_date','',TRUE);
@@ -155,8 +155,8 @@ class Money_Receipt extends CI_Controller {
 		$money_receipt_data['payment_mode']			=	$payment_mode;
 		$money_receipt_data['customer_id']			=	$sales_detail->customer_id;
 		$money_receipt_data['customer_name']		=	$sales_detail->customer_name;
-		$money_receipt_data['dealer_id']			=	$sales_detail->dealer_id;
-		$money_receipt_data['dealer_name']			=	$sales_detail->dealer_name;
+		// $money_receipt_data['dealer_id']			=	$sales_detail->dealer_id;
+		// $money_receipt_data['dealer_name']			=	$sales_detail->dealer_name;
 		
 		$money_receipt_data['received_amount']		=	$this->input->post('received_amount','',TRUE);
 		$money_receipt_data['money_receipt_date']	=	$this->input->post('money_receipt_date','',TRUE);

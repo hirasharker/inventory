@@ -28,7 +28,9 @@
                                             <th>SL</th>
                                             <th>Customer Code</th>
                                             <th>Customer Name</th>
-                                            <th>Address</th>
+                                            <th>Type of Customer</th>
+                                            <th>Category</th>
+                                            <th>Present Address</th>
                                             <th>Phone</th>
                                             <th>Action</th>
                                         </tr>
@@ -39,7 +41,25 @@
                                             <td><?php echo $i;?></td>
                                             <td><?php echo $value->customer_id;?></td>
                                             <td><?php echo $value->customer_name;?></td>
-                                            <td><?php echo $value->address;?></td>
+                                            <td>
+                                                <?php
+                                                    switch ($value->customer_type) {
+                                                        case '1':
+                                                            echo "Dealer";
+                                                            break;
+                                                        case '2':
+                                                            echo "Regular Customer";
+                                                            break;
+                                                        case '3':
+                                                            echo "Annonymus";
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                ?>
+                                            </td>
+                                            <td><?php echo $value->customer_category; ?></td>
+                                            <td><?php echo $value->present_address;?></td>
                                             <td class="center"><?php echo $value->phone_no;?></td>
                                             <td class="center">
                                             <?php if($permission->permission_edit==1){?>

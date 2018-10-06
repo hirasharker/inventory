@@ -18,12 +18,29 @@
                     <div class="col-lg-5">
                         <form role="form" method="post" action="<?php echo base_url();?>customer/add_customer">
                             <div class="form-group">
+                                <label>Type of Customer</label>
+                                <select class="form-control" name="customer_type" id="customerType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="1">Dealer</option>
+                                    <option value="2">Regular Customer</option>
+                                    <option value="3">Anonymous</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="cat-container" style="display: none;">
+                                <label>Dealer Category</label>
+                                <select class="form-control" name="customer_category" id="category">
+                                    <option value="3S">3S</option>
+                                    <option value="2S">2S</option>
+                                    <option value="1S">1S</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>Customer's Name</label>
                                 <input class="form-control" placeholder = "customer's Name" name="customer_name" required>
                             </div>
                             <div class="form-group">
                                 <label>Address</label>
-                                <textarea class="form-control" rows="2" name="address" required></textarea>
+                                <textarea class="form-control" rows="2" name="present_address" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Phone</label>
@@ -64,6 +81,24 @@
                     <div class="col-lg-5">
                         <form role="form" method="post" action="<?php echo base_url();?>customer_name/update_customer/<?php echo $customer->customer_id;?>">
                             <div class="form-group">
+                                <label>Type of Customer</label>
+                                <select class="form-control" name="customer_type" id="customerType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="1">Dealer</option>
+                                    <option value="2">Regular Customer</option>
+                                    <option value="3">Anonymous</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="cat-container" style="display: none;">
+                                <label>Dealer Category</label>
+                                <select class="form-control" name="customer_category">
+                                    <option value="3S">3S</option>
+                                    <option value="2S">2S</option>
+                                    <option value="1S">1S</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
                                 <label>Customer Code</label>
                                 <input class="form-control" disabled value="<?php echo $customer->customer_id;?>">
                             </div>
@@ -73,7 +108,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Address</label>
-                                <textarea class="form-control" rows="2" name="address"><?php echo $customer->address;?></textarea>
+                                <textarea class="form-control" rows="2" name="present_address"><?php echo $customer->present_address;?></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Phone</label>
@@ -95,3 +130,16 @@
     <!-- /.col-lg-12 -->
 </div>
 <?php }?>
+<script>
+    $( "#customerType" ).change(function() {
+      // alert( "Handler for .change() called."+this.value);
+      var val = $('#customerType option:selected').val();
+      if(val == 1){
+        $( "#cat-container" ).show( 500 );
+      }else {
+        $( "#cat-container" ).hide( 500 );
+        // $( "#category" ).val("");
+        // $( "#category" ).change();
+      }
+    });
+</script>
