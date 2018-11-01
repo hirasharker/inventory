@@ -30,6 +30,10 @@ class Group extends CI_Controller {
 	 */
 	public function index($group_id=0)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(1, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/group/add_group','refresh');
+		}
 		$data						=	array();
 		$data['page_title']			=	"Group";
 
@@ -57,6 +61,10 @@ class Group extends CI_Controller {
 	}
 	public function view_groups()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(1, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/group/all_groups','refresh');
+		}
 		$data						=	array();
 		$data['page_title']			=	"Group";
 		$nav_data['dev_key']		=	"group";
@@ -76,6 +84,10 @@ class Group extends CI_Controller {
 	}
 	public function add_group()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(1, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/group/add_group','refresh');
+		}
 		$group_data					=	array();
 		$group_data['user_id']		=	$this->session->userdata('user_id');
 		$group_data['user_name']	=	$this->session->userdata('user_name');
@@ -93,6 +105,10 @@ class Group extends CI_Controller {
 
 	public function update_group($group_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(1, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_edit != 1){
+			redirect('access_control/denied/group/add_group','refresh');
+		}
 		$group_data					=	array();
 		$group_data['user_id']		=	$this->session->userdata('user_id');
 		$group_data['user_name']	=	$this->session->userdata('user_name');
@@ -111,6 +127,11 @@ class Group extends CI_Controller {
 	}
 	public function delete_group($group_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(1, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_delete != 1){
+			redirect('access_control/denied/group/all_groups','refresh');
+		}
+
 		$group_result			=	$this->group_model->get_group_by_parent_id($group_id);
 		$item_result			=	$this->item_model->get_item_by_parent_id($group_id);
 		$delete 				=	TRUE;

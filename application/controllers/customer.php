@@ -40,6 +40,10 @@ class Customer extends CI_Controller {
 	 */
 	public function index($customer_id = 0)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(8, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/customer/add_customer','refresh');
+		}
 		$data							=	array();
 		$data['page_title']				=	"Inventory Management";
 		$nav_data['dev_key']			=	"customer";
@@ -62,6 +66,10 @@ class Customer extends CI_Controller {
 	}
 	public function view_customers()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(8, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/customer/all_customers','refresh');
+		}
 		$data								=	array();
 		$data['page_title']					=	"Inventory Management";
 		$nav_data['dev_key']				=	"customer";
@@ -82,6 +90,10 @@ class Customer extends CI_Controller {
 
 	public function add_customer()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(8, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/customer/add_customer','refresh');
+		}
 		$customer_data						=	array();
 		$customer_data['user_id']			=	$this->session->userdata('user_id');
 		$customer_data['user_name']			=	$this->session->userdata('user_name');
@@ -98,6 +110,10 @@ class Customer extends CI_Controller {
 
 	public function update_customer($customer_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(8, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_edit != 1){
+			redirect('access_control/denied/customer/add_customer','refresh');
+		}
 		$customer_data						=	array();
 		$customer_data['user_id']			=	$this->session->userdata('user_id');
 		$customer_data['user_name']			=	$this->session->userdata('user_name');
@@ -113,6 +129,10 @@ class Customer extends CI_Controller {
 	}
 	public function delete_customer($customer_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(8, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_delete != 1){
+			redirect('access_control/denied/customer/add_customer','refresh');
+		}
 		
 		$this->customer_model->delete_customer($customer_id);
 

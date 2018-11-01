@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Bank extends CI_Controller {
+	
 	public function __construct(){
 		parent:: __construct();
 		if($this->session->userdata('user_id')==NULL){
@@ -9,8 +10,8 @@ class Bank extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->load->model('company_model','company_model',TRUE);
 		$this->load->model('convert_model','convert_model',TRUE);
-		$this->load->model('module_model','module_model',TRUE);
 		$this->load->model('bank_model','bank_model',TRUE);
+		$this->load->model('module_model','module_model',TRUE);
 	}
 
 
@@ -40,13 +41,16 @@ class Bank extends CI_Controller {
 	 */
 	public function index($bank_id = 0)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(20, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/bank/add_bank','refresh');
+		}
 		$data							=	array();
 		$data['page_title']				=	"Inventory Management";
 		$nav_data['dev_key']			=	"bank";
 		$nav_data['selected']			=	"add_bank";
-		$nav_data['company_name']   	=   $this->company_model->get_company_by_id(1)->company_name;
+		$nav_data['company_name']   	=   this->company_model->get_company_by_id(1)->company_name;
 		$nav_data['user_permission'] 	=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
-
 		$bank_data					=	array();
 		if($bank_id!=0){
 			$bank_data['bank_detail']		=	$this->bank_model->get_bank_by_id($bank_id);	
@@ -63,6 +67,11 @@ class Bank extends CI_Controller {
 
 	public function view_banks()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(20, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/bank/all_banks','refresh');
+		}
+
 		$data								=	array();
 		$data['page_title']					=	"Inventory Management";
 		$nav_data['dev_key']				=	"bank";
@@ -83,6 +92,10 @@ class Bank extends CI_Controller {
 
 	public function add_bank()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(20, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/bank/all_banks','refresh');
+		}
 		$bank_data						=	array();
 		$bank_data['user_id']			=	$this->session->userdata('user_id');
 		$bank_data['bank_name']			=	$this->input->post('bank_name','',TRUE);
@@ -96,6 +109,10 @@ class Bank extends CI_Controller {
 
 	public function update_bank()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(20, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_edit != 1){
+			redirect('access_control/denied/bank/all_banks','refresh');
+		}
 		$bank_data						=	array();
 
 		$bank_data['user_id']			=	$this->session->userdata('user_id');
@@ -111,6 +128,10 @@ class Bank extends CI_Controller {
 	}
 	public function delete_bank($bank_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(20, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_delete != 1){
+			redirect('access_control/denied/bank/all_banks','refresh');
+		}
 		
 		$this->bank_model->delete_bank($bank_id);
 

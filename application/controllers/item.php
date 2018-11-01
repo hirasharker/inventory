@@ -31,6 +31,10 @@ class Item extends CI_Controller {
 	 */
 	public function index($item_id=0)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(2, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/item/add_item','refresh');
+		}
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 
@@ -56,6 +60,10 @@ class Item extends CI_Controller {
 	}
 	public function view_items()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(2, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/item/all_items','refresh');
+		}
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 		$nav_data['dev_key']		=	"item";
@@ -75,6 +83,10 @@ class Item extends CI_Controller {
 	}
 	public function add_item()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(2, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/item/add_item','refresh');
+		}
 		$item_data					=	array();
 
 		$item_data['user_id']		=	$this->session->userdata('user_id');
@@ -96,6 +108,10 @@ class Item extends CI_Controller {
 
 	public function update_item($item_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(2, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_edit != 1){
+			redirect('access_control/denied/item/add_item','refresh');
+		}
 		$item_data					=	array();
 		$item_data['user_id']		=	$this->session->userdata('user_id');
 		$item_data['user_name']		=	$this->session->userdata('user_name');
@@ -115,6 +131,10 @@ class Item extends CI_Controller {
 	}
 	public function delete_item($item_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(2, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_delete != 1){
+			redirect('access_control/denied/item/add_item','refresh');
+		}
 
 		$result			=	$this->purchase_model->get_purchase_detail_by_item_id($item_id);
 

@@ -79,7 +79,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-5">
-                        <form role="form" method="post" action="<?php echo base_url();?>customer_name/update_customer/<?php echo $customer->customer_id;?>">
+                        <form role="form" method="post" action="<?php echo base_url();?>customer/update_customer/<?php echo $customer->customer_id;?>">
                             <div class="form-group">
                                 <label>Type of Customer</label>
                                 <select class="form-control" name="customer_type" id="customerType" required>

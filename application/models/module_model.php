@@ -49,14 +49,5 @@ class Module_Model extends CI_Model{
     $result = $result_query->num_rows();
     return $result;
   }
-
-    
-
-
-
 }
-
-
-
-
 ?>

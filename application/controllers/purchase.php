@@ -37,6 +37,10 @@ class Purchase extends CI_Controller {
 	 */
 	public function index($purchase_id=0,$error_count=0)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(5, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/purchase/add_purchase','refresh');
+		}
 		$data							=	array();
 		$data['page_title']				=	"Inventory Management";
 
@@ -74,6 +78,10 @@ class Purchase extends CI_Controller {
 
 	public function view_purchases()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(5, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/purchase/all_purchases','refresh');
+		}
 		$data							=	array();
 		$data['page_title']				=	"Inventory Management";
 		$nav_data['dev_key']			=	"purchase";
@@ -96,6 +104,10 @@ class Purchase extends CI_Controller {
 
 	public function add_purchase()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(5, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/purchase/add_purchase','refresh');
+		}
 		$purchase_data						=	array();
 		$purchase_data['user_id']			=	$this->session->userdata('user_id');
 		$purchase_data['user_name']			=	$this->session->userdata('user_name');
@@ -190,6 +202,11 @@ class Purchase extends CI_Controller {
 
 	public function upload_purchase($purchase_data, $file_name){
 		
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(5, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/purchase/add_purchase','refresh');
+		}
+
 		$this->load->library('csvreader');
 
 		$result												=	$this->csvreader->parse_file($file_name);
@@ -246,6 +263,10 @@ class Purchase extends CI_Controller {
 
 	public function update_purchase($purchase_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(5, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_edit != 1){
+			redirect('access_control/denied/purchase/add_purchase','refresh');
+		}
 		$purchase_data						=	array();
 		$purchase_data['user_id']			=	$this->session->userdata('user_id');
 		$purchase_data['user_name']			=	$this->session->userdata('user_name');
@@ -325,6 +346,11 @@ class Purchase extends CI_Controller {
 	}
 	public function delete_purchase($purchase_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(5, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_delete != 1){
+			redirect('access_control/denied/purchase/add_purchase','refresh');
+		}
+
 		$this->delete_purchase_detail($purchase_id);
 
 		$this->purchase_model->delete_purchase($purchase_id);
@@ -344,11 +370,15 @@ class Purchase extends CI_Controller {
 	}
 
 
-
-
 	//---------------------VENDOR SECTION STARTS HERE
 	public function vendor($vendor_id=0)
 	{
+
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(4, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/vendor/add_vendor','refresh');
+		}
+
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 		$nav_data['dev_key']		=	"vendor";
@@ -372,6 +402,11 @@ class Purchase extends CI_Controller {
 	}
 	public function view_vendors()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(4, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/vendor/all_vendors','refresh');
+		}
+
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 		$nav_data['dev_key']		=	"vendor";
@@ -392,6 +427,11 @@ class Purchase extends CI_Controller {
 
 	public function add_vendor()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(4, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/vendor/add_vendor','refresh');
+		}
+
 		$vendor_data					=	array();
 		$vendor_data['user_id']			=	$this->session->userdata('user_id');
 		$vendor_data['user_name']		=	$this->session->userdata('user_name');
@@ -406,6 +446,12 @@ class Purchase extends CI_Controller {
 
 	public function update_vendor($vendor_id)
 	{
+
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(4, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_edit != 1){
+			redirect('access_control/denied/vendor/all_vendors','refresh');
+		}
+
 		$vendor_data					=	array();
 		$vendor_data['user_id']			=	$this->session->userdata('user_id');
 		$vendor_data['user_name']		=	$this->session->userdata('user_name');
@@ -419,6 +465,11 @@ class Purchase extends CI_Controller {
 	}
 	public function delete_vendor($vendor_id)
 	{
+
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(4, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_delete != 1){
+			redirect('access_control/denied/vendor/all_vendors','refresh');
+		}
 		
 		$this->purchase_model->delete_vendor($vendor_id);
 
@@ -432,6 +483,11 @@ class Purchase extends CI_Controller {
 
 	public function payable()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(7, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/purchase/payable','refresh');
+		}
+
 		$data							=	array();
 		$data['page_title']				=	"Inventory Management";
 
@@ -459,6 +515,7 @@ class Purchase extends CI_Controller {
 ///////////// PDF section start Here-------------------
 
 	public function purchase_invoice(){
+		
 		$this->load->helper(array('My_Pdf'));   //  Load helper
 		$data 				=	$this->load->view('partials/purchase_invoice','',TRUE);
 		writeHTML($data);

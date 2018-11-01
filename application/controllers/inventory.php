@@ -36,6 +36,10 @@ class Inventory extends CI_Controller {
 	 */
 	public function index()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(3, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/inventory/individual_report','refresh');
+		}
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 		$nav_data['dev_key']		=	"inventory";
@@ -82,6 +86,10 @@ class Inventory extends CI_Controller {
 	}
 
 	public function generate_individual_inventory_detail(){
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(3, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/inventory/individual_report','refresh');
+		}
 		$item_id 		=	$this->input->post('item_id',TRUE);
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
@@ -146,6 +154,10 @@ class Inventory extends CI_Controller {
 	}
 
 	public function individual_inventory_pdf(){
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(3, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/inventory/individual_report','refresh');
+		}
 		$this->load->library('pdf');
 
 		$item_name 		=	$this->input->post('item_name',TRUE);
@@ -193,6 +205,10 @@ class Inventory extends CI_Controller {
 
 	public function group_inventory()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(3, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/inventory/individual_report','refresh');
+		}
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 		$nav_data['dev_key']		=	"inventory";
@@ -209,6 +225,10 @@ class Inventory extends CI_Controller {
 	}
 
 	public function generate_group_inventory_detail(){
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(3, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/inventory/individual_report','refresh');
+		}
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
 
@@ -234,6 +254,10 @@ class Inventory extends CI_Controller {
 	}
 
 	public function group_inventory_pdf(){
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(3, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/inventory/individual_report','refresh');
+		}
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
 
@@ -264,6 +288,10 @@ class Inventory extends CI_Controller {
 
 	public function warehouse_inventory()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(3, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/inventory/individual_report','refresh');
+		}
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 		$nav_data['dev_key']		=	"inventory";
@@ -282,6 +310,10 @@ class Inventory extends CI_Controller {
 	}
 
 	public function generate_warehouse_inventory_detail(){
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(3, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/inventory/individual_report','refresh');
+		}
 		$warehouse_id 	=	$this->input->post('warehouse_id',TRUE);
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);
@@ -314,6 +346,10 @@ class Inventory extends CI_Controller {
 	}
 
 	public function warehouse_inventory_pdf(){
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(3, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/inventory/individual_report','refresh');
+		}
 		$warehouse_id 	=	$this->input->post('warehouse_id',TRUE);
 		$from_date 		=	$this->input->post('from_date',TRUE);
 		$to_date 		=	$this->input->post('to_date',TRUE);

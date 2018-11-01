@@ -41,6 +41,11 @@ class Money_Receipt extends CI_Controller {
 	
 	public function index ($money_receipt_id=0)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(10, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/money_receipt/add_money_receipt','refresh');
+		}
+
 		$data							=	array();
 		$data['page_title']				=	"Inventory Management";
 
@@ -66,6 +71,10 @@ class Money_Receipt extends CI_Controller {
 
 	public function view_money_receipts()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(10, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/money_receipt/all_money_receipts','refresh');
+		}
 		$data							=	array();
 		$data['page_title']				=	"Inventory Management";
 		$nav_data['dev_key']			=	"money_receipt";
@@ -88,6 +97,10 @@ class Money_Receipt extends CI_Controller {
 
 	public function add_money_receipt()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(10, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/money_receipt/add_money_receipt','refresh');
+		}
 		$money_receipt_data							=	array();
 		$money_receipt_data['user_id']				=	$this->session->userdata('user_id');
 		$money_receipt_data['user_name']			=	$this->session->userdata('user_name');
@@ -131,6 +144,10 @@ class Money_Receipt extends CI_Controller {
 
 	public function update_money_receipt()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(10, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_edit != 1){
+			redirect('access_control/denied/money_receipt/add_money_receipt','refresh');
+		}
 		$money_receipt_id 							=	$this->input->post('money_receipt_id','',TRUE);
 
 		$money_receipt_data							=	array();
@@ -175,6 +192,10 @@ class Money_Receipt extends CI_Controller {
 	}
 	public function delete_money_receipt($money_receipt_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(10, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_delete != 1){
+			redirect('access_control/denied/money_receipt/add_money_receipt','refresh');
+		}
 		
 		$this->mr_model->delete_money_receipt($money_receipt_id);
 
@@ -183,6 +204,10 @@ class Money_Receipt extends CI_Controller {
 
 
 	public function print_money_receipt (){
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(10, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/money_receipt/all_money_receipts','refresh');
+		}
 		$money_receipt_data 							=	array();
 
 		$money_receipt_data['page_title']				=	"Money Receipt !!!";

@@ -63,7 +63,7 @@
                                 <td class="center"><?php echo $value->phone_no;?></td>
                                 <td class="center">
                                 <?php if($permission->permission_edit==1){?>
-                                <a href="<?php echo base_url();?>customer/customer/<?php echo $value->customer_id;?>"> edit </a> | 
+                                <a href="<?php echo base_url();?>customer/index/<?php echo $value->customer_id;?>"> edit </a> | 
                                 <?php }else{?>
                                 <label style="color:#aea4a4; font-weight:normal;">edit</label>|
                                 <?php }?>

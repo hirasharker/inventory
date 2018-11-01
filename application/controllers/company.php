@@ -28,6 +28,7 @@ class Company extends CI_Controller {
 	 */
 	public function index()
 	{
+		
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 
