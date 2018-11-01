@@ -15,6 +15,18 @@
 </head>
 <body>
     <div id="wrapper">
+      <div id="banner">
+        <div id="title">
+          <div id="logo">
+            <img src="<?php echo base_url(); ?>files/simpleLogo.png" alt="logo">
+          </div>
+          <h1>IFAD MOTORS LTD</h1>
+        </div>
+        <p>Kagojipukur Bazar, Benapole, Jessore. Mobile : 01966670891</p>
+        <p>Corporate Office : Sonartori Tower (13th- 18th fl), 12 Biponon C/A, Sonargaon Road, Dhaka -1000</p>
+        <hr>
+      </div>
+
       <h2>Sales Order</h2>
       <div id="header">
         <div class="left">
