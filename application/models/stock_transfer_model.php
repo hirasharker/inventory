@@ -44,6 +44,7 @@ class Stock_Transfer_Model extends CI_Model {
         $this->db->select('*');
         $this->db->from('tbl_stock_transfer');
         $this->db->where('stock_transfer_id',$stock_transfer_id);
+        
         $result_query=$this->db->get();
         $result=$result_query->row();
         return $result;
@@ -63,11 +64,22 @@ class Stock_Transfer_Model extends CI_Model {
 
     
     public function get_stock_transfer_detail_by_transfer_id($stock_transfer_id){
-        $this->db->select('*');
+        $this->db->select('tbl_stock_transfer_detail.*,tbl_item.part_no');
         $this->db->from('tbl_stock_transfer_detail');
         $this->db->where('stock_transfer_id', $stock_transfer_id);
+        $this->db->join('tbl_item','tbl_item.item_id = tbl_stock_transfer_detail.item_id');
         $result_query=$this->db->get();
         $result=$result_query->result();
+        return $result;
+    }
+
+    public function get_stock_transfer_summary_by_transfer_id($stock_transfer_id){
+        $this->db->select('tbl_stock_transfer_detail.*, sum(tbl_stock_transfer_detail.item_price * tbl_stock_transfer_detail.quantity) as sub_total, sum(tbl_stock_transfer_detail.quantity) as total_quantity');
+        $this->db->from('tbl_stock_transfer_detail');
+        $this->db->where('stock_transfer_id', $stock_transfer_id);
+        $this->db->join('tbl_item','tbl_item.item_id = tbl_stock_transfer_detail.item_id');
+        $result_query=$this->db->get();
+        $result=$result_query->row();
         return $result;
     }
     

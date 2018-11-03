@@ -16,6 +16,7 @@ class Stock_Transfer extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->load->model('company_model','company_model',TRUE);
 		$this->load->model('module_model','module_model',TRUE);
+		$this->load->model('convert_model','convert_model',TRUE);
 	}
 
 
@@ -198,6 +199,39 @@ class Stock_Transfer extends CI_Controller {
 		echo json_encode($item_list);
 		// a die here helps ensure a clean ajax call
 		die();
+	}
+
+
+	public function print_stock_transfer($stock_transfer_id){
+		$this->load->library('mypdf');
+		$pdf = $this->mypdf->load();
+
+		$invoice_balance 								=	0;
+		$paid_amount 									=	0;
+
+		$stock_transfer_data 							= 	array();
+
+		$stock_transfer_data['warehouse_list']			=	$this->warehouse_model->get_all_warehouses();
+
+		$stock_transfer_data['company_detail']			=	$this->company_model->get_company_by_id('1');
+		
+		$stock_transfer_data['stock_transfer']			=	$this->stock_transfer_model->get_stock_transfer_by_id($stock_transfer_id);
+		$stock_transfer_data['stock_transfer_detail']	=	$this->stock_transfer_model->get_stock_transfer_detail_by_transfer_id($stock_transfer_id);
+		
+		$stock_transfer_data['stock_transfer_summary']	=	$this->stock_transfer_model->get_stock_transfer_summary_by_transfer_id($stock_transfer_id);
+		// echo '<pre>';print_r($stock_transfer_data); echo '</pre>';exit();
+
+		$stock_transfer_data['total_in_words']		=	$this->convert_model->convert_number($stock_transfer_data['stock_transfer_summary']->sub_total);
+
+
+		// echo '<pre>';print_r($invoice_balance); echo '</pre>'; exit();
+
+		$data 							= 	$this->load->view('partials/stock_transfer_print',$stock_transfer_data,TRUE);
+		
+		$pdf->writeHTML($data);
+		$pdf->Output();
+
+		// $this->load->view('partials/purchase_invoice1');
 	}
 
 	

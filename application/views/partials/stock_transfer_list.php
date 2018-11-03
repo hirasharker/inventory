@@ -50,16 +50,19 @@
                                             </td>
                                             <td><?php echo $value->stock_transfer_date;?></td>
                                             <td class="center">
-                                            <?php if($permission->permission_edit==1){?>
-                                            <a href="<?php echo base_url();?>stock_transfer/index/<?php echo $value->stock_transfer_id;?>"> edit </a> | 
-                                            <?php }else{?>
-                                            <label style="color:#aea4a4; font-weight:normal;">edit</label>|
-                                            <?php }?>
-                                            <?php if($permission->permission_delete==1){?>
-                                            <a data-href="<?php echo base_url();?>stock_transfer/delete_stock_transfer/<?php echo $value->stock_transfer_id;?>" data-toggle="modal" data-target="#confirm-delete"> delete </a>
-                                            <?php }else{?>
-                                            <label style="color:#aea4a4; font-weight:normal;">delete</label>
-                                            <?php }?>
+                                                <?php if($permission->permission_view==1){?>
+                                                <a href="<?php echo base_url();?>stock_transfer/print_stock_transfer/<?php echo $value->stock_transfer_id;?>" target="_blank"> Print </a> | 
+                                                <?php }?>
+                                                <?php if($permission->permission_edit==1){?>
+                                                <a href="<?php echo base_url();?>stock_transfer/index/<?php echo $value->stock_transfer_id;?>"> edit </a> | 
+                                                <?php }else{?>
+                                                <label style="color:#aea4a4; font-weight:normal;">edit</label>|
+                                                <?php }?>
+                                                <?php if($permission->permission_delete==1){?>
+                                                <a data-href="<?php echo base_url();?>stock_transfer/delete_stock_transfer/<?php echo $value->stock_transfer_id;?>" data-toggle="modal" data-target="#confirm-delete"> delete </a>
+                                                <?php }else{?>
+                                                <label style="color:#aea4a4; font-weight:normal;">delete</label>
+                                                <?php }?>
                                             </td>
                                         </tr>
                                         <?php $i++; }?>
