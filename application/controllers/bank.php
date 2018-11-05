@@ -49,7 +49,7 @@ class Bank extends CI_Controller {
 		$data['page_title']				=	"Inventory Management";
 		$nav_data['dev_key']			=	"bank";
 		$nav_data['selected']			=	"add_bank";
-		$nav_data['company_name']   	=   this->company_model->get_company_by_id(1)->company_name;
+		$nav_data['company_name']   	=   $this->company_model->get_company_by_id(1)->company_name;
 		$nav_data['user_permission'] 	=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 		$bank_data					=	array();
 		if($bank_id!=0){
