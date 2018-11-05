@@ -279,6 +279,7 @@ class Sales extends CI_Controller {
 		$sales_data['warehouse_id']		=	$this->input->post('warehouse_id','',TRUE);
 		$sales_data['warehouse_name']	=	$this->warehouse_model->get_warehouse_by_id($sales_data['warehouse_id'])->warehouse_name;
 
+		$sales_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
 		if($sales_data['customer_id']!= NULL){
 			$customer_data 					=	$this->customer_model->get_customer_by_id($sales_data['customer_id']);
 			$sales_data['customer_name']	=	$customer_data->customer_name;
@@ -345,6 +346,7 @@ class Sales extends CI_Controller {
 
 				$this->stock_model->subtract_stock_quantity($sales_detail_data['item_id'], $sales_data['warehouse_id'], $sales_detail_data['quantity']);
 			}
+			exit();
 
 			redirect('sales/view_sales','refresh');
 		}else{

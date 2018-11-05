@@ -7,6 +7,7 @@ class Money_Receipt extends CI_Controller {
 			redirect('login','refresh');
 		}
 		$this->load->model('money_receipt_model','mr_model',TRUE);
+		$this->load->model('bank_model','bank_model',TRUE);
 		$this->load->model('sales_model','sales_model',TRUE);
 		$this->load->model('sales_order_model','sales_order_model',TRUE);
 		$this->load->model('dealer_model','dealer_model',TRUE);
@@ -62,6 +63,8 @@ class Money_Receipt extends CI_Controller {
 			$money_receipt_data['money_receipt']	=	NULL;
 		}
 
+		$money_receipt_data['bank_list']			=	$this->bank_model->get_all_banks();
+
 		$data['navigation']				=	$this->load->view('templates/navigation',$nav_data,TRUE);
 		$data['footer']					=	$this->load->view('templates/footer','',TRUE);
 		$data['content']				=	$this->load->view('partials/money_receipt',$money_receipt_data,TRUE);
@@ -105,22 +108,28 @@ class Money_Receipt extends CI_Controller {
 		$money_receipt_data['user_id']				=	$this->session->userdata('user_id');
 		$money_receipt_data['user_name']			=	$this->session->userdata('user_name');
 
-		$payment_mode 								=	$this->input->post('payment_mode');
+		$money_receipt_type 						=	$this->input->post('money_receipt_type');
 
 		$session_data 								=	array();
-		if($payment_mode == 2){
+		if($money_receipt_type == 2){
 			$session_data['error']					=	"Select Payment Mode!!!";
 			$this->session->set_userdata($session_data);
 			redirect('money_receipt','refresh');
-		}elseif ($payment_mode == 0) {
+		}elseif ($money_receipt_type == 0) {
 			$money_receipt_data['sales_order_id']	=	$this->input->post('sales_order_id','',TRUE);
 			$sales_detail							=	$this->sales_order_model->get_sales_order_by_id($money_receipt_data['sales_order_id']);
-		}elseif ($payment_mode == 1) {
+		}elseif ($money_receipt_type == 1) {
 			$money_receipt_data['sales_id']			=	$this->input->post('sales_id','',TRUE);
 			$sales_detail							=	$this->sales_model->get_sales_by_id($money_receipt_data['sales_id']);
 		}
 
-		$money_receipt_data['payment_mode']			=	$payment_mode;
+		$money_receipt_data['payment_mode']			=	$this->input->post('payment_mode','',TRUE);
+		$money_receipt_data['bank_id']				=	$this->input->post('bank_id','',TRUE);
+		$money_receipt_data['branch_name']			=	$this->input->post('branch_name','',TRUE);
+		$money_receipt_data['deposit_slip_no']		=	$this->input->post('deposit_slip_no','',TRUE);
+		$money_receipt_data['cheque_no']			=	$this->input->post('cheque_no','',TRUE);
+
+		$money_receipt_data['money_receipt_type']	=	$money_receipt_type;
 		$money_receipt_data['customer_id']			=	$sales_detail->customer_id;
 		$money_receipt_data['customer_name']		=	$sales_detail->customer_name;
 		// $money_receipt_data['dealer_id']			=	$sales_detail->dealer_id;
@@ -154,22 +163,28 @@ class Money_Receipt extends CI_Controller {
 		$money_receipt_data['user_id']				=	$this->session->userdata('user_id');
 		$money_receipt_data['user_name']			=	$this->session->userdata('user_name');
 
-		$payment_mode 								=	$this->input->post('payment_mode');
+		$money_receipt_type 								=	$this->input->post('money_receipt_type');
 
 		$session_data 								=	array();
-		if($payment_mode == 2){
+		if($money_receipt_type == 2){
 			$session_data['error']					=	"Select Payment Mode!!!";
 			$this->session->set_userdata($session_data);
 			redirect('money_receipt','refresh');
-		}elseif ($payment_mode == 0) {
+		}elseif ($money_receipt_type == 0) {
 			$money_receipt_data['sales_order_id']	=	$this->input->post('sales_order_id','',TRUE);
 			$sales_detail							=	$this->sales_order_model->get_sales_order_by_id($money_receipt_data['sales_order_id']);
-		}elseif ($payment_mode == 1) {
+		}elseif ($money_receipt_type == 1) {
 			$money_receipt_data['sales_id']			=	$this->input->post('sales_id','',TRUE);
 			$sales_detail							=	$this->sales_model->get_sales_by_id($money_receipt_data['sales_id']);
 		}
 
-		$money_receipt_data['payment_mode']			=	$payment_mode;
+		$money_receipt_data['payment_mode']			=	$this->input->post('payment_mode','',TRUE);
+		$money_receipt_data['bank_id']				=	$this->input->post('bank_id','',TRUE);
+		$money_receipt_data['branch_name']			=	$this->input->post('branch_name','',TRUE);
+		$money_receipt_data['deposit_slip_no']		=	$this->input->post('deposit_slip_no','',TRUE);
+		$money_receipt_data['cheque_no']			=	$this->input->post('cheque_no','',TRUE);
+
+		$money_receipt_data['money_receipt_type']	=	$money_receipt_type;
 		$money_receipt_data['customer_id']			=	$sales_detail->customer_id;
 		$money_receipt_data['customer_name']		=	$sales_detail->customer_name;
 		// $money_receipt_data['dealer_id']			=	$sales_detail->dealer_id;

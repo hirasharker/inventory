@@ -581,44 +581,6 @@ $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is
 
 
         
-        var customerType = $('#customerType option:selected').val();
-
-        if(customerType == 1){
-            $( "#dealer" ).show( 500 );
-            $( "#customer" ).hide( 500 );
-            $( "#customerId" ).val("");
-          }else if (customerType == 2){
-            $( "#customer" ).show( 500 );
-            $( "#dealer" ).hide( 500 );
-            $( "#dealerId" ).val("");
-          }else {
-            $( "#customer" ).hide( 500 );
-            $( "#dealer" ).hide( 500 );
-            $( "#customerId" ).val("");
-            $( "#dealerId" ).val("");
-        }
-        
-        $( "#customerType" ).change(function() {
-          // alert( "Handler for .change() called."+this.value);
-          var val = $('#customerType option:selected').val();
-          if(val == 1){
-            $( "#dealer" ).show( 500 );
-            $( "#customer" ).hide( 500 );
-            $( "#customerId" ).val("");
-          }else if (val == 2){
-            $( "#customer" ).show( 500 );
-            $( "#dealer" ).hide( 500 );
-            $( "#dealerId" ).val("");
-          }else {
-            $( "#customer" ).hide( 500 );
-            $( "#dealer" ).hide( 500 );
-            $( "#customerId" ).val("");
-            $( "#dealerId" ).val("");
-          }
-        });
-
-
-
          $( "#warehouseId" ).change(function() {
           // alert( "Handler for .change() called.");
 

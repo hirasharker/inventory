@@ -93,11 +93,11 @@
                 </div>
                 <div class="c x1 y14 wf h4">
                     <div class="t m0 xf h5 y13 ff2 fs1 fc0 sc0 ls0 ws0"><?php
-                            if($money_receipt->payment_mode == 1){
+                            if($money_receipt->money_receipt_type == 1){
                                 echo "Sales Invoice";
                             }
 
-                            if($money_receipt->payment_mode == 0){
+                            if($money_receipt->money_receipt_type == 0){
                                 echo "Sales Order";
                             }
                         ?></div>
@@ -107,11 +107,11 @@
                 </div>
                 <div class="c x7 y14 w11 h4">
                     <div class="t m0 x11 h5 y13 ff2 fs1 fc0 sc0 ls0 ws0"><?php
-                            if($money_receipt->payment_mode == 1){
+                            if($money_receipt->money_receipt_type == 1){
                                 echo $money_receipt->sales_id;
                             }
 
-                            if($money_receipt->payment_mode == 0){
+                            if($money_receipt->money_receipt_type == 0){
                                 echo $money_receipt->sales_order_id;
                             }
                         ?></div>
@@ -121,11 +121,11 @@
                 </div>
                 <div class="c x1 y16 w4 he">
                     <div class="t m0 xe h11 y11 ff2 fs5 fc0 sc0 ls0 ws0"><?php
-                            if($money_receipt->payment_mode == 1){
+                            if($money_receipt->money_receipt_type == 1){
                                 echo $money_receipt->sales_date;
                             }
 
-                            if($money_receipt->payment_mode == 0){
+                            if($money_receipt->money_receipt_type == 0){
                                 echo $money_receipt->sales_order_date;
                             }
                         ?></div>
@@ -140,16 +140,16 @@
                     <div class="t m0 x14 h5 y13 ff2 fs1 fc0 sc0 ls0 ws0">Paid by</div>
                 </div>
                 <div class="c x15 y16 w14 he">
-                    <div class="t m0 x16 h14 y17 ff3 fs2 fc0 sc0 ls0 ws0">Ö</div>
+                    <div class="t m0 x16 h14 y17 ff3 fs2 fc0 sc0 ls0 ws0"><?php if($money_receipt->payment_mode == 0){ echo 'Ö';} ?></div>
                 </div>
                 <div class="c x9 y16 w15 he">
                     <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0"> Cash</div>
                 </div>
                 <div class="c x15 y19 w14 h4">
-                    <div class="t m0 x16 h14 y17 ff3 fs2 fc0 sc0 ls0 ws0">Ö</div>
+                    <div class="t m0 x16 h14 y17 ff3 fs2 fc0 sc0 ls0 ws0"><?php if($money_receipt->payment_mode == 2){ echo 'Ö';} ?></div>
                 </div>
                 <div class="c x9 y19 w15 h4">
-                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0"> Check No.</div>
+                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0"> Cheque No.</div>
                 </div>
                 <div class="c x0 y1a wb h4">
                     <div class="t m0 x17 h12 y15 ff1 fs6 fc0 sc0 ls0 ws0">Received By </div>
@@ -161,10 +161,10 @@
                     <div class="t m0 x11 h11 y11 ff2 fs5 fc2 sc0 ls0 ws0">[42]</div>
                 </div>
                 <div class="c x15 y1a w14 h4">
-                    <div class="t m0 x16 h14 y17 ff3 fs2 fc0 sc0 ls0 ws0">Ö</div>
+                    <div class="t m0 x16 h14 y17 ff3 fs2 fc0 sc0 ls0 ws0"><?php if($money_receipt->payment_mode == 1){ echo 'Ö';} ?></div>
                 </div>
                 <div class="c x9 y1a wa h4">
-                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0"> Money Order</div>
+                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0"> Bank Deposit</div>
                 </div>
                 <div class="c x1 y1b w4 h4">
                     <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0">Name</div>

@@ -43,6 +43,8 @@
               <td style="padding-left: 10px; text-align: left;">Phone: </td>
             </tr>
           <?php } }?>
+          </table>
+          <table border="0">
             <!-- <tr>
               <td style="padding-left: 10px; text-align: left;">Chittagong.</td>
             </tr> -->

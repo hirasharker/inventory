@@ -20,15 +20,13 @@
                             
 
                             <div class="form-group">
-                                <label>Type of Payment</label>
-                                <select class="form-control" name="payment_mode" id="paymentMode">
-                                    <option value="2">Select Mode</option>
+                                <label>Type of Money Receipt</label>
+                                <select class="form-control" name="money_receipt_type" id="moneyReceiptType">
+                                    <option value="2">Select Type</option>
                                     <option value="0">Advance Against Sales Order</option>
                                     <option value="1">Payment Against Sales Invoice</option>
                                 </select>
                             </div>
-
-
 
                             <div class="form-group sales-order-id" style="display:none;">
                                 <label>Sales Order No</label>
@@ -40,7 +38,39 @@
                                 <input type="text" class="form-control" id="salesId" name="sales_id" value="<?php echo set_value('sales_id'); ?>">
                             </div>
 
-                            
+                            <div class="form-group">
+                                <label>Payment Mode</label>
+                                <select class="form-control" name="payment_mode" id="paymentMode">
+                                    <option value="0">Cash</option>
+                                    <option value="1">Bank Deposit</option>
+                                    <option value="2">Cheque</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group bank-name" style="display:none;">
+                                <label>Select Bank</label>
+                                <select class="form-control" id="bankId" name="bank_id">
+                                    <option value="">Select Bank</option>
+                                    <?php foreach($bank_list as $b_value) {?>
+                                    <option value="<?php echo $b_value->bank_id; ?>"><?php echo $b_value->bank_name; ?></option>
+                                <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group bank-branch" style="display:none;">
+                                <label>Branch Name</label>
+                                <input type="text" class="form-control" id="bankBranch" name="branch_name" >
+                            </div>
+
+                            <div class="form-group deposit-no" style="display:none;">
+                                <label>Deposit No</label>
+                                <input type="text" class="form-control" id="depositNo" name="deposit_slip_no" >
+                            </div>
+
+                            <div class="form-group cheque-no" style="display:none;">
+                                <label>Cheque No</label>
+                                <input type="text" class="form-control" id="chequeNo" name="cheque_no" >
+                            </div>
 
                             <label>Received Amount</label>
 
@@ -83,9 +113,9 @@
 </div>
 
 <script type="text/javascript">
-    $( "#paymentMode" ).change(function() {
+    $( "#moneyReceiptType" ).change(function() {
           // alert( "Handler for .change() called."+this.value);
-          var val = $('#paymentMode option:selected').val();
+          var val = $('#moneyReceiptType option:selected').val();
           if(val == 0){
             $( ".sales-order-id" ).show( 500 );
             $( ".sales-id" ).hide( 500 );
@@ -99,6 +129,33 @@
             $( ".sales-order-id" ).hide( 500 );
             $( "#salesId" ).val("");
             $( "#salesOrderId" ).val("");
+          }
+    });
+
+    $( "#paymentMode" ).change(function() {
+          // alert( "Handler for .change() called."+this.value);
+          var val = $('#paymentMode option:selected').val();
+          if(val == 0){                 //  CASH MODE
+            $( ".bank-name" ).hide( 500 );
+            $( ".bank-branch" ).hide( 500 );
+            $( ".deposit-no" ).hide( 500 );
+            $( ".cheque-no" ).hide( 500 );
+            $( "#bankId" ).val("");
+            $( "#bankBranch" ).val("");
+            $( "#depositNo" ).val("");
+            $( "#chequeNo" ).val("");
+          }else if (val == 1){           //  BANK DEPOSIT MODE
+            $( ".bank-name" ).show( 500 );
+            $( ".bank-branch" ).show( 500 );
+            $( ".deposit-no" ).show( 500 );
+            $( ".cheque-no" ).hide( 500 );
+            $( "#chequeNo" ).val("");
+          }else if(val== 2){             //  CHEQUE MODE
+            $( ".bank-name" ).show( 500 );
+            $( ".bank-branch" ).show( 500 );
+            $( ".cheque-no" ).show( 500 );
+            $( ".deposit-no" ).hide( 500 );
+            $( "#depositNo" ).val("");
           }
     });
 </script>
@@ -124,16 +181,14 @@
                             <input type="hidden" name="money_receipt_id" value="<?php echo $money_receipt->money_receipt_id;?>">
 
                             <div class="form-group">
-                                <label>Type of Payment</label>
-                                <select class="form-control" name="payment_mode" id="paymentMode">
-                                    <option value="2">Select Mode</option>
-                                    <option value="0" <?php if($money_receipt->payment_mode == 0){echo "selected";}?>>Advance Against Sales Order</option>
-                                    <option value="1" <?php if($money_receipt->payment_mode == 1){echo "selected";}?>>Payment Against Sales Invoice</option>
+                                <label>Type of Money Receipt</label>
+                                <select class="form-control" name="money_receipt_type" id="moneyReceiptType">
+                                    <option value="2">Select Type</option>
+                                    <option value="0" <?php if($money_receipt->money_receipt_type == 0){echo "selected";}?>>Advance Against Sales Order</option>
+                                    <option value="1" <?php if($money_receipt->money_receipt_type == 1){echo "selected";}?>>Payment Against Sales Invoice</option>
                                 </select>
                             </div>
-
-
-
+                            
                             <div class="form-group sales-order-id" style="display:none;">
                                 <label>Sales Order No</label>
                                 <input type="text" class="form-control" id="salesOrderId" name="sales_order_id" value="<?php echo $money_receipt->sales_order_id; ?>">
@@ -144,7 +199,39 @@
                                 <input type="text" class="form-control" id="salesId" name="sales_id" value="<?php echo $money_receipt->sales_id; ?>">
                             </div>
 
-                            
+                            <div class="form-group">
+                                <label>Payment Mode</label>
+                                <select class="form-control" name="payment_mode" id="paymentMode">
+                                    <option value="0" <?php if($money_receipt->payment_mode == 0){echo "selected";}?>>Cash</option>
+                                    <option value="1" <?php if($money_receipt->payment_mode == 1){echo "selected";}?>>Bank Deposit</option>
+                                    <option value="2" <?php if($money_receipt->payment_mode == 2){echo "selected";}?>>Cheque</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group bank-name" style="display:none;">
+                                <label>Select Bank</label>
+                                <select class="form-control" id="bankId" name="bank_id">
+                                    <option value="">Select Bank</option>
+                                    <?php foreach($bank_list as $b_value) {?>
+                                    <option value="<?php echo $b_value->bank_id; ?>" <?php if($money_receipt->bank_id == $b_value->bank_id){echo "selected";}?>><?php echo $b_value->bank_name; ?></option>
+                                <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group bank-branch" style="display:none;">
+                                <label>Branch Name</label>
+                                <input type="text" class="form-control" id="bankBranch" name="branch_name" value="<?php echo $money_receipt->branch_name ?>">
+                            </div>
+
+                            <div class="form-group deposit-no" style="display:none;">
+                                <label>Deposit No</label>
+                                <input type="text" class="form-control" id="depositNo" name="deposit_slip_no" value="<?php echo $money_receipt->deposit_slip_no; ?>">
+                            </div>
+
+                            <div class="form-group cheque-no" style="display:none;">
+                                <label>Cheque No</label>
+                                <input type="text" class="form-control" id="chequeNo" name="cheque_no" value="<?php echo $money_receipt->cheque_no; ?>">
+                            </div>
 
                             <label>Received Amount</label>
 
@@ -187,21 +274,21 @@
 </div>
 
 <script type="text/javascript">
-    <?php if($money_receipt->payment_mode == 0){?>
+    <?php if($money_receipt->money_receipt_type == 0){?>
         $( ".sales-order-id" ).show( 500 );
         $( ".sales-id" ).hide( 500 );
         $( "#salesId" ).val("");
     <?php }?>
 
-    <?php if($money_receipt->payment_mode == 1){?>
+    <?php if($money_receipt->money_receipt_type == 1){?>
         $( ".sales-id" ).show( 500 );
         $( ".sales-order-id" ).hide( 500 );
         $( "#salesOrderId" ).val("");
     <?php }?>
 
-    $( "#paymentMode" ).change(function() {
+    $( "#moneyReceiptType" ).change(function() {
           // alert( "Handler for .change() called."+this.value);
-          var val = $('#paymentMode option:selected').val();
+          var val = $('#moneyReceiptType option:selected').val();
           if(val == 0){
             $( ".sales-order-id" ).show( 500 );
             $( ".sales-id" ).hide( 500 );
@@ -215,6 +302,60 @@
             $( ".sales-order-id" ).hide( 500 );
             $( "#salesId" ).val("");
             $( "#salesOrderId" ).val("");
+          }
+    });
+
+    <?php if($money_receipt->payment_mode == 0){?>
+        $( ".bank-name" ).hide( 500 );
+        $( ".bank-branch" ).hide( 500 );
+        $( ".deposit-no" ).hide( 500 );
+        $( ".cheque-no" ).hide( 500 );
+        $( "#bankId" ).val("");
+        $( "#bankBranch" ).val("");
+        $( "#depositNo" ).val("");
+        $( "#chequeNo" ).val("");
+    <?php }?>
+
+    <?php if($money_receipt->payment_mode == 1){?>
+        $( ".bank-name" ).show( 500 );
+        $( ".bank-branch" ).show( 500 );
+        $( ".deposit-no" ).show( 500 );
+        $( ".cheque-no" ).hide( 500 );
+        $( "#chequeNo" ).val("");
+    <?php }?>
+
+    <?php if($money_receipt->payment_mode == 2){?>
+        $( ".bank-name" ).show( 500 );
+        $( ".bank-branch" ).show( 500 );
+        $( ".cheque-no" ).show( 500 );
+        $( ".deposit-no" ).hide( 500 );
+        $( "#depositNo" ).val("");
+    <?php }?>
+
+    $( "#paymentMode" ).change(function() {
+          // alert( "Handler for .change() called."+this.value);
+          var val = $('#paymentMode option:selected').val();
+          if(val == 0){                 //  CASH MODE
+            $( ".bank-name" ).hide( 500 );
+            $( ".bank-branch" ).hide( 500 );
+            $( ".deposit-no" ).hide( 500 );
+            $( ".cheque-no" ).hide( 500 );
+            $( "#bankId" ).val("");
+            $( "#bankBranch" ).val("");
+            $( "#depositNo" ).val("");
+            $( "#chequeNo" ).val("");
+          }else if (val == 1){           //  BANK DEPOSIT MODE
+            $( ".bank-name" ).show( 500 );
+            $( ".bank-branch" ).show( 500 );
+            $( ".deposit-no" ).show( 500 );
+            $( ".cheque-no" ).hide( 500 );
+            $( "#chequeNo" ).val("");
+          }else if(val== 2){             //  CHEQUE MODE
+            $( ".bank-name" ).show( 500 );
+            $( ".bank-branch" ).show( 500 );
+            $( ".cheque-no" ).show( 500 );
+            $( ".deposit-no" ).hide( 500 );
+            $( "#depositNo" ).val("");
           }
     });
 </script>
