@@ -148,13 +148,15 @@
          $( "#item" ).change(function() {
           // alert( "Handler for .change() called."+this.value);
           var itemName = $('#item option:selected').text();
+          var itemPrice = $(this).find('option:selected').attr('itemPrice');
           var quantity = $(this).find('option:selected').attr('stockQuantity');
           count = document.getElementById('count').value;
           if(count == 0){
             var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
-            +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">Name</label></div>'
             +'<div class="col-lg-2"><label class="lblItem"></label></div>'
-            +'<div class="col-lg-3"><label class="lblItem">QTY</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">QTY</label></div>'
+            +'<div class="col-lg-2"><label class="lblItem">Price</label></div>'
             +'<div class="col-lg-1"><label class="lblItem">Stock</label></div>'
             +'</div>';
             
@@ -175,12 +177,14 @@
                 // alert(quantity);
 
                 count++;
-                var code = '<div class="col-lg-12" style="margin-bottom: 10px"><div class="col-lg-5"><label class="lblItem">'
+                var code = '<div class="col-lg-12" style="margin-bottom: 10px"><div class="col-lg-4"><label class="lblItem">'
                 +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+this.value+'">'
                 +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
                 +'</div>'
-                +'<div class="col-lg-4">'
-                +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div><div class="col-lg-2"><label class="quantity">('+quantity+')</label></div>'
+                +'<div class="col-lg-2">'
+                +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div>'
+                +'<div class="col-lg-2">'
+                +'<input class="form-control" placeholder = "Price" name="item_price[]" required value="'+itemPrice+'"></div><div class="col-lg-2"><label class="quantity">('+quantity+')</label></div>'
                 +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
                 if(this.value != 0){
@@ -237,7 +241,7 @@
                                 <select class="form-control" name="previous_warehouse_id" id="previous_warehouse" required>
                                     <option value="">Select Warehouse</option>
                                     <?php foreach($warehouse_list as $value){?>
-                                    <option value="<?php echo $value->warehouse_id; ?>"><?php echo $value->warehouse_name;?></option>
+                                    <option value="<?php echo $value->warehouse_id; ?>" <?php if($stock_transfer->previous_warehouse_id == $value->warehouse_id){ echo 'selected';} ?>><?php echo $value->warehouse_name;?></option>
                                 <?php }?>
                                 </select>
                             </div>
@@ -295,6 +299,59 @@
 
 
 <script>
+    if($('#current_warehouse').val()!="NULL"){
+        $('#current_warehouse').empty();
+    }
+
+    var previousWarehouseId = $('#previous_warehouse option:selected').val();
+    $.ajax({
+        type: "POST",
+        url: "<?php echo base_url()?>stock_transfer/get_warehouse_list_without_previous_warehouse/",
+        data: { 'previousWarehouseId': previousWarehouseId  },
+        success: function(data){
+            // Parse the returned json data
+            var opts = $.parseJSON(data);
+            // Use jQuery's each to iterate over the opts value
+            $('#current_warehouse').append('<option value="">Select Warehouse</option>');
+
+            $.each(opts, function(i, d) {
+                // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
+                $('#current_warehouse').append('<option value="' + d.warehouse_id + '">' + d.warehouse_name + '</option>');
+
+            });
+        }
+    });
+
+
+    
+    if($('#item').val()!="NULL"){
+        $('#item').empty();
+    }
+
+    $('#create').empty();
+
+    $('#create').append('<div id="quantity-error"></div><input type="hidden" id="count" value="0" name="count">');
+
+    $.ajax({
+        type: "POST",
+        url: "<?php echo base_url()?>stock_transfer/get_item_by_warehouse_id/",
+        data: { 'warehouseId': previousWarehouseId  },
+        success: function(data){
+            // Parse the returned json data
+            var opts = $.parseJSON(data);
+            // Use jQuery's each to iterate over the opts value
+            $('#item').append('<option value="">Select Item</option>');
+
+            $.each(opts, function(i, d) {
+                // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
+                $('#item').append('<option value="' + d.item_id + '" quantity = "'+ d.quantity +'">' + d.item_name + '</option>');
+
+            });
+        }
+    });
+</script>
+<script>
+
     <?php foreach($stock_transfer_detail as $value){?>
         // alert(<?php echo json_encode($value->item_name);?>);
         // alert( "Handler for .change() called."+this.value);

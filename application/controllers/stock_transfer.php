@@ -84,6 +84,7 @@ class Stock_Transfer extends CI_Controller {
 
 		$item_id						=	$this->input->post('item_id','',TRUE);
 		$item_name						=	$this->input->post('item_name','',TRUE);
+		$item_price						=	$this->input->post('item_price','',TRUE);
 		$quantity						=	$this->input->post('quantity','',TRUE);
 
 		$pre_warehouse_id 				=	$stock_transfer_data['previous_warehouse_id'];
@@ -111,6 +112,7 @@ class Stock_Transfer extends CI_Controller {
 				$stock_transfer_detail_data['stock_transfer_id']		=	$result;
 				$stock_transfer_detail_data['item_id']					=	$item_id[$i];
 				$stock_transfer_detail_data['item_name']				=	$item_name[$i];
+				$stock_transfer_detail_data['item_price']				=	$item_price[$i];
 				$stock_transfer_detail_data['quantity']					=	$quantity[$i];
 
 				$stock_transfer_detail_data['previous_warehouse_id']	=	$pre_warehouse_id;
