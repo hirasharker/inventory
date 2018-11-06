@@ -299,6 +299,7 @@
 
 
 <script>
+    // INITIAL VALUES
     if($('#current_warehouse').val()!="NULL"){
         $('#current_warehouse').empty();
     }
@@ -316,12 +317,11 @@
 
             $.each(opts, function(i, d) {
                 // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
-                $('#current_warehouse').append('<option value="' + d.warehouse_id + '">' + d.warehouse_name + '</option>');
+                $('#current_warehouse').append('<option value="' + d.warehouse_id + '" >' + d.warehouse_name + '</option>');
 
             });
         }
     });
-
 
     
     if($('#item').val()!="NULL"){
