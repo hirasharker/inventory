@@ -137,6 +137,8 @@
                 <?php }?>
                 <li><a href="<?php echo base_url();?>user/user_profile"><i class="fa fa-file fa-fw"></i> My Profile</a>
                 </li>
+                <li><a href="<?php echo base_url();?>user/change_password/"><i class="fa fa-key"></i> Change Password</a>
+                </li>
                 <li class="divider"></li>
                 <li><a href="<?php echo base_url();?>settings"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
 

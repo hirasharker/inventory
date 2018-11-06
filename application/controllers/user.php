@@ -280,6 +280,37 @@ class User extends CI_Controller {
 
 	}
 
+	public function change_password(){
+		$data						=	array();
+		$data['page_title']			=	"User";
+
+		$nav_data					=	array();
+		$nav_data['dev_key']		=	"user";
+		$nav_data['selected']		=	"password";
+		$nav_data['company_name']   =   $this->company_model->get_company_by_id(1)->company_name;
+		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+
+		$user_data					=	array();
+
+		$data['navigation']			=	$this->load->view('templates/navigation',$nav_data,TRUE);
+		$data['footer']				=	$this->load->view('templates/footer','',TRUE);
+		$data['content']			=	$this->load->view('partials/user_password',$user_data,TRUE);
+
+		$this->load->view('templates/main_template',$data);
+
+	}
+
+	public function update_password()
+	{
+		$user_id 					=	$this->session->userdata('user_id');
+		$user_data					=	array();
+		$user_data['password']		=	md5($this->input->post('password',TRUE));
+
+		$this->user_model->update_user($user_data , $user_id);
+
+		redirect('log_out','refresh');
+	}
+
 
 	
 		
