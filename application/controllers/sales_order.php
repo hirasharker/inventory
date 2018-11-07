@@ -15,7 +15,7 @@ class Sales_Order extends CI_Controller {
 		$this->load->model('company_model','company_model',TRUE);
 		$this->load->model('convert_model','convert_model',TRUE);
 		$this->load->model('module_model','module_model',TRUE);
-		$this->load->model('company_model','company_model',TRUE);
+		$this->load->model('customer_model','customer_model',TRUE);
 
 	}
 
@@ -142,11 +142,11 @@ class Sales_Order extends CI_Controller {
 		$sales_order_data['warehouse_id']		=	$this->input->post('warehouse_id','',TRUE);
 		$sales_order_data['warehouse_name']		=	$this->warehouse_model->get_warehouse_by_id($sales_order_data['warehouse_id'])->warehouse_name;
 
-		$sales_order_data['customer_type']		=	$this->input->post('customer_type','',TRUE);
-		
 		$sales_order_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
-		if($sales_order_data['customer_id']	!= NULL){
-			$sales_order_data['customer_name']	=	$this->sales_order_model->get_customer_by_id($sales_order_data['customer_id'])->customer_name;
+		if($sales_order_data['customer_id']!= NULL){
+			$customer_data 						=	$this->customer_model->get_customer_by_id($sales_order_data['customer_id']);
+			$sales_order_data['customer_name']	=	$customer_data->customer_name;
+			$sales_order_data['customer_type']	=	$customer_data->customer_type;
 		}
 		
 		// $sales_order_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
@@ -217,8 +217,10 @@ class Sales_Order extends CI_Controller {
 		$sales_order_data['warehouse_name']		=	$this->warehouse_model->get_warehouse_by_id($sales_order_data['warehouse_id'])->warehouse_name;
 
 		$sales_order_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
-		if($sales_order_data['customer_id']		!= NULL){
-			$sales_order_data['customer_name']	=	$this->sales_order_model->get_customer_by_id($sales_order_data['customer_id'])->customer_name;
+		if($sales_order_data['customer_id']!= NULL){
+			$customer_data 					=	$this->customer_model->get_customer_by_id($sales_order_data['customer_id']);
+			$sales_order_data['customer_name']	=	$customer_data->customer_name;
+			$sales_order_data['customer_type']	=	$customer_data->customer_type;
 		}
 		
 		// $sales_order_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);

@@ -40,6 +40,11 @@ class Sales extends CI_Controller {
 	 */
 	public function index($sales_id = 0, $error_count = 0)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(9, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/sales_invoice/add_sales','refresh');
+		}
+
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 
@@ -79,6 +84,10 @@ class Sales extends CI_Controller {
 	}
 	public function view_sales()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(9, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_view != 1){
+			redirect('access_control/denied/sales_invoice/all_sales','refresh');
+		}
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 		$nav_data['dev_key']		=	"sales_invoice";
@@ -118,6 +127,10 @@ class Sales extends CI_Controller {
 
 	public function add_sales()
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(9, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_add != 1){
+			redirect('access_control/denied/sales_invoice/add_sales','refresh');
+		}
 		$sales_data						=	array();
 		$sales_data['user_id']			=	$this->session->userdata('user_id');
 		$sales_data['user_name']		=	$this->session->userdata('user_name');
@@ -272,6 +285,10 @@ class Sales extends CI_Controller {
 
 	public function update_sales($sales_id)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(9, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_edit != 1){
+			redirect('access_control/denied/sales_invoice/add_sales','refresh');
+		}
 		$sales_data						=	array();
 		$sales_data['user_id']			=	$this->session->userdata('user_id');
 		$sales_data['user_name']		=	$this->session->userdata('user_name');
@@ -356,6 +373,10 @@ class Sales extends CI_Controller {
 
 	public function delete_sales($sales_id, $warehouse_id=NULL)
 	{
+		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(9, $this->session->userdata('user_id')); // module_id for bank is 20.....
+		if($permission->permission_delete != 1){
+			redirect('access_control/denied/sales_invoice/add_sales','refresh');
+		}
 		if($warehouse_id==NULL){
 			$warehouse_id 		=	$this->sales_model->get_sales_by_id($sales_id)->warehouse_id;
 		}

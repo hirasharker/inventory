@@ -21,13 +21,13 @@
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <table class="table table-striped table-bordered table-hover" id="datatable-buttons1">
                                     <thead>
                                         <tr>
                                             <th>SL</th>
                                             <th>Invoice No</th>
-                                            <th>Dealer Name</th>
                                             <th>Customer Name</th>
+                                            <th>Type of Customer</th>
                                             <th>Item Name</th>
                                             <th>Total Price</th>
                                             <th>Sales date</th>
@@ -39,8 +39,26 @@
                                         <tr class="gradeA">
                                             <td><?php echo $i;?></td>
                                             <td><?php echo $value->sales_id;?></td>
-                                            <td><?php echo $value->dealer_name;?></td>
                                             <td><?php echo $value->customer_name;?></td>
+                                            <td><?php
+                                                switch ($value->customer_type) {
+                                                    case '1':
+                                                        echo 'Dealer';
+                                                        break;
+
+                                                    case '2':
+                                                        echo 'Regular Customer';
+                                                        break;
+
+                                                    case '3':
+                                                        echo 'Annonymus';
+                                                        break;
+                                                    
+                                                    default:
+                                                        # code...
+                                                        break;
+                                                }
+                                            ?></td>
                                             <td><?php echo $value->item_name;?></td>
                                             <td class="center"><?php echo $value->total_price;?></td>
                                             <td><?php echo $value->sales_date;?></td>
