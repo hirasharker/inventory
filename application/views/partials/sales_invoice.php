@@ -38,7 +38,7 @@
               <th style="padding-left: 10px; text-align: left;"><?php echo $customer->customer_name;?> </th>
             </tr>
             <tr>
-              <td style="padding-left: 10px; text-align: left;"><?php echo $customer->address;?></td>
+              <td style="padding-left: 10px; text-align: left;"><?php echo $customer->present_address;?></td>
             </tr>
             <!-- <tr>
               <td style="padding-left: 10px; text-align: left;">Chittagong.</td>
