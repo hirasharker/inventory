@@ -50,7 +50,7 @@
 
                             <div class="form-group transfer-from-bank-container" style="display:none;">
                                 <label>Transfer from</label>
-                                <select class="form-control" id="fromBankId" name="transfer_from_bank_id">
+                                <select class="form-control select-tag" id="fromBankId" name="transfer_from_bank_id">
                                     <option value="">Select Bank</option>
                                     <?php foreach($bank_list as $b_value) {?>
                                     <option value="<?php echo $b_value->bank_id; ?>"><?php echo $b_value->bank_name; ?></option>
@@ -60,7 +60,7 @@
 
                             <div class="form-group transfer-to-bank-container" style="display:none;">
                                 <label>Transfer to</label>
-                                <select class="form-control" id="toBankId" name="transfer_to_bank_id">
+                                <select class="form-control select-tag" id="toBankId" name="transfer_to_bank_id">
                                     <option value="">Select Bank</option>
                                     <?php foreach($bank_list as $b_value) {?>
                                     <option value="<?php echo $b_value->bank_id; ?>"><?php echo $b_value->bank_name; ?></option>
@@ -75,7 +75,7 @@
 
                             <div class="form-group bank-name" style="display:none;">
                                 <label>Select Bank</label>
-                                <select class="form-control" id="bankId" name="bank_id">
+                                <select class="form-control select-tag" id="bankId" name="bank_id">
                                     <option value="">Select Bank</option>
                                     <?php foreach($bank_list as $b_value) {?>
                                     <option value="<?php echo $b_value->bank_id; ?>"><?php echo $b_value->bank_name; ?></option>
