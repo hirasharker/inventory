@@ -15,6 +15,7 @@ class Warranty_Claim extends CI_Controller {
 		$this->load->model('convert_model','convert_model',TRUE);
 		$this->load->model('module_model','module_model',TRUE);
 		$this->load->model('upload_model','upload_model',TRUE);
+		$this->load->model('customer_model','customer_model',TRUE);
 	}
 
 
@@ -36,7 +37,7 @@ class Warranty_Claim extends CI_Controller {
 	
 
 	//---------------------warranty_claim SECTION STARTS HERE
-	public function index($warranty_claim_id = 0)
+	public function index($warranty_claim_id = 0, $error_count = 0)
 	{
 		$data							=	array();
 		$data['page_title']				=	"Inventory Management";
@@ -48,13 +49,20 @@ class Warranty_Claim extends CI_Controller {
 		$warranty_claim_data							=	array();
 		if($warranty_claim_id!=0){
 			$warranty_claim_data['warranty_claim']		=	$this->warranty_claim_model->get_warranty_claim_by_id($warranty_claim_id);
+			$warranty_claim_data['warranty_claim_detail']		=	$this->warranty_claim_model->get_warranty_claim_detail_by_claim_id($warranty_claim_id);
 			$warranty_claim_data['item_list']			=	$this->sales_model->get_items_by_sales_id($warranty_claim_data['warranty_claim']->sales_id);	
 		}else{
 			$warranty_claim_data['warranty_claim']		=	NULL;
 			$warranty_claim_data['item_list']			=	NULL;
 		}
 
-		
+		if($error_count != 0){
+			$warranty_claim_data['error_content']		=	$error_count +1;
+		}else{
+			$warranty_claim_data['error_content']		=	NULL;
+		}
+
+		$warranty_claim_data['customer_list']			=	$this->customer_model->get_all_customers();
 		$warranty_claim_data['sales_list']				=	$this->sales_model->get_all_sales();
 		$warranty_claim_data['wc_type_list']			=	$this->warranty_claim_model->get_all_warranty_claim_types();
 
@@ -76,6 +84,7 @@ class Warranty_Claim extends CI_Controller {
 		$warranty_claim_data								=	array();
 		$warranty_claim_data['warranty_claim_list']			=	$this->warranty_claim_model->get_all_warranty_claims();
 		$warranty_claim_data['wc_type_list']				=	$this->warranty_claim_model->get_all_warranty_claim_types();
+		echo '<pre>';print_r($warranty_claim_data['warranty_claim_list']);echo '</pre>';exit();
 		$warranty_claim_data['permission']					= 	$this->module_model->get_permission_by_module_id_and_user_id(17,$this->session->userdata('user_id'));
 
 		$data['navigation']					=	$this->load->view('templates/navigation',$nav_data,TRUE);
@@ -91,51 +100,73 @@ class Warranty_Claim extends CI_Controller {
 		$warranty_claim_data['user_id']				=	$this->session->userdata('user_id');
 		$warranty_claim_data['user_name']			=	$this->session->userdata('user_name');
 
-		$warranty_claim_data['item_id']							=	$this->input->post('item_id','',TRUE);
-		$warranty_claim_data['item_serial_no']					=	$this->input->post('item_serial_no','',TRUE);
+		$warranty_claim_data['claim_mode']						=	$this->input->post('claim_mode','',TRUE);
 		$warranty_claim_data['sales_id']						=	$this->input->post('sales_id','',TRUE);
+		$warranty_claim_data['customer_id']						=	$this->input->post('customer_id','',TRUE);
+		$warranty_claim_data['customer_name']					=	$this->input->post('customer_name','',TRUE);
+		$warranty_claim_data['engine_no']						=	$this->input->post('engine_no','',TRUE);
+		$warranty_claim_data['chassis_no']						=	$this->input->post('chassis_no','',TRUE);
 		$warranty_claim_data['warranty_claim_type_id']			=	$this->input->post('warranty_claim_type_id','',TRUE);
 		$warranty_claim_data['buyer_complain']					=	$this->input->post('buyer_complain','',TRUE);
 		$warranty_claim_data['observation_note']				=	$this->input->post('observation_note','',TRUE);
-		$warranty_claim_data['quantity']						=	$this->input->post('quantity','',TRUE);
 		$warranty_claim_data['warranty_claim_date']				=	$this->input->post('warranty_claim_date','',TRUE);
 
 		$document_upload										=	$this->upload_model->upload_file('document_path','files'); //after upload
 		if(isset($document_upload['file_name'])){
-			$warranty_claim_data['document_path'] 					=	$document_upload['file_name'];
+			$warranty_claim_data['document_path'] 				=	$document_upload['file_name'];
 		}else{
 			$sdata=array();
 			$sdata['upload_error'] = $document_upload['error'];
+			// print_r($sdata['upload_error']);exit();
 			$this->session->set_userdata($sdata);
 		}
 
-		$result								=	$this->warranty_claim_model->add_warranty_claim($warranty_claim_data);
+		$result													=	$this->warranty_claim_model->add_warranty_claim($warranty_claim_data);
+		$warranty_claim_id 										=	$result;
+		
+
+		$item_id 												=	$this->input->post('item_id','',TRUE);
+		$quantity 												=	$this->input->post('quantity','',TRUE);
+		$item_price												=	$this->input->post('item_price','',TRUE);
+		
+		$count 													=	$this->input->post('count','',TRUE);
+
+		$warranty_claim_detail_data								=	array();
+
+		for ($i=0; $i < $count; $i++) { 
+			$warranty_claim_detail_data['warranty_claim_id']	=	$warranty_claim_id;
+			$warranty_claim_detail_data['item_id']				=	$item_id[$i];
+			$warranty_claim_detail_data['item_price']			=	$item_price[$i];
+			$warranty_claim_detail_data['quantity']				=	$quantity[$i];
+			$detail_result 										=	$this->warranty_claim_model->add_warranty_claim_detail($warranty_claim_detail_data);
+			unset($warranty_claim_detail_data);
+		}
 
 		redirect('warranty_claim/view_warranty_claims','refresh');
 	}
 
 	public function update_warranty_claim()
 	{
-		$warranty_claim_id 							=	$this->input->post('warranty_claim_id','',TRUE);
+		$warranty_claim_id 										=	$this->input->post('warranty_claim_id','',TRUE);
 
-		$warranty_claim_detail 						=	$this->warranty_claim_model->get_warranty_claim_by_id($warranty_claim_id);
+		$warranty_claim_data									=	array();
+		$warranty_claim_data['user_id']							=	$this->session->userdata('user_id');
+		$warranty_claim_data['user_name']						=	$this->session->userdata('user_name');
 
-		$$warranty_claim_data						=	array();
-		$warranty_claim_data['user_id']				=	$this->session->userdata('user_id');
-		$warranty_claim_data['user_name']			=	$this->session->userdata('user_name');
-
-		$warranty_claim_data['item_id']							=	$this->input->post('item_id','',TRUE);
-		$warranty_claim_data['item_serial_no']					=	$this->input->post('item_serial_no','',TRUE);
+		$warranty_claim_data['claim_mode']						=	$this->input->post('claim_mode','',TRUE);
 		$warranty_claim_data['sales_id']						=	$this->input->post('sales_id','',TRUE);
+		$warranty_claim_data['customer_id']						=	$this->input->post('customer_id','',TRUE);
+		$warranty_claim_data['customer_name']					=	$this->input->post('customer_name','',TRUE);
+		$warranty_claim_data['engine_no']						=	$this->input->post('engine_no','',TRUE);
+		$warranty_claim_data['chassis_no']						=	$this->input->post('chassis_no','',TRUE);
 		$warranty_claim_data['warranty_claim_type_id']			=	$this->input->post('warranty_claim_type_id','',TRUE);
 		$warranty_claim_data['buyer_complain']					=	$this->input->post('buyer_complain','',TRUE);
 		$warranty_claim_data['observation_note']				=	$this->input->post('observation_note','',TRUE);
-		$warranty_claim_data['quantity']						=	$this->input->post('quantity','',TRUE);
 		$warranty_claim_data['warranty_claim_date']				=	$this->input->post('warranty_claim_date','',TRUE);
 
 		$document_upload										=	$this->upload_model->upload_file('document_path','files'); //after upload
 		if(isset($document_upload['file_name'])){
-			$warranty_claim_data['document_path'] 					=	$document_upload['file_name'];
+			$warranty_claim_data['document_path'] 				=	$document_upload['file_name'];
 			unlink('files/'.$warranty_claim_detail->document_path);
 		}else{
 			$sdata=array();
@@ -143,7 +174,29 @@ class Warranty_Claim extends CI_Controller {
 			$this->session->set_userdata($sdata);
 		}
 
-		$result								=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data,$warranty_claim_id);
+		$update_result											=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data,$warranty_claim_id);
+
+		if ($update_result != NULL) {
+			$this->delete_warranty_claim_detail($warranty_claim_id);
+			$item_id 												=	$this->input->post('item_id','',TRUE);
+			$quantity 												=	$this->input->post('quantity','',TRUE);
+			$item_price												=	$this->input->post('item_price','',TRUE);
+			
+			$count 													=	$this->input->post('count','',TRUE);
+
+			$warranty_claim_detail_data								=	array();
+
+			for ($i=0; $i < $count; $i++) { 
+				$warranty_claim_detail_data['warranty_claim_id']	=	$warranty_claim_id;
+				$warranty_claim_detail_data['item_id']				=	$item_id[$i];
+				$warranty_claim_detail_data['item_price']			=	$item_price[$i];
+				$warranty_claim_detail_data['quantity']				=	$quantity[$i];
+				$detail_result 										=	$this->warranty_claim_model->add_warranty_claim_detail($warranty_claim_detail_data);
+				unset($warranty_claim_detail_data);
+			}
+		}else {
+			redirect('warranty_claim/index/'.$warranty_claim_id,'refresh');
+		}
 
 		redirect('warranty_claim/view_warranty_claims','refresh');
 	}
@@ -156,6 +209,10 @@ class Warranty_Claim extends CI_Controller {
 		$this->warranty_claim_model->delete_warranty_claim($warranty_claim_id);
 
 		redirect('warranty_claim/view_warranty_claims','refresh');
+	}
+
+	public function delete_warranty_claim_detail($warranty_claim_id){
+		$this->warranty_claim_model->delete_warranty_claim_detail($warranty_claim_id);
 	}
 
 	//---------------------warranty_claim SECTION ENDS HERE
@@ -373,6 +430,13 @@ class Warranty_Claim extends CI_Controller {
 
 	//---------------------- AJAX SECTION
 	
+	public function ajax_get_all_items(){
+		$item_list 				=	$this->item_model->get_all_items();
+		echo json_encode($item_list);
+		// a die here helps ensure a clean ajax call
+		die();
+	}
+
 	public function ajax_get_item_list_by_sales_id(){
 		$sales_id = $this->input->post('sales_id');
 
@@ -381,6 +445,17 @@ class Warranty_Claim extends CI_Controller {
 		echo json_encode($item_list);
 		// a die here helps ensure a clean ajax call
 		die();
+	}
+
+	public function ajax_count_item(){
+		$count						=	$this->input->post('count',TRUE);
+
+		$data 						=	array();
+		$data['count']				=	$count+1;
+		$data['error_content']		=	$this->load->view('partials/form_validation_tag',$data,TRUE);
+
+		// $error_message			=	$count +1;
+        echo json_encode($data['error_content']);
 	}
 
 	

@@ -146,10 +146,10 @@
                     <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0"> Cash</div>
                 </div>
                 <div class="c x15 y19 w14 h4">
-                    <div class="t m0 x16 h14 y17 ff3 fs2 fc0 sc0 ls0 ws0"><?php if($money_receipt->payment_mode == 2){ echo 'Ö';} ?></div>
+                    <div class="t m0 x16 h14 y17 ff3 fs2 fc0 sc0 ls0 ws0"><?php if($money_receipt->payment_mode == 3){ echo 'Ö';} ?></div>
                 </div>
                 <div class="c x9 y19 w15 h4">
-                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0"> Cheque No.</div>
+                    <div class="t m0 x2 h8 y18 ff2 fs2 fc0 sc0 ls0 ws0"> Bank Transfer</div>
                 </div>
                 <div class="c x0 y1a wb h4">
                     <div class="t m0 x17 h12 y15 ff1 fs6 fc0 sc0 ls0 ws0">Received By </div>

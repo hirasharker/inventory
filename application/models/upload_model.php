@@ -6,11 +6,9 @@ public function upload_file($type,$path){
     $config['upload_path']='./'.$path.'/';
     $config['allowed_types']='gif|jpg|png|pdf|csv';
     $config['max_size']='500000';
-    $config['max_width']='3000';
-    $config['max_height']='3000';
-    if($type=='purchase_list'){
-        $config['overwrite']=TRUE;
-    }
+    $config['max_width']='10000';
+    $config['max_height']='10000';
+    $config['overwrite']=TRUE;
 
     $this->upload->initialize($config);
     unset($config);

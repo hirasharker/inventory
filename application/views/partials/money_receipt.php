@@ -44,7 +44,33 @@
                                     <option value="0">Cash</option>
                                     <option value="1">Bank Deposit</option>
                                     <option value="2">Cheque</option>
+                                    <option value="3">Bank Transfer</option>
                                 </select>
+                            </div>
+
+                            <div class="form-group transfer-from-bank-container" style="display:none;">
+                                <label>Transfer from</label>
+                                <select class="form-control" id="fromBankId" name="transfer_from_bank_id">
+                                    <option value="">Select Bank</option>
+                                    <?php foreach($bank_list as $b_value) {?>
+                                    <option value="<?php echo $b_value->bank_id; ?>"><?php echo $b_value->bank_name; ?></option>
+                                <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group transfer-to-bank-container" style="display:none;">
+                                <label>Transfer to</label>
+                                <select class="form-control" id="toBankId" name="transfer_to_bank_id">
+                                    <option value="">Select Bank</option>
+                                    <?php foreach($bank_list as $b_value) {?>
+                                    <option value="<?php echo $b_value->bank_id; ?>"><?php echo $b_value->bank_name; ?></option>
+                                <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group bank-transfer-id-container" style="display:none;">
+                                <label>Transfer ID</label>
+                                <input type="text" class="form-control" id="bankTransferId" name="bank_transfer_id" >
                             </div>
 
                             <div class="form-group bank-name" style="display:none;">
@@ -140,22 +166,52 @@
             $( ".bank-branch" ).hide( 500 );
             $( ".deposit-no" ).hide( 500 );
             $( ".cheque-no" ).hide( 500 );
+            $( ".transfer-from-bank-container" ).hide( 500 );
+            $( ".transfer-to-bank-container" ).hide( 500 );
+            $( ".bank-transfer-id-container" ).hide( 500 );
             $( "#bankId" ).val("");
             $( "#bankBranch" ).val("");
             $( "#depositNo" ).val("");
             $( "#chequeNo" ).val("");
+            $( "#fromBankId" ).val("");
+            $( "#toBankId" ).val("");
+            $( "#bankTransferId" ).val("");
           }else if (val == 1){           //  BANK DEPOSIT MODE
             $( ".bank-name" ).show( 500 );
             $( ".bank-branch" ).show( 500 );
             $( ".deposit-no" ).show( 500 );
             $( ".cheque-no" ).hide( 500 );
+            $( ".transfer-from-bank-container" ).hide( 500 );
+            $( ".transfer-to-bank-container" ).hide( 500 );
+            $( ".bank-transfer-id-container" ).hide( 500 );
             $( "#chequeNo" ).val("");
+            $( "#fromBankId" ).val("");
+            $( "#toBankId" ).val("");
+            $( "#bankTransferId" ).val("");
           }else if(val== 2){             //  CHEQUE MODE
             $( ".bank-name" ).show( 500 );
             $( ".bank-branch" ).show( 500 );
             $( ".cheque-no" ).show( 500 );
             $( ".deposit-no" ).hide( 500 );
+            $( ".transfer-from-bank-container" ).hide( 500 );
+            $( ".transfer-to-bank-container" ).hide( 500 );
+            $( ".bank-transfer-id-container" ).hide( 500 );
             $( "#depositNo" ).val("");
+            $( "#fromBankId" ).val("");
+            $( "#toBankId" ).val("");
+            $( "#bankTransferId" ).val("");
+          }else if(val== 3){             //  CHEQUE MODE
+            $( ".transfer-from-bank-container" ).show( 500 );
+            $( ".transfer-to-bank-container" ).show( 500 );
+            $( ".bank-transfer-id-container" ).show( 500 );
+            $( ".bank-name" ).hide( 500 );
+            $( ".bank-branch" ).hide( 500 );
+            $( ".cheque-no" ).hide( 500 );
+            $( ".deposit-no" ).hide( 500 );
+            $( "#bankId" ).val("");
+            $( "#bankBranch" ).val("");
+            $( "#depositNo" ).val("");
+            $( "#chequeNo" ).val("");
           }
     });
 </script>

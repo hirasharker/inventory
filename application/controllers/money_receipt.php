@@ -129,6 +129,10 @@ class Money_Receipt extends CI_Controller {
 		$money_receipt_data['deposit_slip_no']		=	$this->input->post('deposit_slip_no','',TRUE);
 		$money_receipt_data['cheque_no']			=	$this->input->post('cheque_no','',TRUE);
 
+		$money_receipt_data['transfer_from_bank_id']=	$this->input->post('transfer_from_bank_id','',TRUE);
+		$money_receipt_data['transfer_to_bank_id']	=	$this->input->post('transfer_to_bank_id','',TRUE);
+		$money_receipt_data['bank_transfer_id']		=	$this->input->post('bank_transfer_id','',TRUE);
+
 		$money_receipt_data['money_receipt_type']	=	$money_receipt_type;
 		$money_receipt_data['customer_id']			=	$sales_detail->customer_id;
 		$money_receipt_data['customer_name']		=	$sales_detail->customer_name;
@@ -183,6 +187,10 @@ class Money_Receipt extends CI_Controller {
 		$money_receipt_data['branch_name']			=	$this->input->post('branch_name','',TRUE);
 		$money_receipt_data['deposit_slip_no']		=	$this->input->post('deposit_slip_no','',TRUE);
 		$money_receipt_data['cheque_no']			=	$this->input->post('cheque_no','',TRUE);
+
+		$money_receipt_data['transfer_from_bank_id']=	$this->input->post('transfer_from_bank_id','',TRUE);
+		$money_receipt_data['transfer_to_bank_id']	=	$this->input->post('transfer_to_bank_id','',TRUE);
+		$money_receipt_data['bank_transfer_id']		=	$this->input->post('bank_transfer_id','',TRUE);
 
 		$money_receipt_data['money_receipt_type']	=	$money_receipt_type;
 		$money_receipt_data['customer_id']			=	$sales_detail->customer_id;

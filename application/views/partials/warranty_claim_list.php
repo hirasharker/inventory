@@ -28,6 +28,7 @@
                                 <th>SL</th>
                                 <th>Claim ID</th>
                                 <th>Invoice No</th>
+                                <th>Engine No</th>
                                 <th>Buyer Name</th>
                                 <th>Part No</th>
                                 <th>Item Name</th>
@@ -43,6 +44,7 @@
                                 <td><?php echo $i;?></td>
                                 <td><?php echo $value->warranty_claim_id;?></td>
                                 <td><a href="<?php echo base_url().'sales/index/'.$value->sales_id;?>" target="_blank"><?php echo $value->sales_id;?></a></td>
+                                <td><?php echo $value->engine_no; ?></td>
                                 <td>
                                 <?php 
                                     if($value->customer_type == 2){ 
