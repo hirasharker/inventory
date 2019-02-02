@@ -9,7 +9,7 @@ class Warranty_Claim_Model extends CI_Model {
 
 
     public function get_all_warranty_claims(){
-        $this->db->select('tbl_warranty_claim.warranty_claim_id, tbl_warranty_claim.customer_id, tbl_warranty_claim.customer_name, tbl_warranty_claim.warranty_claim_date, tbl_warranty_claim_detail.quantity, GROUP_CONCAT(tbl_item.item_name SEPARATOR "|") as item_name, tbl_warranty_claim.approval_status');
+        $this->db->select('tbl_warranty_claim.warranty_claim_id, tbl_warranty_claim.customer_id, tbl_warranty_claim.sales_id, tbl_warranty_claim.warranty_claim_type_id, tbl_warranty_claim.engine_no, tbl_warranty_claim.chassis_no, tbl_warranty_claim.customer_name, tbl_warranty_claim.document_path, tbl_warranty_claim.warranty_claim_date, tbl_warranty_claim_detail.quantity, GROUP_CONCAT(tbl_item.item_name SEPARATOR "|") as item_name, tbl_warranty_claim.approval_status');
         $this->db->from('tbl_warranty_claim');
         $this->db->join('tbl_warranty_claim_detail','tbl_warranty_claim.warranty_claim_id = tbl_warranty_claim_detail.warranty_claim_id');
         $this->db->join('tbl_item','tbl_warranty_claim_detail.item_id = tbl_item.item_id');
@@ -21,12 +21,14 @@ class Warranty_Claim_Model extends CI_Model {
     }
     
     public function get_warranty_claim_by_status($approval_status){
-        $this->db->select('tbl_warranty_claim.*,tbl_item.item_name, tbl_item.part_no, tbl_item.unit , tbl_sales.customer_type,
-            tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name');
+        $this->db->select('tbl_warranty_claim.*, GROUP_CONCAT(tbl_item.item_name SEPARATOR "|") as item_name, GROUP_CONCAT(tbl_item.part_no SEPARATOR "|") as part_no, tbl_sales.customer_type,
+            tbl_sales.customer_id, tbl_sales.customer_name');
         $this->db->from('tbl_warranty_claim');
-        $this->db->join('tbl_item','tbl_warranty_claim.item_id = tbl_item.item_id');
+        $this->db->join('tbl_warranty_claim_detail','tbl_warranty_claim_detail.warranty_claim_id = tbl_warranty_claim.warranty_claim_id');
+        $this->db->join('tbl_item','tbl_warranty_claim_detail.item_id = tbl_item.item_id');
         $this->db->join('tbl_sales','tbl_warranty_claim.sales_id = tbl_sales.sales_id','left');
         $this->db->where('tbl_warranty_claim.approval_status',$approval_status);
+        $this->db->group_by('tbl_warranty_claim.warranty_claim_id');
         $result_query=$this->db->get();
         $result=$result_query->result();
         return $result;
@@ -40,6 +42,9 @@ class Warranty_Claim_Model extends CI_Model {
         $result=$result_query->row();
         return $result;
     }
+
+
+    
 
     public function get_warranty_claim_like_id($warranty_claim_id){
         $this->db->select('warranty_claim_id');
@@ -94,6 +99,18 @@ class Warranty_Claim_Model extends CI_Model {
         return $result;
     }
 
+    public function get_preloaded_item_by_sales_id($sales_id){
+        $this->db->select('tbl_item.*, tbl_sales_detail.quantity as sales_quantity, tbl_warranty_claim_detail.warranty_claim_id');
+        $this->db->from('tbl_sales_detail');
+        $this->db->join('tbl_item','tbl_sales_detail.item_id = tbl_item.item_id');
+        $this->db->join('tbl_warranty_claim_detail','tbl_sales_detail.item_id = tbl_warranty_claim_detail.item_id','left');
+        $this->db->where('tbl_warranty_claim_detail.warranty_claim_id',NULL);
+        $this->db->where('tbl_sales_detail.sales_id',$sales_id);
+        $result_query=$this->db->get();
+        $result=$result_query->result();
+        return $result;
+    }
+
     //------- WARRANTY CLAIM DETAIL
     public function get_warranty_claim_detail_by_claim_id($warranty_claim_id){
         $this->db->select('tbl_warranty_claim_detail.*,tbl_item.item_name, tbl_item.item_price, tbl_item.part_no, tbl_item.quantity as stock_quantity');
@@ -102,6 +119,27 @@ class Warranty_Claim_Model extends CI_Model {
         $this->db->where('warranty_claim_id', $warranty_claim_id);
         $result_query=$this->db->get();
         $result=$result_query->result();
+        return $result;
+    }
+
+    public function get_warranty_claim_total_by_claim_id($warranty_claim_id){
+        $this->db->select('sum(tbl_warranty_claim_detail.quantity * tbl_item.item_price) as total_price');
+        $this->db->from('tbl_warranty_claim_detail');
+        $this->db->join('tbl_item','tbl_item.item_id = tbl_warranty_claim_detail.item_id');
+        $this->db->where('warranty_claim_id', $warranty_claim_id);
+        $result_query=$this->db->get();
+        $result=$result_query->row();
+        return $result;
+    }
+
+    
+    public function get_warranty_claim_detail_summary_claim_id($warranty_claim_id){
+        $this->db->select('sum(quantity * item_price) as total_price, sum(quantity) as total_quantity');
+        $this->db->from('tbl_warranty_claim_detail');
+        $this->db->where('warranty_claim_id',$warranty_claim_id);
+        $this->db->group_by('warranty_claim_id');
+        $result_query=$this->db->get();
+        $result=$result_query->row();
         return $result;
     }
 

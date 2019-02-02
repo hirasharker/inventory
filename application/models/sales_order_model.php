@@ -9,8 +9,20 @@ class Sales_Order_Model extends CI_Model {
 
 
     public function get_all_sales_orders(){
+        $this->db->select('tbl_sales_order_detail.sales_order_id, sum(quantity) as qty'); 
+        $this->db->from('tbl_sales_order_detail');
+        // $this->db->join('tbl_sales_order_detail','tbl_sales_order_detail.sales_order_id = tbl_sales_order.sales_order_id','left');
+        $this->db->group_by('tbl_sales_order_detail.sales_order_id');
+        // $this->db->order_by('tbl_sales_order.time_stamp','desc');
+        // $this->db->order_by('tbl_sales_order.customer_name','desc');
+        $result_query=$this->db->get();
+        $result=$result_query->result();
+        return $result;
+    }
+
+    public function get_all_sales_orders_mysql(){
         $this->db->select('tbl_sales_order.sales_order_id, tbl_sales_order.customer_id, tbl_sales_order.customer_name, tbl_sales_order.customer_type, tbl_sales_order.dealer_name, tbl_sales_order.user_id, tbl_sales_order.user_name
-            , tbl_sales_order.sales_order_date, GROUP_CONCAT(tbl_sales_order_detail.item_name SEPARATOR ",") as item_name, (sum(tbl_sales_order_detail.sales_order_price * tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount))*(1-.01*tbl_sales_order.overall_discount) as total_price'); 
+            , tbl_sales_order.sales_order_date, STRING_AGG(CONCAT_WS( "|" , DDD_1, tbl_sales_order_detail.item_name),"|") AS item_name, (sum(tbl_sales_order_detail.sales_order_price * tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount))*(1-.01*tbl_sales_order.overall_discount) as total_price'); 
         $this->db->from('tbl_sales_order');
         $this->db->join('tbl_sales_order_detail','tbl_sales_order_detail.sales_order_id = tbl_sales_order.sales_order_id');
         $this->db->group_by('tbl_sales_order_detail.sales_order_id');
@@ -121,7 +133,7 @@ class Sales_Order_Model extends CI_Model {
     public function get_sales_order_by_id($sales_order_id){
         $this->db->select('tbl_sales_order.*, sum(tbl_sales_order_detail.sales_order_price*tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount) as sub_total
             ,sum(tbl_sales_order_detail.quantity) as total_quantity
-            ,sum(tbl_sales_order_detail.sales_order_price*tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount)*(1-tbl_sales_order.overall_discount*.01) as total_price');
+            ,sum(tbl_sales_order_detail.sales_order_price*tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount)*(1-tbl_sales_order.overall_discount / (100 + tbl_sales_order.value_added_tax_percentage)) as total_price');
         $this->db->from('tbl_sales_order');
         $this->db->where('tbl_sales_order.sales_order_id',$sales_order_id);
         $this->db->join('tbl_sales_order_detail','tbl_sales_order_detail.sales_order_id = tbl_sales_order.sales_order_id');

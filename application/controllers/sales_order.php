@@ -16,6 +16,7 @@ class Sales_Order extends CI_Controller {
 		$this->load->model('convert_model','convert_model',TRUE);
 		$this->load->model('module_model','module_model',TRUE);
 		$this->load->model('customer_model','customer_model',TRUE);
+		$this->load->model('vat_tax_model','vat_tax_model',TRUE);
 
 	}
 
@@ -83,6 +84,7 @@ class Sales_Order extends CI_Controller {
 
 		$sales_order_data 						= 	array();
 		$sales_order_data['sales_order_list']	=	$this->sales_order_model->get_all_sales_orders();
+		echo '<pre>';print_r($sales_order_data['sales_order_list']); echo '</pre>'; exit();
 		$sales_order_data['permission']			= 	$this->module_model->get_permission_by_module_id_and_user_id(21,$this->session->userdata('user_id'));
 
 		$data['navigation']						=	$this->load->view('templates/navigation',$nav_data,TRUE);
@@ -142,19 +144,19 @@ class Sales_Order extends CI_Controller {
 		$sales_order_data['warehouse_id']		=	$this->input->post('warehouse_id','',TRUE);
 		$sales_order_data['warehouse_name']		=	$this->warehouse_model->get_warehouse_by_id($sales_order_data['warehouse_id'])->warehouse_name;
 
+		$sales_order_data['sales_order_date']	=	$this->input->post('sales_order_date','',TRUE);
+
+		$vat_tax_data							=	$this->vat_tax_model->get_vat_tax_rule_by_date($sales_order_data['sales_order_date']);
+
+		$sales_order_data['value_added_tax_percentage']	=	$vat_tax_data->value_added_tax_percentage;
+
 		$sales_order_data['customer_id']		=	$this->input->post('customer_id','',TRUE);
 		if($sales_order_data['customer_id']!= NULL){
 			$customer_data 						=	$this->customer_model->get_customer_by_id($sales_order_data['customer_id']);
 			$sales_order_data['customer_name']	=	$customer_data->customer_name;
 			$sales_order_data['customer_type']	=	$customer_data->customer_type;
 		}
-		
-		// $sales_order_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
-		// if($sales_order_data['dealer_id']!= NULL){
-		// 	$sales_order_data['dealer_name']	=	$this->dealer_model->get_dealer_by_id($sales_order_data['dealer_id'])->dealer_name;
-		// }
-		
-		$sales_order_data['sales_order_date']	=	$this->input->post('sales_order_date','',TRUE);
+
 		$sales_order_data['overall_discount']	=	$this->input->post('sales_order_discount','',TRUE);
 
 		$error_count					=	$this->input->post('count','',TRUE);
@@ -191,6 +193,7 @@ class Sales_Order extends CI_Controller {
 				$sales_order_detail_data['item_id']					=	$item_id[$i];
 				$sales_order_detail_data['item_name']				=	$item_name[$i];
 				$sales_order_detail_data['sales_order_price']		=	$sales_order_price[$i];
+				$sales_order_detail_data['value_added_tax']			=	$sales_order_price[$i] * $vat_tax_data->value_added_tax_percentage / (100 + $vat_tax_data->value_added_tax_percentage);
 				$sales_order_detail_data['individual_discount']		=	$discount[$i];
 				$sales_order_detail_data['overall_discount']		=	$sales_order_data['overall_discount'];
 				$sales_order_detail_data['sales_order_date']		=	$sales_order_data['sales_order_date'];
@@ -223,12 +226,12 @@ class Sales_Order extends CI_Controller {
 			$sales_order_data['customer_type']	=	$customer_data->customer_type;
 		}
 		
-		// $sales_order_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
-		// if($sales_order_data['dealer_id']!= NULL){
-		// 	$sales_order_data['dealer_name']		=	$this->dealer_model->get_dealer_by_id($sales_order_data['dealer_id'])->dealer_name;
-		// }
-		
-		$sales_order_data['sales_order_date']		=	$this->input->post('sales_order_date','',TRUE);
+		$sales_order_data['sales_order_date']			=	$this->input->post('sales_order_date','',TRUE);
+
+		$vat_tax_data									=	$this->vat_tax_model->get_vat_tax_rule_by_date($sales_order_data['sales_order_date']);
+
+		$sales_order_data['value_added_tax_percentage']	=	$vat_tax_data->value_added_tax_percentage;
+
 		$sales_order_data['overall_discount']	=	$this->input->post('sales_order_discount','',TRUE);
 
 		$error_count					=	$this->input->post('count','',TRUE);
@@ -265,15 +268,16 @@ class Sales_Order extends CI_Controller {
 			$sales_order_detail_data['warehouse_id']				=	$sales_order_data['warehouse_id'];
 
 			for ($i=0; $i < $count ; $i++) {
-				$sales_order_detail_data['sales_order_id']				=	$sales_order_id;
-				$sales_order_detail_data['customer_id']			=	$sales_order_data['customer_id'];
-				$sales_order_detail_data['item_id']				=	$item_id[$i];
+				$sales_order_detail_data['sales_order_id']			=	$sales_order_id;
+				$sales_order_detail_data['customer_id']				=	$sales_order_data['customer_id'];
+				$sales_order_detail_data['item_id']					=	$item_id[$i];
 				$sales_order_detail_data['item_name']				=	$item_name[$i];
-				$sales_order_detail_data['sales_order_price']			=	$sales_order_price[$i];
+				$sales_order_detail_data['sales_order_price']		=	$sales_order_price[$i];
+				$sales_order_detail_data['value_added_tax']			=	$sales_order_price[$i] * $vat_tax_data->value_added_tax_percentage / (100 + $vat_tax_data->value_added_tax_percentage);
 				$sales_order_detail_data['individual_discount']	=	$discount[$i];
 				$sales_order_detail_data['overall_discount']		=	$sales_order_data['overall_discount'];
 				$sales_order_detail_data['quantity']				=	$quantity[$i];
-				$sales_order_detail_data['sales_order_date']			=	$sales_order_data['sales_order_date'];
+				$sales_order_detail_data['sales_order_date']		=	$sales_order_data['sales_order_date'];
 				
 				$detail_result								=	$this->sales_order_model->add_sales_order_detail($sales_order_detail_data);
 
@@ -322,22 +326,30 @@ class Sales_Order extends CI_Controller {
 
 
 	public function ajax_get_order_total_with_discount(){
+		
+
 		$price 						=	$this->input->post('sales_order_price');
 
 		$qty 						=	$this->input->post('quantity');
 
 		$discount 					=	$this->input->post('discount');
 
+		$sales_order_date 			=	$this->input->post('sales_order_date');
+
 		$count 						=	count($price);
+
+		$vat_tax_data				=	$this->vat_tax_model->get_vat_tax_rule_by_date($sales_order_date);
+
+		$value_added_tax_percentage	=	$vat_tax_data->value_added_tax_percentage;
 
 		$sub_total 					=	0;
 
 		for ($i=0; $i < $count; $i++) { 
 			$sub_total				+=	($qty[$i] * $price[$i]);
 		}
+		$value_added_tax 			=	round($sub_total * $value_added_tax_percentage / ( 100 + $value_added_tax_percentage), 2);
 
-		$total_price				=	$sub_total - ($sub_total * $discount * .01);
-		
+		$total_price				=	round($sub_total - ($sub_total - $value_added_tax) * $discount * .01, 2);
 		
 		$result_summary 		=	array();
 
@@ -345,7 +357,9 @@ class Sales_Order extends CI_Controller {
 
 		$result_summary['sub_total']	=	$sub_total;
 
-		$result_summary['discount']		=	($sub_total * $discount * .01);
+		$result_summary['value_added_tax']	=	$value_added_tax;
+
+		$result_summary['discount']		=	round(($sub_total - $value_added_tax) * $discount * .01, 2);
 		echo json_encode($result_summary);
 		// a die here helps ensure a clean ajax call
 		die();
@@ -865,12 +879,9 @@ class Sales_Order extends CI_Controller {
 			$sales_order_data['customer']		 	=	$this->sales_order_model->get_customer_by_id($sales_order_data['sales_order']->customer_id);
 			$invoice_balance 					=	$this->sales_order_model->get_invoice_balance_by_customer_id($sales_order_data['sales_order']->customer_id);
 			$paid_amount						=	$this->sales_order_model->get_paid_amount_by_customer_id($sales_order_data['sales_order']->customer_id);
-		}elseif ($sales_order_data['sales_order']->dealer_id!=0){
-			$sales_order_data['dealer']		 	=	$this->dealer_model->get_dealer_by_id($sales_order_data['sales_order']->dealer_id);
-			$invoice_balance 					=	$this->sales_order_model->get_invoice_balance_by_dealer_id($sales_order_data['sales_order']->dealer_id);
-			$paid_amount						=	$this->sales_order_model->get_paid_amount_by_dealer_id($sales_order_data['sales_order']->dealer_id);
 		}
-		
+		$sales_order_data['value_added_tax']	=	$sales_order_data['sales_order']->sub_total * $sales_order_data['sales_order']->value_added_tax_percentage / (100 + $sales_order_data['sales_order']->value_added_tax_percentage);
+
 		$sales_order_data['balance'] 			=	$invoice_balance[0]->invoice_balance - $paid_amount->paid_amount;
 
 		$sales_order_data['total_in_words']		=	$this->convert_model->convert_number($sales_order_data['sales_order']->total_price);

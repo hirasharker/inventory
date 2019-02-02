@@ -26,6 +26,7 @@
     $warehouse_slot_permission      =   array();
     $bank_permission                =   array();
     $warranty_claim_approval_1      =   array();
+    $vat_tax_permission             =   array();
     foreach ($user_permission as $value) {
         if($value->module_id==16){
             $warehouse_permission = $value;
@@ -101,6 +102,9 @@
         }
         if($value->module_id==24){
             $warranty_claim_approval_3 = $value;
+        }
+        if($value->module_id==25){
+            $vat_tax_permission = $value;
         }
 
     }
@@ -322,7 +326,7 @@
             </li>
             <li class="<?php if ($dev_key == "money_receipt" || $dev_key == "customer" || 
                                 $dev_key == "dealer"|| $dev_key == "bank"|| $dev_key == "sales_order" || 
-                                $dev_key == "sales_invoice" ||$dev_key == "sales" || $dev_key == "receivable" || 
+                                $dev_key == "sales_invoice" || $dev_key == "vat_tax" || $dev_key == "sales" || $dev_key == "receivable" || 
                                 $dev_key == "sales_report") {echo 'active';} ?>">
                 <a href="<?php echo base_url();?>"><i class="fa fa-shopping-cart icon-flipped"></i></i> Sales<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level <?php if ($dev_key == "customer" || $dev_key == "sales") {echo 'collapse in';} ?>">
@@ -424,10 +428,22 @@
                             <?php }?>
                         </ul>
                     </li>
+                    <li class="<?php if ($dev_key == "vat_tax") {echo 'active';} ?>">
+                        <a href="<?php echo base_url();?>">VAT & Tax<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level <?php if ($dev_key == "vat_tax") {echo 'collapse in';} ?>">
+                            <?php if($vat_tax_permission->permission_add==1){?>
+                            <li class="<?php if ($selected == "create_vat_tax_rule") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>vat_tax/">Create Rule</a>
+                            </li>
+                            <?php }?>
+                            <?php if($vat_tax_permission->permission_view==1){?>
+                            <li class="<?php if ($selected == "all_vat_tax_rules") {echo 'active-menu';} ?>">
+                                <a href="<?php echo base_url();?>vat_tax/view_vat_tax_rules">All Rules</a>
+                            </li>
+                            <?php }?>
+                        </ul>
+                    </li>
                     
-                    <!-- <li class="<?php if ($selected == "receivable") {echo 'active-menu';} ?>">
-                        <a href="<?php echo base_url();?>sales/receivable">Receivable</a>
-                    </li> -->
                     <?php if($receivable_permission->permission_view==1){?>
                     <li class="<?php if ($dev_key == "receivable") {echo 'active';} ?>">
                         <a href="<?php echo base_url();?>">Receivable<span class="fa arrow"></span></a>

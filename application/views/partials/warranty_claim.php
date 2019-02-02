@@ -17,6 +17,11 @@
             <div class="row">
                 <div class="col-lg-8">
                     <form role="form" method="post" action="<?php echo base_url();?>warranty_claim/add_warranty_claim" enctype="multipart/form-data">
+                        <?php if($this->session->userdata('error') != NULL){ ?>
+                        <div class="form-group">
+                            <label style="color: #F00 !important;"><?php echo $this->session->userdata('error'); $this->session->unset_userdata('error'); ?> </label>
+                        </div>
+                        <?php } ?>
                       <!-- <form role="form" method="get" action="#" enctype="multipart/form-data"> -->
                         <div class="form-group">
                             <label>Mode of Claim</label>
@@ -203,11 +208,18 @@
                 <div class="col-lg-5">
                     <form role="form" method="post" action="<?php echo base_url();?>warranty_claim/update_warranty_claim" enctype="multipart/form-data">
                         <input type="hidden" value="<?php echo $warranty_claim->warranty_claim_id; ?>" name="warranty_claim_id">
+
+                        <?php if($this->session->userdata('error') != NULL){ ?>
+                        <div class="form-group">
+                            <label style="color: #F00 !important;"><?php echo $this->session->userdata('error'); $this->session->unset_userdata('error'); ?> </label>
+                        </div>
+                        <?php } ?>
+
                         <div class="form-group">
                             <label>Mode of Claim</label>
                             <select class="form-control" id="claimMode" name="claim_mode">
-                                <option value="1" >Claim against sold parts</option>
                                 <option value="2" >Claim against sold vehicle</option>
+                                <option value="1" >Claim against sold parts</option>
                             </select>
                         </div>
 
@@ -271,7 +283,7 @@
                             <label>Type of Claim</label>
                             <select class="form-control" name="warranty_claim_type_id" required>
                                 <?php foreach($wc_type_list as $value){?>
-                                <option value="<?php echo $value->warranty_claim_type_id;?>"><?php echo $value->warranty_claim_type_name;?></option>
+                                <option value="<?php echo $value->warranty_claim_type_id;?>" <?php if ($value->warranty_claim_type_id == $warranty_claim->warranty_claim_type_id) { echo 'selected'; } ?> ><?php echo $value->warranty_claim_type_name;?></option>
                                 <?php }?>
                             </select>
                         </div>
@@ -350,6 +362,8 @@
       $( "#chassisNoContainer" ).hide( 500 );
       $( "#customerContainer" ).hide( 500 );
       $( "#salesIdContainer" ).show( 500 );
+      $( "#sales-id" ).val("<?php echo $warranty_claim->sales_id; ?>");
+      $( "#sales-id" ).change();
       $( "#engineNo" ).val("");
       $( "#chassisNo" ).val("");
       $( "#customerId" ).val("");
@@ -357,6 +371,29 @@
       $( "#engineNo" ).removeAttr("required");
       $( "#chassisNo" ).removeAttr("required");
       $( "#sales-id" ).attr("required",true);
+
+      var salesId = $('#sales-id option:selected').val();
+
+      if($('#item').val()!="NULL"){
+          $('#item').empty();
+      }
+      $.ajax({
+          type: "POST",
+          url: "<?php echo base_url()?>warranty_claim/ajax_get_preloaded_item_list_by_sales_id/",
+          data: { 'sales_id': salesId  },
+          success: function(data){
+              // Parse the returned json data
+              var opts = $.parseJSON(data);
+              // Use jQuery's each to iterate over the opts value
+              $('#item').append('<option value="">Select Item</option>');
+
+              $.each(opts, function(i, d) {
+                  // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
+                  $('#item').append('<option value="' + d.item_id + '" itemName="' + d.item_name + '" itemPrice="' + d.item_price + '" stockQuantity="' + d.quantity + '" data-quantity = "'+ d.quantity +'">' +d.part_no+"-"+ d.item_name + '</option>');
+
+              });
+            }
+        });
     <?php } ?>
     $( "#sales-id" ).change(function() {
     // alert( "Handler for .change() called.");
@@ -394,6 +431,7 @@
 
 <script type="text/javascript">
   <?php foreach($warranty_claim_detail as $value){ ?>
+      var itemId   =    <?php echo json_encode($value->item_id);?>;
       var itemName = <?php echo json_encode($value->item_name);?>;
       var itemPrice = <?php echo json_encode($value->item_price);?>;
       var partNo = <?php echo json_encode($value->part_no);?>;
@@ -413,7 +451,7 @@
 
       count++;
       var code = '<div class="col-lg-12 item-list" style="margin-bottom: 10px"><div class="col-lg-4"><label class="lblItem">'
-          +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+this.value+'">'
+          +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+itemId+'">'
           +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
           +'<input class="form-control part-no" type="hidden" name="part_no[]" value="'+partNo+'">'
           +'</div><div class="col-lg-2">'

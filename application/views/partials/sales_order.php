@@ -38,6 +38,14 @@
                                 </select>
                             </div>
 
+                            <label>sales_order Date</label>
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control"  id="datepicker" name="sales_order_date" required >
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+
                             <!-- <div class="form-group" id="dealer" style="display:none">
                                 <label>Select Dealer</label>
                                 <select class="form-control select-tag" name="dealer_id" id="dealerId" style="width: 100% !important;">
@@ -80,19 +88,11 @@
                                 
                             </div>
 
-                            
-
                             <div class="form-group" id="discount-div">
                                 <label>Discount (%)</label>
                                 <input class="form-control discount" placeholder = "Discount" id="discount" name="sales_order_discount" type="number" step=".01" min="0" max="100">
                             </div>
-                            <label>sales_order Date</label>
-                            <div class="input-group date" data-provide="datepicker">
-                                <input type="text" class="form-control"  id="datepicker" name="sales_order_date" required >
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </div>
-                            </div>
+                            
                             <label style="color:#F00;font-size:10px;"><?php echo form_error('sales_order_date');?></label>
                             <br/>
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -133,12 +133,13 @@
             $('#create').append(itemHeader);
           }
 
-
           if(count == 0){
             var itemSummary  = '<div class="col-lg-12" style="margin-top: 10px;border-top: 1px dotted #09192a;" id="itemSummary">'
            
             +'<div class="col-lg-2"><label class="lblItem">Sub Total</label></div>'
             +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="sub-total" value="0"/></div>'
+            +'<div class="col-lg-2"><label class="lblItem">VAT</label></div>'
+            +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="vat" value="0"/></div>'
             +'<div class="col-lg-2"><label class="lblItem">Discount</label></div>'
             +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="discount-summary" value="0"/></div>'
              +'<div class="col-lg-2"><label class="lblItem">Total Price</label></div>'
@@ -294,6 +295,12 @@
 
         //-----AJAX FOR ADJUSTING SUBTOTAL
        $('#create').on('keyup', '.qty', function(e){ //Once remove button is clicked
+
+                var salesOrderDate = document.getElementById('datepicker').value;
+                if(salesOrderDate == ""){
+                  $('.qty').val("");
+                  alert('please insert valid order date!!');
+                }
           
                 var salesOrderPrice = $('input[name="sales_order_price[]"]').map(function(){ 
                     return this.value; 
@@ -312,6 +319,7 @@
                         'sales_order_price[]': salesOrderPrice,
                         'quantity[]': qty,
                         'discount' : discount,
+                        'sales_order_date' : salesOrderDate,
                         // other data
                     },
                     success: function(data){
@@ -319,6 +327,7 @@
                         var resultSummary = $.parseJSON(data);
                         console.log(resultSummary);
                        document.getElementById('sub-total').value = resultSummary.sub_total;
+                       document.getElementById('vat').value = resultSummary.value_added_tax;
                        document.getElementById('discount-summary').value = resultSummary.discount;
                        document.getElementById('total-price').value = resultSummary.total_price;
                     }
@@ -331,6 +340,11 @@
 
         //-----AJAX FOR ADJUSTING SUBTOTAL  with DISCOUNT
        $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is clicked
+                var salesOrderDate = document.getElementById('datepicker').value;
+                if(salesOrderDate == ""){
+                  $('.qty').val("");
+                  alert('please insert valid order date!!');
+                }
           
                 var salesOrderPrice = $('input[name="sales_order_price[]"]').map(function(){ 
                     return this.value; 
@@ -349,6 +363,7 @@
                         'sales_order_price[]': salesOrderPrice,
                         'quantity[]': qty,
                         'discount': discount,
+                        'sales_order_date' : salesOrderDate,
                         // other data
                     },
                     success: function(data){

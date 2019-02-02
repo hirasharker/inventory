@@ -109,7 +109,7 @@ class Sales_Model extends CI_Model {
     public function get_sales_by_id($sales_id){
         $this->db->select('tbl_sales.*, sum(tbl_sales_detail.sales_price*tbl_sales_detail.quantity-tbl_sales_detail.individual_discount) as sub_total
             ,sum(tbl_sales_detail.quantity) as total_quantity
-            ,sum(tbl_sales_detail.sales_price*tbl_sales_detail.quantity-tbl_sales_detail.individual_discount)*(1-tbl_sales.overall_discount*.01) as total_price');
+            ,sum(tbl_sales_detail.sales_price*tbl_sales_detail.quantity-tbl_sales_detail.individual_discount)*(1-tbl_sales.overall_discount / (100 + tbl_sales.value_added_tax_percentage)) as total_price');
         $this->db->from('tbl_sales');
         $this->db->where('tbl_sales.sales_id',$sales_id);
         $this->db->join('tbl_sales_detail','tbl_sales_detail.sales_id = tbl_sales.sales_id');

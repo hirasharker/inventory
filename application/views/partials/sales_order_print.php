@@ -107,14 +107,20 @@
           </tr>
           <tr>
             <td style="border-right: none"></td>
+            <td style="text-align: right; width: 39.88%; border-left: none;"><b></b></td>
+            <td  colspan="4" style="text-align: right; width: 42.3%">VAT  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $sales_order->value_added_tax_percentage;?>%</td>
+            <td  style="text-align: right;"><?php echo round($value_added_tax,2);?></td>
+          </tr>
+          <tr>
+            <td style="border-right: none"></td>
             <td style="text-align: right; width: 39.88%; border-left: none;"><b>Add &amp; Total:</b></td>
             <td  colspan="4" style="text-align: right; width: 42.3%">Sales Discount  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $sales_order->overall_discount;?>%</td>
-            <td  style="text-align: right;"><?php echo $sales_order->sub_total*$sales->overall_discount*.01;?></td>
+            <td  style="text-align: right;"><?php echo round(($sales_order->sub_total - $value_added_tax) *$sales_order->overall_discount*.01,2);?></td>
           </tr>
           <tr>
             <td style="border-right: none"></td>
             <td style="text-align: right; width: 39.88%; border-left: none; border-right:none;"><b>Order Total:</b></td>
-            <td  colspan="5" style="text-align: right; width: 53.24%; border-left: none;"><b><?php echo $sales_order->total_price;?></b></td>
+            <td  colspan="5" style="text-align: right; width: 53.24%; border-left: none;"><b><?php echo round($sales_order->total_price ,2);?></b></td>
           </tr>
         </table>
       </div>

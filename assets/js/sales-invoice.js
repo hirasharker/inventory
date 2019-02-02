@@ -44,81 +44,6 @@ $("#salesAgainstOrder").click( function(){
 
 });
 
-
-$( "#item" ).change(function(){
-  // alert( "Handler for .change() called."+this.value);
-  // var itemName = $('#item option:selected').text();
-  var element = $(this).find('option:selected'); 
-  var itemName = element.attr("itemName");
-
-  var itemPrice = $(this).find('option:selected').attr('itemPrice');
-  var stockQuantity = $(this).find('option:selected').attr('stockQuantity');
-  count = document.getElementById('count').value;
-  if(count == 0){
-    var itemHeader  = '<div class="col-lg-12" style="margin-bottom: 10px;border-bottom: 2px solid #09192a;" id="itemHeader">'
-    +'<div class="col-lg-4"><label class="lblItem">Name</label></div>'
-    +'<div class="col-lg-2"><label class="lblItem">Price</label></div>'
-    +'<div class="col-lg-2"><label class="lblItem"></label></div>'
-    +'<div class="col-lg-2"><label class="lblItem">QTY</label></div>'
-    +'<div class="col-lg-1"><label class="lblItem">Stock</label></div>'
-    +'</div>';
-    
-    $('#create').append(itemHeader);
-  }
-
-  if(count == 0){
-    var itemSummary  = '<div class="col-lg-12" style="margin-top: 10px;border-top: 1px dotted #09192a;" id="itemSummary">'
-   
-    +'<div class="col-lg-2"><label class="lblItem">Sub Total</label></div>'
-    +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="sub-total" value="0"/></div>'
-    +'<div class="col-lg-2"><label class="lblItem">Discount</label></div>'
-    +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="discount-summary" value="0"/></div>'
-     +'<div class="col-lg-2"><label class="lblItem">Total Price</label></div>'
-    +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="total-price" value="0"/></div>'
-    +'</div>';
-    
-    $('#item-summary').append(itemSummary);
-  }
-
-  var val = $('#item option:selected').val();
-      if(val!=0){
-        $.ajax({
-              url: '<?php echo base_url();?>sales/ajax_count_item',
-              type:'POST',
-              dataType: 'json',
-              data: {count : count},
-              success: function(error_message){
-                      $('#quantity-error').html(error_message);
-                  } // End of success function of ajax form
-        }); // End of ajax call
-        
-        // alert(quantity);
-
-        count++;
-        var code = '<div class="col-lg-12" style="margin-bottom: 10px"><div class="col-lg-4"><label class="lblItem">'
-        +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+this.value+'">'
-        +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
-        +'</div><div class="col-lg-2">'
-        +'<input class="form-control item-price" placeholder = "Price" name="sales_price[]" value="'+itemPrice+'" required type="hidden" >'
-        +'<label>MRP '+itemPrice+'/-</label></div>'
-        +'<div class="col-lg-2">'
-        +'<input class="form-control stock-quantity" type="hidden" value="'+stockQuantity+'">'
-        +'<input class="form-control" placeholder = "Discount" name="discount[]" required value="0" type="hidden"></div>'
-        +'<input class="col-lg-2 qty" placeholder = "QTY" name="quantity[]" required><div class="col-lg-1"><label>('+stockQuantity+')</label></div>'
-        +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
-
-        if(this.value != 0){
-             $('#create').append(code);
-                document.getElementById('count').value = count;
-        }
-
-        $("#item option[value='"+this.value+"']").remove();
-    }
-  
-}); //item.change..............
-
-
-
 $( "#orderId" ).change(function() {
   // alert( "Handler for .change() called.");
   var orderId = $('#orderId option:selected').val();
@@ -135,6 +60,8 @@ $( "#orderId" ).change(function() {
      
       +'<div class="col-lg-2"><label class="lblItem">Sub Total</label></div>'
       +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="sub-total" value="0"/></div>'
+       +'<div class="col-lg-2"><label class="lblItem">VAT</label></div>'
+      +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="vat" value="0"/></div>'
       +'<div class="col-lg-2"><label class="lblItem">Discount</label></div>'
       +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="discount-summary" value="0"/></div>'
        +'<div class="col-lg-2"><label class="lblItem">Total Price</label></div>'

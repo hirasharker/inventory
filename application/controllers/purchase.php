@@ -48,7 +48,7 @@ class Purchase extends CI_Controller {
 		$nav_data['dev_key']			=	"purchase";
 		$nav_data['selected']			=	"add_purchase";
 		$nav_data['company_name']   	=   $this->company_model->get_company_by_id(1)->company_name;
-		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+		$nav_data['user_permission']	=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
 		$purchase_data					=	array();
 		$purchase_data['item_list']		=	$this->item_model->get_all_items();

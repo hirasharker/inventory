@@ -27,7 +27,7 @@
                                         <tr>
                                             <th>SL</th>
                                             <th>Purchase Inv. No</th>
-                                            <th>Item Name</th>
+                                            <!-- <th>Item Name</th> -->
                                             <th>Purchase Price</th>
                                             <th>Discount</th>
                                             <th>Purchase date</th>
@@ -39,8 +39,8 @@
                                         <tr class="gradeA">
                                             <td><?php echo $i; ?></td>
                                             <td><?php echo $value->purchase_id;?></td>
-                                            <td><?php echo $value->item_name;?></td>
-                                            <td><?php echo $value->total_price;?></td>
+                                            <!-- <td><?php echo $value->item_name;?></td> -->
+                                            <td><?php echo round($value->total_price,0);?></td>
                                             <td><?php echo $value->purchase_discount;?>%</td>
                                             <td><?php echo $value->purchase_date;?></td>
                                             <td class="center">

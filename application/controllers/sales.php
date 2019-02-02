@@ -19,6 +19,7 @@ class Sales extends CI_Controller {
 		$this->load->model('convert_model','convert_model',TRUE);
 		$this->load->model('module_model','module_model',TRUE);
 		$this->load->model('company_model','company_model',TRUE);
+		$this->load->model('vat_tax_model','vat_tax_model',TRUE);
 
 	}
 
@@ -137,11 +138,17 @@ class Sales extends CI_Controller {
 
 		$sales_data['sales_date']		=	$this->input->post('sales_date','',TRUE);
 
+		$vat_tax_data					=	$this->vat_tax_model->get_vat_tax_rule_by_date($sales_data['sales_date']);
+
+		$sales_data['value_added_tax_percentage']	=	$vat_tax_data->value_added_tax_percentage;
+		
 		$sales_against_order 			=	$this->input->post('sales_against_order','',TRUE);
+
+
 
 		if($sales_against_order == 1){
 			$sales_data['sales_order_id']=	$this->input->post('sales_order_id','',TRUE);
-			$this->add_sales_against_sales_order($sales_data['sales_order_id'], $sales_data['sales_date']);
+			$this->add_sales_against_sales_order($sales_data['sales_order_id'], $sales_data['sales_date'],$sales_data['value_added_tax_percentage']);
 			redirect('sales','refresh');
 		}
 		
@@ -154,11 +161,6 @@ class Sales extends CI_Controller {
 			$sales_data['customer_name']	=	$customer_data->customer_name;
 			$sales_data['customer_type']	=	$customer_data->customer_type;
 		}
-		
-		// $sales_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
-		// if($sales_data['dealer_id']!= NULL){
-		// 	$sales_data['dealer_name']		=	$this->dealer_model->get_dealer_by_id($sales_data['dealer_id'])->dealer_name;
-		// }
 		
 		$sales_data['overall_discount']	=	$this->input->post('sales_discount','',TRUE);
 
@@ -196,6 +198,7 @@ class Sales extends CI_Controller {
 				$sales_detail_data['item_id']				=	$item_id[$i];
 				$sales_detail_data['item_name']				=	$item_name[$i];
 				$sales_detail_data['sales_price']			=	$sales_price[$i];
+				$sales_detail_data['value_added_tax']		=	$sales_price[$i] * $vat_tax_data->value_added_tax_percentage / (100 + $vat_tax_data->value_added_tax_percentage);
 				$sales_detail_data['individual_discount']	=	$discount[$i];
 				$sales_detail_data['overall_discount']		=	$sales_data['overall_discount'];
 				$sales_detail_data['sales_date']			=	$sales_data['sales_date'];
@@ -212,7 +215,7 @@ class Sales extends CI_Controller {
 		}
 	}
 
-	public function add_sales_against_sales_order($sales_order_id, $sales_date){
+	public function add_sales_against_sales_order($sales_order_id, $sales_date, $value_added_tax_percentage){
 		$session_data 					=	array();
 		$sales_data						=	array();
 		$sales_data['user_id']			=	$this->session->userdata('user_id');
@@ -267,6 +270,7 @@ class Sales extends CI_Controller {
 			$sales_detail_data['item_id']				=	$value->item_id;
 			$sales_detail_data['item_name']				=	$value->item_name;
 			$sales_detail_data['sales_price']			=	$value->sales_order_price;
+			$sales_detail_data['value_added_tax']		=	$value->sales_order_price * $value_added_tax_percentage /(100 + $value_added_tax_percentage);
 			$sales_detail_data['individual_discount']	=	$value->individual_discount;
 			$sales_detail_data['overall_discount']		=	$sales_data['overall_discount'];
 			$sales_detail_data['sales_date']			=	$sales_date;
@@ -303,12 +307,12 @@ class Sales extends CI_Controller {
 			$sales_data['customer_type']	=	$customer_data->customer_type;
 		}
 		
-		// $sales_data['dealer_id']		=	$this->input->post('dealer_id','',TRUE);
-		// if($sales_data['dealer_id']!= NULL){
-		// 	$sales_data['dealer_name']		=	$this->dealer_model->get_dealer_by_id($sales_data['dealer_id'])->dealer_name;
-		// }
-		
 		$sales_data['sales_date']		=	$this->input->post('sales_date','',TRUE);
+
+		$vat_tax_data					=	$this->vat_tax_model->get_vat_tax_rule_by_date($sales_data['sales_date']);
+
+		$sales_data['value_added_tax_percentage']	=	$vat_tax_data->value_added_tax_percentage;
+
 		$sales_data['overall_discount']	=	$this->input->post('sales_discount','',TRUE);
 
 		$error_count					=	$this->input->post('count','',TRUE);
@@ -350,6 +354,7 @@ class Sales extends CI_Controller {
 				$sales_detail_data['item_id']				=	$item_id[$i];
 				$sales_detail_data['item_name']				=	$item_name[$i];
 				$sales_detail_data['sales_price']			=	$sales_price[$i];
+				$sales_detail_data['value_added_tax']		=	$value->sales_order_price * $value_added_tax_percentage /(100 + $value_added_tax_percentage);
 				$sales_detail_data['individual_discount']	=	$discount[$i];
 				$sales_detail_data['overall_discount']		=	$sales_data['overall_discount'];
 				$sales_detail_data['quantity']				=	$quantity[$i];
@@ -406,6 +411,8 @@ class Sales extends CI_Controller {
 	}
 
 	public function ajax_get_sales_total(){
+		$sales_date 				=	$this->input->post('sales_date');
+
 		$price 						=	$this->input->post('sales_price');
 
 		$qty 						=	$this->input->post('quantity');
@@ -414,13 +421,19 @@ class Sales extends CI_Controller {
 
 		$count 						=	count($price);
 
+		$vat_tax_data				=	$this->vat_tax_model->get_vat_tax_rule_by_date($sales_date);
+
+		$value_added_tax_percentage	=	$vat_tax_data->value_added_tax_percentage;
+
 		$sub_total 					=	0;
 
 		for ($i=0; $i < $count; $i++) { 
 			$sub_total				+=	($qty[$i] * $price[$i]);
 		}
 
-		$total_price				=	$sub_total - ($sub_total * $discount * .01);
+		$value_added_tax 			=	round($sub_total * $value_added_tax_percentage / ( 100 + $value_added_tax_percentage), 2);
+
+		$total_price				=	round($sub_total - ($sub_total-$value_added_tax) * $discount * .01, 2);
 		
 		
 		$result_summary 		=	array();
@@ -429,7 +442,9 @@ class Sales extends CI_Controller {
 
 		$result_summary['sub_total']	=	$sub_total;
 
-		$result_summary['discount']		=	($sub_total * $discount * .01);
+		$result_summary['value_added_tax']	=	$value_added_tax;
+
+		$result_summary['discount']		=	round(($sub_total-$value_added_tax) * $discount * .01,2);
 		echo json_encode($result_summary);
 		// a die here helps ensure a clean ajax call
 	}
@@ -950,6 +965,7 @@ class Sales extends CI_Controller {
 		// 	$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_dealer_id($sales_data['sales']->dealer_id);
 		// 	$paid_amount					=	$this->sales_model->get_paid_amount_by_dealer_id($sales_data['sales']->dealer_id);
 		// }
+		$sales_data['value_added_tax']	=	$sales_data['sales']->sub_total * $sales_data['sales']->value_added_tax_percentage / (100 + $sales_data['sales']->value_added_tax_percentage);
 		
 		$sales_data['balance'] 			=	$invoice_balance[0]->invoice_balance - $paid_amount->paid_amount;
 

@@ -7,8 +7,23 @@
 
 class Purchase_Model extends CI_Model {
 
+    public function get_all_purchases() {
+        $this->db->select('tbl_purchase.purchase_id, tbl_purchase.purchase_discount, tbl_purchase.vendor_id, tbl_purchase.vendor_name,tbl_purchase.user_id, tbl_purchase.user_name
+            , tbl_purchase.purchase_date, sum(tbl_purchase_detail.purchase_price * tbl_purchase_detail.quantity)*(1-.01*tbl_purchase_detail.purchase_discount) as total_price'); 
+        $this->db->from('tbl_purchase');
+        $this->db->join('tbl_purchase_detail','tbl_purchase_detail.purchase_id = tbl_purchase.purchase_id');
+        $this->db->group_by('tbl_purchase.purchase_id');
+        $this->db->group_by('tbl_purchase_detail.purchase_discount');
+        $this->db->group_by('tbl_purchase.vendor_id');
+        $this->db->group_by('tbl_purchase.vendor_name');
+        $this->db->order_by('tbl_purchase.time_stamp','desc');
+        $this->db->order_by('tbl_purchase.vendor_name','desc');
+        $result_query=$this->db->get();
+        $result=$result_query->result();
+        return $result;
+    }
 
-    public function get_all_purchases(){
+    public function get_all_purchases_mysql() {
         $this->db->select('tbl_purchase.purchase_id, tbl_purchase.purchase_discount, tbl_purchase.vendor_id, tbl_purchase.vendor_name,tbl_purchase.user_id, tbl_purchase.user_name
             , tbl_purchase.purchase_date, GROUP_CONCAT(tbl_purchase_detail.item_name SEPARATOR ",") as item_name
             , sum(tbl_purchase_detail.purchase_price * tbl_purchase_detail.quantity)*(1-.01*tbl_purchase_detail.purchase_discount) as total_price'); 
@@ -22,7 +37,7 @@ class Purchase_Model extends CI_Model {
         return $result;
     }
 
-    public function get_purchase_by_id($purchase_id){
+    public function get_purchase_by_id($purchase_id) {
         $this->db->select('*');
         $this->db->from('tbl_purchase');
         $this->db->where('purchase_id',$purchase_id);
@@ -45,7 +60,7 @@ class Purchase_Model extends CI_Model {
     
     public function add_purchase($data){
         $this->db->insert('tbl_purchase',$data);
-        $result = $this->db->insert_id();
+        $result = $this->db->affected_rows();
         return $result;
     }
    
