@@ -41,10 +41,6 @@
                             if($wc_value->customer_id != ''){
                                 echo $wc_value->customer_name; 
                             }
-                            
-                            if($wc_value->dealer_id != ''){
-                                echo $wc_value->dealer_name; 
-                            }
                             ?>
                             </td>
                             <td><?php echo $wc_value->item_name; ?></td>
@@ -55,15 +51,15 @@
                             <td>
                             <?php
                             if($wc_value->comment_1 != '') {
-                                echo $wc_value->comment_1; 
+                                echo $wc_value->comment_1;
                             }
 
                             if($wc_value->comment_2 != '') {
-                                echo $wc_value->comment_2; 
+                                echo $wc_value->comment_2;
                             }
 
                             if($wc_value->comment_3 != '') {
-                                echo $wc_value->comment_3; 
+                                echo $wc_value->comment_3;
                             }
                             ?>
                             </td>

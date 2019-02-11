@@ -126,6 +126,25 @@ class Report_Warranty_Claim extends CI_Controller {
 
 	}
 
+
+
+
+
+
+
+
+
+
+
+	public function test_ajax(){
+		$claim_status 									=	$this->input->post('claim_status',TRUE);
+		$warranty_claim_type_id 						=	$this->input->post('warranty_claim_type_id',TRUE);
+		$from_date 										=	$this->input->post('from_date',TRUE);
+		$to_date 										=	$this->input->post('to_date',TRUE);
+		$result 										=	$this->warranty_claim_model->get_warranty_claim_status($claim_status, $warranty_claim_type_id, $from_date, $to_date);
+		print_r($result);
+	}
+
 	
 
 	

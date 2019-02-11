@@ -90,7 +90,7 @@
 
                             <div class="form-group" id="discount-div">
                                 <label>Discount (%)</label>
-                                <input class="form-control discount" placeholder = "Discount" id="discount" name="sales_order_discount" type="number" step=".01" min="0" max="100">
+                                <input class="form-control discount" placeholder = "Discount" id="discount" name="sales_order_discount" type="number" step=".01" min="0" max="100" value="0" required="">
                             </div>
                             
                             <label style="color:#F00;font-size:10px;"><?php echo form_error('sales_order_date');?></label>
@@ -470,10 +470,9 @@
                                 
                             </div>
 
-                           
                             <div class="form-group" id="discount-div">
                                 <label>Discount (%)</label>
-                                <input class="form-control discount" placeholder = "Discount" id="discount" value="<?php echo $sales_order->overall_discount;?>" name="sales_order_discount" type="number" step=".01" min="0" max="100">
+                                <input class="form-control discount" placeholder = "Discount" id="discount" value="<?php echo $sales_order->overall_discount;?>" name="sales_order_discount" type="number" step=".01" min="0" max="100" required>
                             </div>
                             <label>sales_order Date</label>
                             <div class="input-group date" data-provide="datepicker">

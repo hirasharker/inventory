@@ -45,7 +45,6 @@
                                                 <th>Claim ID</th>
                                                 <th>Invoice No</th>
                                                 <th>Customer Name</th>
-                                                <th>Type of Customer</th>
                                                 <th>Part No</th>
                                                 <th>Item Name</th>
                                                 <th>Documents</th>
@@ -61,14 +60,6 @@
                                                 <td><?php echo $value->warranty_claim_id;?></td>
                                                 <td><a href="<?php echo base_url().'sales/index/'.$value->sales_id;?>" target="_blank"><?php echo $value->sales_id;?></a></td>
                                                 <td><?php echo $value->customer_name; ?></td>
-                                                <td>
-                                                <?php 
-                                                    if($value->customer_type == 2){ 
-                                                        echo 'Regular Customer'; 
-                                                    } elseif ($value->customer_type == 1){
-                                                        echo 'Dealer'; 
-                                                    }
-                                                ?></td>
                                                 <td><?php echo $value->part_no; ?></td>
                                                 <td><?php echo $value->item_name;?></td>
                                                 <td><a href="<?php echo base_url().'files/'.$value->document_path;?>" target="_blank"><img height="50px" width="50px" 
@@ -119,7 +110,6 @@
                                                 <th>Claim ID</th>
                                                 <th>Invoice No</th>
                                                 <th>Customer Name</th>
-                                                <th>Type of Customer</th>
                                                 <th>Part No</th>
                                                 <th>Item Name</th>
                                                 <th>Documents</th>
@@ -135,14 +125,6 @@
                                                 <td><?php echo $value->warranty_claim_id;?></td>
                                                 <td><a href="<?php echo base_url().'sales/index/'.$value->sales_id;?>" target="_blank"><?php echo $value->sales_id;?></a></td>
                                                 <td><?php echo $value->customer_name; ?></td>
-                                                <td>
-                                                <?php 
-                                                    if($value->customer_type == 2){ 
-                                                        echo 'Regular Customer'; 
-                                                    } elseif ($value->customer_type == 1){
-                                                        echo 'Dealer'; 
-                                                    }
-                                                ?></td>
                                                 <td><?php echo $value->part_no; ?></td>
                                                 <td><?php echo $value->item_name;?></td>
                                                 <td><a href="<?php echo base_url().'files/'.$value->document_path;?>" target="_blank"><img height="50px" width="50px" 
@@ -183,7 +165,6 @@
                                                 <th>Claim ID</th>
                                                 <th>Invoice No</th>
                                                 <th>Customer Name</th>
-                                                <th>Type of Customer</th>
                                                 <th>Part No</th>
                                                 <th>Item Name</th>
                                                 <th>Documents</th>
@@ -199,14 +180,6 @@
                                                 <td><?php echo $value->warranty_claim_id;?></td>
                                                 <td><a href="<?php echo base_url().'sales/index/'.$value->sales_id;?>" target="_blank"><?php echo $value->sales_id;?></a></td>
                                                 <td><?php echo $value->customer_name; ?></td>
-                                                <td>
-                                                <?php 
-                                                    if($value->customer_type == 2){ 
-                                                        echo 'Regular Customer'; 
-                                                    } elseif ($value->customer_type == 1){
-                                                        echo 'Dealer'; 
-                                                    }
-                                                ?></td>
                                                 <td><?php echo $value->part_no; ?></td>
                                                 <td><?php echo $value->item_name;?></td>
                                                 <td><a href="<?php echo base_url().'files/'.$value->document_path;?>" target="_blank"><img height="50px" width="50px" 

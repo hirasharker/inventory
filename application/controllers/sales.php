@@ -60,7 +60,7 @@ class Sales extends CI_Controller {
 		$sales_data['warehouse_list']	=	$this->warehouse_model->get_all_warehouses();
 		$sales_data['customer_list']	=	$this->customer_model->get_all_customers();
 		$sales_data['dealer_list']		=	$this->dealer_model->get_all_dealers();
-		$sales_data['sales_order_list']	=	$this->sales_order_model->get_all_unused_sales_orders();
+		$sales_data['sales_order_list']	=	$this->sales_order_model->get_all_pending_sales_orders();
 
 		if($sales_id != 0){
 			$sales_data['sales']		=	$this->sales_model->get_sales_by_id($sales_id);
@@ -845,7 +845,7 @@ class Sales extends CI_Controller {
 
 		if($customer_id != ""){
 			$search_result['sales']			=	$this->sales_model->get_individual_sales_report_by_date_and_customer_id($customer_id,$from_date,$to_date);
-			$search_result['payments']		=	$this->sales_model->get_individual_money_receipt_by_date_and_customer_id($customer_id,$from_date,$to_date);
+			$search_result['payments']		=	$this->mr_model->get_individual_money_receipt_by_date_and_customer_id($customer_id,$from_date,$to_date);
 			$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_customer_id($customer_id);
 			$paid_amount					=	$this->sales_model->get_paid_amount_by_customer_id($customer_id);
 		} 
@@ -855,6 +855,7 @@ class Sales extends CI_Controller {
 		// 	$invoice_balance 				=	$this->sales_model->get_invoice_balance_by_dealer_id($dealer_id);
 		// 	$paid_amount					=	$this->sales_model->get_paid_amount_by_dealer_id($dealer_id);
 		// }
+		// print_r($invoice_balance); exit()
 
 		$search_result['balance']			=	$invoice_balance[0]->invoice_balance - $paid_amount->paid_amount;
 

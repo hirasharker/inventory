@@ -9,10 +9,11 @@ class Sales_Order_Model extends CI_Model {
 
 
     public function get_all_sales_orders(){
-        $this->db->select('tbl_sales_order_detail.sales_order_id, sum(quantity) as qty'); 
+        $this->db->select("tbl_sales_order_detail.sales_order_id, customer_name, sales_order_date, customer_type, string_agg(item_name, '| ') as item_name, sum(quantity) as qty, (sum(tbl_sales_order_detail.sales_order_price * tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount))*(1-.01*tbl_sales_order_detail.overall_discount) as total_price");
         $this->db->from('tbl_sales_order_detail');
         // $this->db->join('tbl_sales_order_detail','tbl_sales_order_detail.sales_order_id = tbl_sales_order.sales_order_id','left');
-        $this->db->group_by('tbl_sales_order_detail.sales_order_id');
+        $this->db->join('tbl_customer','tbl_customer.customer_id = tbl_sales_order_detail.customer_id','left');
+        $this->db->group_by('tbl_sales_order_detail.sales_order_id, customer_name, customer_type, overall_discount, sales_order_date');
         // $this->db->order_by('tbl_sales_order.time_stamp','desc');
         // $this->db->order_by('tbl_sales_order.customer_name','desc');
         $result_query=$this->db->get();
@@ -32,12 +33,12 @@ class Sales_Order_Model extends CI_Model {
         $result=$result_query->result();
         return $result;
     }
-    public function get_all_unused_sales_orders(){
-        $this->db->select('tbl_sales_order.sales_order_id, tbl_sales_order.customer_id, tbl_sales_order.customer_name, tbl_sales_order.dealer_name, tbl_sales_order.user_id, tbl_sales_order.user_name
-            , tbl_sales_order.sales_order_date, GROUP_CONCAT(tbl_sales_order_detail.item_name SEPARATOR ",") as item_name, (sum(tbl_sales_order_detail.sales_order_price * tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount))*(1-.01*tbl_sales_order.overall_discount) as total_price'); 
+    public function get_all_pending_sales_orders(){
+        $this->db->select("tbl_sales_order.sales_order_id, tbl_sales_order.customer_id, tbl_sales_order.customer_name, tbl_sales_order.dealer_name, tbl_sales_order.user_id, tbl_sales_order.user_name
+            , tbl_sales_order.sales_order_date, string_agg(tbl_sales_order_detail.item_name, ', ') as item_name, (sum(tbl_sales_order_detail.sales_order_price * tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount))*(1-.01*tbl_sales_order.overall_discount) as total_price"); 
         $this->db->from('tbl_sales_order');
         $this->db->join('tbl_sales_order_detail','tbl_sales_order_detail.sales_order_id = tbl_sales_order.sales_order_id');
-        $this->db->group_by('tbl_sales_order_detail.sales_order_id');
+        $this->db->group_by('tbl_sales_order.sales_order_id');
         $this->db->order_by('tbl_sales_order.time_stamp','desc');
         $this->db->order_by('tbl_sales_order.customer_name','desc');
         $result_query=$this->db->get();
@@ -131,13 +132,14 @@ class Sales_Order_Model extends CI_Model {
     }
 
     public function get_sales_order_by_id($sales_order_id){
-        $this->db->select('tbl_sales_order.*, sum(tbl_sales_order_detail.sales_order_price*tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount) as sub_total
+        $this->db->select('tbl_sales_order.sales_order_id, tbl_sales_order.overall_discount, tbl_sales_order.sales_order_date, tbl_sales_order.customer_id, tbl_sales_order.customer_name, tbl_sales_order.warehouse_id, sum(tbl_sales_order_detail.sales_order_price*tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount) as sub_total
             ,sum(tbl_sales_order_detail.quantity) as total_quantity
             ,sum(tbl_sales_order_detail.sales_order_price*tbl_sales_order_detail.quantity-tbl_sales_order_detail.individual_discount)*(1-tbl_sales_order.overall_discount / (100 + tbl_sales_order.value_added_tax_percentage)) as total_price');
         $this->db->from('tbl_sales_order');
-        $this->db->where('tbl_sales_order.sales_order_id',$sales_order_id);
+        
         $this->db->join('tbl_sales_order_detail','tbl_sales_order_detail.sales_order_id = tbl_sales_order.sales_order_id');
-        $this->db->group_by('tbl_sales_order_detail.sales_order_id');
+        $this->db->where('tbl_sales_order.sales_order_id',$sales_order_id);
+        $this->db->group_by('tbl_sales_order.sales_order_id');
         $result_query=$this->db->get();
         $result=$result_query->row();
         return $result;
@@ -371,7 +373,7 @@ class Sales_Order_Model extends CI_Model {
         $this->db->from('tbl_customer');
         $this->db->where('tbl_customer.customer_id',$customer_id);
         $this->db->join('tbl_money_receipt','tbl_money_receipt.customer_id = tbl_customer.customer_id','inner');
-        $this->db->order_by('tbl_money_receipt.time_stamp','desc');
+        $this->db->group_by('tbl_customer.customer_id');
         $result_query=$this->db->get();
         $result=$result_query->row();
         return $result;

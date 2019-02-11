@@ -9,7 +9,7 @@ class Warranty_Claim_Model extends CI_Model {
 
 
     public function get_all_warranty_claims(){
-        $this->db->select('tbl_warranty_claim.warranty_claim_id, tbl_warranty_claim.customer_id, tbl_warranty_claim.sales_id, tbl_warranty_claim.warranty_claim_type_id, tbl_warranty_claim.engine_no, tbl_warranty_claim.chassis_no, tbl_warranty_claim.customer_name, tbl_warranty_claim.document_path, tbl_warranty_claim.warranty_claim_date, tbl_warranty_claim_detail.quantity, GROUP_CONCAT(tbl_item.item_name SEPARATOR "|") as item_name, tbl_warranty_claim.approval_status');
+        $this->db->select("tbl_warranty_claim.warranty_claim_id, tbl_warranty_claim.customer_id, tbl_warranty_claim.sales_id, tbl_warranty_claim.warranty_claim_type_id, tbl_warranty_claim.engine_no, tbl_warranty_claim.chassis_no, tbl_warranty_claim.customer_name, tbl_warranty_claim.document_path, tbl_warranty_claim.warranty_claim_date, sum(tbl_warranty_claim_detail.quantity), string_agg(tbl_item.item_name, ', ') as item_name, tbl_warranty_claim.approval_status");
         $this->db->from('tbl_warranty_claim');
         $this->db->join('tbl_warranty_claim_detail','tbl_warranty_claim.warranty_claim_id = tbl_warranty_claim_detail.warranty_claim_id');
         $this->db->join('tbl_item','tbl_warranty_claim_detail.item_id = tbl_item.item_id');
@@ -21,8 +21,8 @@ class Warranty_Claim_Model extends CI_Model {
     }
     
     public function get_warranty_claim_by_status($approval_status){
-        $this->db->select('tbl_warranty_claim.*, GROUP_CONCAT(tbl_item.item_name SEPARATOR "|") as item_name, GROUP_CONCAT(tbl_item.part_no SEPARATOR "|") as part_no, tbl_sales.customer_type,
-            tbl_sales.customer_id, tbl_sales.customer_name');
+        $this->db->select("tbl_warranty_claim.*, string_agg(tbl_item.item_name, ', ') as item_name, string_agg(tbl_item.part_no, ', ') as part_no, max(tbl_sales.customer_type),
+            tbl_warranty_claim.customer_id, tbl_warranty_claim.customer_name");
         $this->db->from('tbl_warranty_claim');
         $this->db->join('tbl_warranty_claim_detail','tbl_warranty_claim_detail.warranty_claim_id = tbl_warranty_claim.warranty_claim_id');
         $this->db->join('tbl_item','tbl_warranty_claim_detail.item_id = tbl_item.item_id');
@@ -205,10 +205,11 @@ class Warranty_Claim_Model extends CI_Model {
     //------warranty_claim_report SECTION--------------
 
     public function get_warranty_claim_status($claim_status, $warranty_claim_type_id, $from_date, $to_date) {
-        $this->db->select('tbl_warranty_claim.*,tbl_item.item_name, tbl_item.part_no, tbl_item.unit , tbl_sales.customer_type,
-            tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name, tbl_sales.sales_date');
+        $this->db->select("tbl_warranty_claim.*, string_agg(tbl_item.item_name, ', ') as item_name, string_agg(tbl_item.part_no, '| '), max(tbl_sales.customer_type),
+            tbl_warranty_claim.customer_id, tbl_warranty_claim.customer_name, max(tbl_sales.sales_date) as sales_date");
         $this->db->from('tbl_warranty_claim');
-        $this->db->join('tbl_item','tbl_warranty_claim.item_id = tbl_item.item_id');
+        $this->db->join('tbl_warranty_claim_detail','tbl_warranty_claim_detail.warranty_claim_id = tbl_warranty_claim.warranty_claim_id');
+        $this->db->join('tbl_item','tbl_warranty_claim_detail.item_id = tbl_item.item_id');
         $this->db->join('tbl_sales','tbl_warranty_claim.sales_id = tbl_sales.sales_id');
 
         if($claim_status != ''){
@@ -238,6 +239,8 @@ class Warranty_Claim_Model extends CI_Model {
 
         $this->db->where('tbl_warranty_claim.time_stamp >=',$from_date);
         $this->db->where('tbl_warranty_claim.time_stamp <=',$to_date);
+
+        $this->db->group_by('tbl_warranty_claim.warranty_claim_id');
 
         $result_query=$this->db->get();
         $result=$result_query->result();

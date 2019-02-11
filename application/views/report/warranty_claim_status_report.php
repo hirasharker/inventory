@@ -19,6 +19,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <form method="post" action="<?php echo base_url()?>report_warranty_claim/warranty_claim_status_pdf" target="_blank">
+                        <!-- <form method="post" action="<?php echo base_url()?>report_warranty_claim/test_ajax" target="_blank"> -->
                         <!-- <form method="post" action="<?php echo base_url()?>inventory/generate_individual_inventory_detail" target="_blank"> -->
                         <!-- <form role="form" method="post" action="<?php echo base_url();?>purchase/add_purchase"> -->
                         <div class="row">

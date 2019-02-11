@@ -30,12 +30,12 @@
 
                             <div class="form-group sales-order-id" style="display:none;">
                                 <label>Sales Order No</label>
-                                <input type="text" class="form-control" id="salesOrderId" name="sales_order_id" value="<?php echo set_value('sales_order_id'); ?>">
+                                <input type="text" class="form-control" id="salesOrderId" name="sales_order_id" value="0">
                             </div>
 
                             <div class="form-group sales-id" style="display:none;">
                                 <label>Invoice No</label>
-                                <input type="text" class="form-control" id="salesId" name="sales_id" value="<?php echo set_value('sales_id'); ?>">
+                                <input type="text" class="form-control" id="salesId" name="sales_id" value="0">
                             </div>
 
                             <div class="form-group">
@@ -51,7 +51,7 @@
                             <div class="form-group transfer-from-bank-container" style="display:none;">
                                 <label>Transfer from</label>
                                 <select class="form-control select-tag" id="fromBankId" name="transfer_from_bank_id">
-                                    <option value="">Select Bank</option>
+                                    <option value="0">Select Bank</option>
                                     <?php foreach($bank_list as $b_value) {?>
                                     <option value="<?php echo $b_value->bank_id; ?>"><?php echo $b_value->bank_name; ?></option>
                                 <?php } ?>
@@ -61,7 +61,7 @@
                             <div class="form-group transfer-to-bank-container" style="display:none;">
                                 <label>Transfer to</label>
                                 <select class="form-control select-tag" id="toBankId" name="transfer_to_bank_id">
-                                    <option value="">Select Bank</option>
+                                    <option value="0">Select Bank</option>
                                     <?php foreach($bank_list as $b_value) {?>
                                     <option value="<?php echo $b_value->bank_id; ?>"><?php echo $b_value->bank_name; ?></option>
                                 <?php } ?>
@@ -76,7 +76,7 @@
                             <div class="form-group bank-name" style="display:none;">
                                 <label>Select Bank</label>
                                 <select class="form-control select-tag" id="bankId" name="bank_id">
-                                    <option value="">Select Bank</option>
+                                    <option value="0">Select Bank</option>
                                     <?php foreach($bank_list as $b_value) {?>
                                     <option value="<?php echo $b_value->bank_id; ?>"><?php echo $b_value->bank_name; ?></option>
                                 <?php } ?>
@@ -90,12 +90,12 @@
 
                             <div class="form-group deposit-no" style="display:none;">
                                 <label>Deposit No</label>
-                                <input type="text" class="form-control" id="depositNo" name="deposit_slip_no" >
+                                <input type="text" class="form-control" id="depositNo" name="deposit_slip_no" value="0">
                             </div>
 
                             <div class="form-group cheque-no" style="display:none;">
                                 <label>Cheque No</label>
-                                <input type="text" class="form-control" id="chequeNo" name="cheque_no" >
+                                <input type="text" class="form-control" id="chequeNo" name="cheque_no" value="0">
                             </div>
 
                             <label>Received Amount</label>
@@ -145,16 +145,16 @@
           if(val == 0){
             $( ".sales-order-id" ).show( 500 );
             $( ".sales-id" ).hide( 500 );
-            $( "#salesId" ).val("");
+            $( "#salesId" ).val("0");
           }else if (val == 1){
             $( ".sales-id" ).show( 500 );
             $( ".sales-order-id" ).hide( 500 );
-            $( "#salesOrderId" ).val("");
+            $( "#salesOrderId" ).val("0");
           }else if(val== 2){
             $( ".sales-id" ).hide( 500 );
             $( ".sales-order-id" ).hide( 500 );
-            $( "#salesId" ).val("");
-            $( "#salesOrderId" ).val("");
+            $( "#salesId" ).val("0");
+            $( "#salesOrderId" ).val("0");
           }
     });
 
@@ -169,13 +169,13 @@
             $( ".transfer-from-bank-container" ).hide( 500 );
             $( ".transfer-to-bank-container" ).hide( 500 );
             $( ".bank-transfer-id-container" ).hide( 500 );
-            $( "#bankId" ).val("");
+            $( "#bankId" ).val("0");
             $( "#bankBranch" ).val("");
-            $( "#depositNo" ).val("");
-            $( "#chequeNo" ).val("");
-            $( "#fromBankId" ).val("");
-            $( "#toBankId" ).val("");
-            $( "#bankTransferId" ).val("");
+            $( "#depositNo" ).val("0");
+            $( "#chequeNo" ).val("0");
+            $( "#fromBankId" ).val("0");
+            $( "#toBankId" ).val("0");
+            $( "#bankTransferId" ).val("0");
           }else if (val == 1){           //  BANK DEPOSIT MODE
             $( ".bank-name" ).show( 500 );
             $( ".bank-branch" ).show( 500 );
@@ -184,10 +184,10 @@
             $( ".transfer-from-bank-container" ).hide( 500 );
             $( ".transfer-to-bank-container" ).hide( 500 );
             $( ".bank-transfer-id-container" ).hide( 500 );
-            $( "#chequeNo" ).val("");
-            $( "#fromBankId" ).val("");
-            $( "#toBankId" ).val("");
-            $( "#bankTransferId" ).val("");
+            $( "#chequeNo" ).val("0");
+            $( "#fromBankId" ).val("0");
+            $( "#toBankId" ).val("0");
+            $( "#bankTransferId" ).val("0");
           }else if(val== 2){             //  CHEQUE MODE
             $( ".bank-name" ).show( 500 );
             $( ".bank-branch" ).show( 500 );
@@ -196,10 +196,10 @@
             $( ".transfer-from-bank-container" ).hide( 500 );
             $( ".transfer-to-bank-container" ).hide( 500 );
             $( ".bank-transfer-id-container" ).hide( 500 );
-            $( "#depositNo" ).val("");
-            $( "#fromBankId" ).val("");
-            $( "#toBankId" ).val("");
-            $( "#bankTransferId" ).val("");
+            $( "#depositNo" ).val("0");
+            $( "#fromBankId" ).val("0");
+            $( "#toBankId" ).val("0");
+            $( "#bankTransferId" ).val("0");
           }else if(val== 3){             //  CHEQUE MODE
             $( ".transfer-from-bank-container" ).show( 500 );
             $( ".transfer-to-bank-container" ).show( 500 );
@@ -208,10 +208,10 @@
             $( ".bank-branch" ).hide( 500 );
             $( ".cheque-no" ).hide( 500 );
             $( ".deposit-no" ).hide( 500 );
-            $( "#bankId" ).val("");
+            $( "#bankId" ).val("0");
             $( "#bankBranch" ).val("");
-            $( "#depositNo" ).val("");
-            $( "#chequeNo" ).val("");
+            $( "#depositNo" ).val("0");
+            $( "#chequeNo" ).val("0");
           }
     });
 </script>
@@ -267,7 +267,7 @@
                             <div class="form-group bank-name" style="display:none;">
                                 <label>Select Bank</label>
                                 <select class="form-control" id="bankId" name="bank_id">
-                                    <option value="">Select Bank</option>
+                                    <option value="0">Select Bank</option>
                                     <?php foreach($bank_list as $b_value) {?>
                                     <option value="<?php echo $b_value->bank_id; ?>" <?php if($money_receipt->bank_id == $b_value->bank_id){echo "selected";}?>><?php echo $b_value->bank_name; ?></option>
                                 <?php } ?>
@@ -333,13 +333,13 @@
     <?php if($money_receipt->money_receipt_type == 0){?>
         $( ".sales-order-id" ).show( 500 );
         $( ".sales-id" ).hide( 500 );
-        $( "#salesId" ).val("");
+        $( "#salesId" ).val("0");
     <?php }?>
 
     <?php if($money_receipt->money_receipt_type == 1){?>
         $( ".sales-id" ).show( 500 );
         $( ".sales-order-id" ).hide( 500 );
-        $( "#salesOrderId" ).val("");
+        $( "#salesOrderId" ).val("0");
     <?php }?>
 
     $( "#moneyReceiptType" ).change(function() {
@@ -348,16 +348,16 @@
           if(val == 0){
             $( ".sales-order-id" ).show( 500 );
             $( ".sales-id" ).hide( 500 );
-            $( "#salesId" ).val("");
+            $( "#salesId" ).val("0");
           }else if (val == 1){
             $( ".sales-id" ).show( 500 );
             $( ".sales-order-id" ).hide( 500 );
-            $( "#salesOrderId" ).val("");
+            $( "#salesOrderId" ).val("0");
           }else if(val== 2){
             $( ".sales-id" ).hide( 500 );
             $( ".sales-order-id" ).hide( 500 );
-            $( "#salesId" ).val("");
-            $( "#salesOrderId" ).val("");
+            $( "#salesId" ).val("0");
+            $( "#salesOrderId" ).val("0");
           }
     });
 
@@ -366,10 +366,10 @@
         $( ".bank-branch" ).hide( 500 );
         $( ".deposit-no" ).hide( 500 );
         $( ".cheque-no" ).hide( 500 );
-        $( "#bankId" ).val("");
+        $( "#bankId" ).val("0");
         $( "#bankBranch" ).val("");
-        $( "#depositNo" ).val("");
-        $( "#chequeNo" ).val("");
+        $( "#depositNo" ).val("0");
+        $( "#chequeNo" ).val("0");
     <?php }?>
 
     <?php if($money_receipt->payment_mode == 1){?>
@@ -377,7 +377,7 @@
         $( ".bank-branch" ).show( 500 );
         $( ".deposit-no" ).show( 500 );
         $( ".cheque-no" ).hide( 500 );
-        $( "#chequeNo" ).val("");
+        $( "#chequeNo" ).val("0");
     <?php }?>
 
     <?php if($money_receipt->payment_mode == 2){?>
@@ -385,7 +385,7 @@
         $( ".bank-branch" ).show( 500 );
         $( ".cheque-no" ).show( 500 );
         $( ".deposit-no" ).hide( 500 );
-        $( "#depositNo" ).val("");
+        $( "#depositNo" ).val("0");
     <?php }?>
 
     $( "#paymentMode" ).change(function() {
@@ -396,22 +396,22 @@
             $( ".bank-branch" ).hide( 500 );
             $( ".deposit-no" ).hide( 500 );
             $( ".cheque-no" ).hide( 500 );
-            $( "#bankId" ).val("");
+            $( "#bankId" ).val("0");
             $( "#bankBranch" ).val("");
-            $( "#depositNo" ).val("");
-            $( "#chequeNo" ).val("");
+            $( "#depositNo" ).val("0");
+            $( "#chequeNo" ).val("0");
           }else if (val == 1){           //  BANK DEPOSIT MODE
             $( ".bank-name" ).show( 500 );
             $( ".bank-branch" ).show( 500 );
             $( ".deposit-no" ).show( 500 );
             $( ".cheque-no" ).hide( 500 );
-            $( "#chequeNo" ).val("");
+            $( "#chequeNo" ).val("0");
           }else if(val== 2){             //  CHEQUE MODE
             $( ".bank-name" ).show( 500 );
             $( ".bank-branch" ).show( 500 );
             $( ".cheque-no" ).show( 500 );
             $( ".deposit-no" ).hide( 500 );
-            $( "#depositNo" ).val("");
+            $( "#depositNo" ).val("0");
           }
     });
 </script>

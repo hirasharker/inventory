@@ -84,7 +84,7 @@ class Sales_Order extends CI_Controller {
 
 		$sales_order_data 						= 	array();
 		$sales_order_data['sales_order_list']	=	$this->sales_order_model->get_all_sales_orders();
-		echo '<pre>';print_r($sales_order_data['sales_order_list']); echo '</pre>'; exit();
+		// echo '<pre>';print_r($sales_order_data['sales_order_list']); echo '</pre>'; exit();
 		$sales_order_data['permission']			= 	$this->module_model->get_permission_by_module_id_and_user_id(21,$this->session->userdata('user_id'));
 
 		$data['navigation']						=	$this->load->view('templates/navigation',$nav_data,TRUE);
@@ -115,7 +115,7 @@ class Sales_Order extends CI_Controller {
 	}
 
 	public function ajax_get_sales_order_by_id(){
-		$sales_order_id = $this->input->post('sales_order_id');
+		$sales_order_id = 	$this->input->post('sales_order_id');
 		$sales_order 	=	$this->sales_order_model->get_sales_order_by_id($sales_order_id);
 
 		echo json_encode($sales_order);
@@ -157,14 +157,14 @@ class Sales_Order extends CI_Controller {
 			$sales_order_data['customer_type']	=	$customer_data->customer_type;
 		}
 
-		$sales_order_data['overall_discount']	=	$this->input->post('sales_order_discount','',TRUE);
+		$sales_order_data['overall_discount']	=	$this->input->post('sales_order_discount',0,TRUE);
 
 		$error_count					=	$this->input->post('count','',TRUE);
 
 		$item_id						=	$this->input->post('item_id','',TRUE);
 		$item_name						=	$this->input->post('item_name','',TRUE);
 		$sales_order_price				=	$this->input->post('sales_order_price','',TRUE);
-		$discount 						=	$this->input->post('discount','',TRUE);
+		$discount 						=	$this->input->post('discount',0,TRUE);
 		$quantity						=	$this->input->post('quantity','',TRUE);
 		$stock[]						=	array();
 
@@ -232,14 +232,14 @@ class Sales_Order extends CI_Controller {
 
 		$sales_order_data['value_added_tax_percentage']	=	$vat_tax_data->value_added_tax_percentage;
 
-		$sales_order_data['overall_discount']	=	$this->input->post('sales_order_discount','',TRUE);
+		$sales_order_data['overall_discount']	=	$this->input->post('sales_order_discount',0,TRUE);
 
 		$error_count					=	$this->input->post('count','',TRUE);
 
 		$item_id						=	$this->input->post('item_id','',TRUE);
 		$item_name						=	$this->input->post('item_name','',TRUE);
 		$sales_order_price					=	$this->input->post('sales_order_price','',TRUE);
-		$discount 						=	$this->input->post('discount','',TRUE);
+		$discount 						=	$this->input->post('discount',0,TRUE);
 		$quantity						=	$this->input->post('quantity','',TRUE);
 
 		$sales_order_detail					=	$this->sales_order_model->get_sales_order_details_by_id($sales_order_id, $sales_order_data['warehouse_id']);

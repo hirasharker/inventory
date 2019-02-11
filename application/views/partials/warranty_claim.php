@@ -54,7 +54,7 @@
                         <div class="form-group" id="salesIdContainer">
                             <label>Sales Invoice</label>
                             <select class="form-control" name="sales_id" id="sales-id" required>
-                                <option value="">Select Invoice</option>
+                                <option value="0">Select Invoice</option>
                                 <?php foreach($sales_list as $value){?>
                                 <option customerId="<?php echo $value->customer_id;?>" customerName="<?php echo $value->customer_name;?>" value="<?php echo $value->sales_id;?>" ><?php echo $value->sales_id;?></option>
                                 <?php }?>
@@ -246,7 +246,7 @@
                         <div class="form-group" id="salesIdContainer">
                             <label>Sales Invoice</label>
                             <select class="form-control" name="sales_id" id="sales-id" required>
-                                <option value="">Select Invoice</option>
+                                <option value="0">Select Invoice</option>
                                 <?php foreach($sales_list as $value){?>
                                 <option customerId="<?php echo $value->customer_id;?>" customerName="<?php echo $value->customer_name;?>" value="<?php echo $value->sales_id;?>" ><?php echo $value->sales_id;?></option>
                                 <?php }?>

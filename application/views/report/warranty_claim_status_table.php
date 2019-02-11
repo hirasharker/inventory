@@ -23,10 +23,6 @@
             if($wc_value->customer_id != ''){
                 echo $wc_value->customer_name; 
             }
-            
-            if($wc_value->dealer_id != ''){
-                echo $wc_value->dealer_name; 
-            }
             ?>
             </td>
             <td><?php echo $wc_value->item_name; ?></td>
