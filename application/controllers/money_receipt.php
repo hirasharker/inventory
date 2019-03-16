@@ -52,7 +52,7 @@ class Money_Receipt extends CI_Controller {
 
 		$nav_data						=	array();
 		$nav_data['dev_key']			=	"money_receipt";
-		$nav_data['selected']			=	"add_money_receipt";
+		$nav_data['selected']			=	"add_money_receipt"; 
 		$nav_data['company_name']   	=   $this->company_model->get_company_by_id(1)->company_name;
 		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
@@ -64,6 +64,7 @@ class Money_Receipt extends CI_Controller {
 		}
 
 		$money_receipt_data['bank_list']			=	$this->bank_model->get_all_banks();
+		$money_receipt_data['sales_list']			=	$this->sales_model->get_all_sales();
 
 		$data['navigation']				=	$this->load->view('templates/navigation',$nav_data,TRUE);
 		$data['footer']					=	$this->load->view('templates/footer','',TRUE);
@@ -253,6 +254,55 @@ class Money_Receipt extends CI_Controller {
 	
 		$this->load->view('partials/money_receipt_print',$money_receipt_data);
 	}
+
+
+
+	public function ajax_get_sales_by_id(){
+		$sales_id 					=	$this->input->post('sales_id');
+
+		$sales_data					=	$this->sales_model->get_sales_by_id($sales_id);
+
+		$customer_name				=	"";
+
+		if($sales_data){
+			$customer_name 			=	$sales_data->customer_name;
+		}
+
+		$result						=	array();
+
+
+
+		$result['customer_name']	=	$customer_name;
+
+		echo json_encode($result);
+		// a die here helps ensure a clean ajax call
+		die();
+	}
+
+
+	public function ajax_get_sales_order_by_id(){
+		$sales_order_id 			=	$this->input->post('sales_order_id');
+
+		$sales_data					=	$this->sales_order_model->get_sales_order_by_id($sales_order_id);
+
+		$customer_name				=	"";
+
+		if($sales_data){
+			$customer_name 			=	$sales_data->customer_name;
+		}
+
+		$result						=	array();
+
+
+
+		$result['customer_name']	=	$customer_name;
+
+		echo json_encode($result);
+		// a die here helps ensure a clean ajax call
+		die();
+	}
+
+	
 
 	
 }

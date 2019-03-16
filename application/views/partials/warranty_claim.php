@@ -60,7 +60,14 @@
                                 <?php }?>
                             </select>
                         </div>
-
+                        <div class="form-group">
+                            <label>Select Warehouse</label>
+                            <select class="form-control" name="warehouse_id">
+                                <?php foreach($warehouse_list as $value){?>
+                                <option value="<?php echo $value->warehouse_id;?>"><?php echo $value->warehouse_name;?></option>
+                                <?php }?>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label>Select Item</label>
                             <select class="form-control" name="item_id" id="item" >

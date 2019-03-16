@@ -39,6 +39,10 @@
                             </div>
 
                             <div class="form-group">
+                                <label id="salesIdStatus" style="color: green;"></label>
+                            </div>
+
+                            <div class="form-group">
                                 <label>Payment Mode</label>
                                 <select class="form-control" name="payment_mode" id="paymentMode">
                                     <option value="0">Cash</option>
@@ -418,13 +422,67 @@
 <?php }?>
 <script>
     $(function(){
-      $("#salesId").autocomplete({
-        source: "<?php echo base_url();?>sales/generate_sales_id/"// path to the get_birds method
-      });
+          $( "#salesId" ).keyup(function() {
+            document.getElementById('salesIdStatus').innerHTML = "";
+          // alert( "Handler for .change() called.");
 
-      $("#salesOrderId").autocomplete({
-        source: "<?php echo base_url();?>sales_order/generate_sales_order_id/"// path to the get_birds method
-      });
+          var salesId = document.getElementById('salesId').value;
+
+          $.ajax({
+                type: 'POST',
+                url: '<?php echo base_url()?>money_receipt/ajax_get_sales_by_id/',
+                data: {
+                    'sales_id': salesId,
+                },
+                success: function(data){
+                  // Parse the returned json data
+                 var result = $.parseJSON(data);
+                 console.log(result);
+                 if( result.customer_name != "" ){
+                    $("#salesIdStatus").css("color", "green");
+                    document.getElementById('salesIdStatus').innerHTML = "Sold to " + result.customer_name;
+                    $('form').unbind("submit");
+                 } else {
+                    $("#salesIdStatus").css("color", "red");
+                    document.getElementById('salesIdStatus').innerHTML = "Invoice not found!";
+                    $('form').submit(false);
+                 }
+                 
+                
+                }
+            }); // ajax
+        }); // salesId.keyup...............
+
+        $( "#salesOrderId" ).keyup(function() {
+        document.getElementById('salesIdStatus').innerHTML = "";
+          // alert( "Handler for .change() called.");
+
+          var salesOrderId = document.getElementById('salesOrderId').value;
+
+          $.ajax({
+                type: 'POST',
+                url: '<?php echo base_url()?>money_receipt/ajax_get_sales_order_by_id/',
+                data: {
+                    'sales_order_id': salesOrderId,
+                },
+                success: function(data){
+                  // Parse the returned json data
+                 var result = $.parseJSON(data);
+                 console.log(result);
+                 if( result.customer_name != "" ){
+                    $("#salesIdStatus").css("color", "green");
+                    document.getElementById('salesIdStatus').innerHTML = "Ordered by " + result.customer_name;
+                    $('form').unbind("submit");
+                 } else {
+                    $("#salesIdStatus").css("color", "red");
+                    document.getElementById('salesIdStatus').innerHTML = "Sales order not found!";
+                    $('form').submit(false);
+                 }
+                 
+                
+                }
+            }); // ajax
+        }); // salesOrderId.keyup...............
 
     });
 </script>

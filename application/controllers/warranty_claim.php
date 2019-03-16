@@ -16,6 +16,7 @@ class Warranty_Claim extends CI_Controller {
 		$this->load->model('module_model','module_model',TRUE);
 		$this->load->model('upload_model','upload_model',TRUE);
 		$this->load->model('customer_model','customer_model',TRUE);
+		$this->load->model('warehouse_model','warehouse_model',TRUE);
 	}
 
 
@@ -65,6 +66,7 @@ class Warranty_Claim extends CI_Controller {
 		$warranty_claim_data['customer_list']			=	$this->customer_model->get_all_customers();
 		$warranty_claim_data['sales_list']				=	$this->sales_model->get_all_sales();
 		$warranty_claim_data['wc_type_list']			=	$this->warranty_claim_model->get_all_warranty_claim_types();
+		$warranty_claim_data['warehouse_list']			=	$this->warehouse_model->get_all_warehouses();
 
 		$data['navigation']				=	$this->load->view('templates/navigation',$nav_data,TRUE);
 		$data['footer']					=	$this->load->view('templates/footer','',TRUE);
@@ -110,6 +112,7 @@ class Warranty_Claim extends CI_Controller {
 			$warranty_claim_data['customer_id']						=	$this->input->post('customer_id','',TRUE);
 			$warranty_claim_data['customer_name']					=	$this->input->post('customer_name','',TRUE);
 		}
+		$warranty_claim_data['warehouse_id']					=	$this->input->post('warehouse_id','',TRUE);
 		$warranty_claim_data['engine_no']						=	$this->input->post('engine_no','',TRUE);
 		$warranty_claim_data['chassis_no']						=	$this->input->post('chassis_no','',TRUE);
 		$warranty_claim_data['warranty_claim_type_id']			=	$this->input->post('warranty_claim_type_id','',TRUE);
@@ -171,6 +174,7 @@ class Warranty_Claim extends CI_Controller {
 			$warranty_claim_data['customer_id']						=	$this->input->post('customer_id','',TRUE);
 			$warranty_claim_data['customer_name']					=	$this->input->post('customer_name','',TRUE);
 		}
+		$warranty_claim_data['warehouse_id']					=	$this->input->post('warehouse_id','',TRUE);
 		$warranty_claim_data['engine_no']						=	$this->input->post('engine_no','',TRUE);
 		$warranty_claim_data['chassis_no']						=	$this->input->post('chassis_no','',TRUE);
 		$warranty_claim_data['warranty_claim_type_id']			=	$this->input->post('warranty_claim_type_id','',TRUE);
@@ -310,13 +314,15 @@ class Warranty_Claim extends CI_Controller {
 		$warranty_claim_data								=	array();
 
 		$warranty_claim_data 								=	array();
-		$warranty_claim_data['Warranty_Claim_id']			=	$this->input->post('warranty_claim_id','',TRUE);
+		$warranty_claim_data['warranty_claim_id']			=	$this->input->post('warranty_claim_id','',TRUE);
 
-		$warranty_claim_detail 								=	$this->warranty_claim_model->get_warranty_claim_by_id($warranty_claim_data['Warranty_Claim_id']);
+		$warranty_claim 									=	$this->warranty_claim_model->get_warranty_claim_by_id($warranty_claim_data['warranty_claim_id']);
 
-		$sales_detail 										=	$this->sales_model->get_sales_by_id($warranty_claim_detail->sales_id);
+		$warranty_claim_detail 								=	$this->warranty_claim_model->get_warranty_claim_detail_by_claim_id($warranty_claim_data['warranty_claim_id']);
 
-		$warranty_claim_data['approval_status']				=	$warranty_claim_detail->approval_status;
+		// $sales_detail 										=	$this->sales_model->get_sales_by_id($warranty_claim_detail->sales_id);
+
+		$warranty_claim_data['approval_status']				=	$warranty_claim->approval_status;
 
 		switch ($warranty_claim_data['approval_status']) {
 			case '0':
@@ -324,10 +330,10 @@ class Warranty_Claim extends CI_Controller {
 				$warranty_claim_data['authorized_user_id_1']		=	$this->session->userdata('user_id');
 				$warranty_claim_data['approval_time_stamp_1']		=	date('Y-m-d G:i:s');
 				$warranty_claim_data['approval_status'] 			=	1;
-				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['Warranty_Claim_id']);
+				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['warranty_claim_id']);
 
 				if($update_result != 0){
-					redirect('warranty_claim/warranty_claim_approval_1');
+					redirect('warranty_claim/warranty_claim_approval_1'); 
 				}
 				break;
 						
@@ -336,14 +342,13 @@ class Warranty_Claim extends CI_Controller {
 				$warranty_claim_data['authorized_user_id_2']		=	$this->session->userdata('user_id');
 				$warranty_claim_data['approval_time_stamp_2']		=	date('Y-m-d G:i:s');
 				$warranty_claim_data['approval_status'] 			=	2;
-				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['Warranty_Claim_id']);
+				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['warranty_claim_id']);
 
 				if($update_result != 0){
+					foreach($warranty_claim_detail as $value){
+						$this->update_stock_quantity ($warranty_claim->warranty_claim_type_id, $warranty_claim->sales_id, $warranty_claim->warehouse_id, $value->item_id, $value->quantity);
+					}
 					
-					$this->update_stock_quantity ($warranty_claim_detail->warranty_claim_type_id, $warranty_claim_detail->sales_id, 
-													$sales_detail->warehouse_id, $warranty_claim_detail->item_id,
-													$warranty_claim_detail->quantity);
-
 					redirect('warranty_claim/warranty_claim_approval_2');
 				}
 				break;
@@ -353,7 +358,7 @@ class Warranty_Claim extends CI_Controller {
 				$warranty_claim_data['authorized_user_id_2']		=	$this->session->userdata('user_id');
 				$warranty_claim_data['approval_time_stamp_2']		=	date('Y-m-d G:i:s');
 				$warranty_claim_data['approval_status'] 			=	3;
-				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['Warranty_Claim_id']);
+				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['warranty_claim_id']);
 
 				if($update_result != 0){
 					redirect('warranty_claim/warranty_claim_approval_2');
@@ -370,11 +375,11 @@ class Warranty_Claim extends CI_Controller {
 		$warranty_claim_data								=	array();
 
 		$warranty_claim_data 								=	array();
-		$warranty_claim_data['Warranty_Claim_id']			=	$this->input->post('warranty_claim_id','',TRUE);
+		$warranty_claim_data['warranty_claim_id']			=	$this->input->post('warranty_claim_id','',TRUE);
 
 		$comment 											=	$this->input->post('comment','',TRUE);
 
-		$warranty_claim_detail 								=	$this->warranty_claim_model->get_warranty_claim_by_id($warranty_claim_data['Warranty_Claim_id']);
+		$warranty_claim_detail 								=	$this->warranty_claim_model->get_warranty_claim_by_id($warranty_claim_data['warranty_claim_id']);
 
 		switch ($warranty_claim_detail->approval_status) {
 			case '0':
@@ -382,7 +387,7 @@ class Warranty_Claim extends CI_Controller {
 				$warranty_claim_data['comment_1']					=	$comment;
 				$warranty_claim_data['approval_time_stamp_1']		=	date('Y-m-d G:i:s');
 				$warranty_claim_data['approval_status']				=	-1;
-				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['Warranty_Claim_id']);
+				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['warranty_claim_id']);
 
 				if($update_result != 0){
 					redirect('warranty_claim/warranty_claim_approval_1');
@@ -394,7 +399,7 @@ class Warranty_Claim extends CI_Controller {
 				$warranty_claim_data['comment_2']					=	$comment;
 				$warranty_claim_data['approval_time_stamp_2']		=	date('Y-m-d G:i:s');
 				$warranty_claim_data['approval_status']				=	-2;
-				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['Warranty_Claim_id']);
+				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['warranty_claim_id']);
 
 				if($update_result != 0){
 					redirect('warranty_claim/warranty_claim_approval_2');
@@ -406,7 +411,7 @@ class Warranty_Claim extends CI_Controller {
 				$warranty_claim_data['comment_3']					=	$comment;
 				$warranty_claim_data['approval_time_stamp_3']		=	date('Y-m-d G:i:s');
 				$warranty_claim_data['approval_status']				=	-3;
-				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['Warranty_Claim_id']);
+				$update_result 										=	$this->warranty_claim_model->update_warranty_claim($warranty_claim_data, $warranty_claim_data['warranty_claim_id']);
 
 				if($update_result != 0){
 					redirect('warranty_claim/warranty_claim_approval_3');
@@ -430,7 +435,7 @@ class Warranty_Claim extends CI_Controller {
 			$this->stock_model->add_stock_quantity($item_id, $warehouse_id, $quantity);
 		}
 		// DWP - Defective During Warranty Period
-		if($warranty_claim_type_id == 2){
+		if($warranty_claim_type_id == 2 || $warranty_claim_type_id == 1){
 
 			$this->item_model->subtract_item_quantity($item_id, $quantity);
 

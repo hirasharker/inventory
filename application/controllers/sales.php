@@ -236,14 +236,8 @@ class Sales extends CI_Controller {
 			$sales_data['customer_type']	=	$customer_data->customer_type;
 		}
 		
-		// $sales_data['dealer_id']		=	$sales_order->dealer_id;
-		// if($sales_data['dealer_id']!= 0){
-		// 	$sales_data['dealer_name']		=	$this->dealer_model->get_dealer_by_id($sales_data['dealer_id'])->dealer_name;
-		// }
-		
 		$sales_data['sales_date']		=	$sales_date;
 		$sales_data['overall_discount']	=	$sales_order->overall_discount;
-
 		
 		$i 								=	0;
 
@@ -354,7 +348,7 @@ class Sales extends CI_Controller {
 				$sales_detail_data['item_id']				=	$item_id[$i];
 				$sales_detail_data['item_name']				=	$item_name[$i];
 				$sales_detail_data['sales_price']			=	$sales_price[$i];
-				$sales_detail_data['value_added_tax']		=	$value->sales_order_price * $value_added_tax_percentage /(100 + $value_added_tax_percentage);
+				$sales_detail_data['value_added_tax']		=	$sales_price[$i] *$vat_tax_data->value_added_tax_percentage /(100 + $vat_tax_data->value_added_tax_percentage);
 				$sales_detail_data['individual_discount']	=	$discount[$i];
 				$sales_detail_data['overall_discount']		=	$sales_data['overall_discount'];
 				$sales_detail_data['quantity']				=	$quantity[$i];
@@ -368,7 +362,7 @@ class Sales extends CI_Controller {
 
 				$this->stock_model->subtract_stock_quantity($sales_detail_data['item_id'], $sales_data['warehouse_id'], $sales_detail_data['quantity']);
 			}
-			exit();
+			// exit();
 
 			redirect('sales/view_sales','refresh');
 		}else{
@@ -458,7 +452,7 @@ class Sales extends CI_Controller {
 		$nav_data['dev_key']			=	"customer";
 		$nav_data['selected']			=	"add_customer";
 		$nav_data['company_name']   	=   $this->company_model->get_company_by_id(1)->company_name;
-		$nav_data['user_permission']=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
+		$nav_data['user_permission']	=	$this->module_model->get_permission_by_user_id($this->session->userdata('user_id'));
 
 		$customer_data					=	array();
 		if($customer_id!=0){

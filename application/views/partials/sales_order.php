@@ -293,92 +293,7 @@
 
 
 
-        //-----AJAX FOR ADJUSTING SUBTOTAL
-       $('#create').on('keyup', '.qty', function(e){ //Once remove button is clicked
-
-                var salesOrderDate = document.getElementById('datepicker').value;
-                if(salesOrderDate == ""){
-                  $('.qty').val("");
-                  alert('please insert valid order date!!');
-                }
-          
-                var salesOrderPrice = $('input[name="sales_order_price[]"]').map(function(){ 
-                    return this.value; 
-                }).get();
-
-                var qty = $('input[name="quantity[]"]').map(function(){ 
-                    return this.value; 
-                }).get();
-
-                var discount = document.getElementById('discount').value;
-
-                $.ajax({
-                    type: 'POST',
-                    url: '<?php echo base_url()?>sales_order/ajax_get_order_total_with_discount/',
-                    data: {
-                        'sales_order_price[]': salesOrderPrice,
-                        'quantity[]': qty,
-                        'discount' : discount,
-                        'sales_order_date' : salesOrderDate,
-                        // other data
-                    },
-                    success: function(data){
-                        // Parse the returned json data
-                        var resultSummary = $.parseJSON(data);
-                        console.log(resultSummary);
-                       document.getElementById('sub-total').value = resultSummary.sub_total;
-                       document.getElementById('vat').value = resultSummary.value_added_tax;
-                       document.getElementById('discount-summary').value = resultSummary.discount;
-                       document.getElementById('total-price').value = resultSummary.total_price;
-                    }
-                });
-
-
-          });
-        //-----END AJAX FOR ADJUSTING SUBTOTAL
-
-
-        //-----AJAX FOR ADJUSTING SUBTOTAL  with DISCOUNT
-       $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is clicked
-                var salesOrderDate = document.getElementById('datepicker').value;
-                if(salesOrderDate == ""){
-                  $('.qty').val("");
-                  alert('please insert valid order date!!');
-                }
-          
-                var salesOrderPrice = $('input[name="sales_order_price[]"]').map(function(){ 
-                    return this.value; 
-                }).get();
-
-                var qty = $('input[name="quantity[]"]').map(function(){ 
-                    return this.value; 
-                }).get();
-
-                var discount = document.getElementById('discount').value;
-
-                $.ajax({
-                    type: 'POST',
-                    url: '<?php echo base_url()?>sales_order/ajax_get_order_total_with_discount/',
-                    data: {
-                        'sales_order_price[]': salesOrderPrice,
-                        'quantity[]': qty,
-                        'discount': discount,
-                        'sales_order_date' : salesOrderDate,
-                        // other data
-                    },
-                    success: function(data){
-                        // Parse the returned json data
-                        var resultSummary = $.parseJSON(data);
-                        console.log(resultSummary);
-                       document.getElementById('sub-total').value = resultSummary.sub_total;
-                       document.getElementById('discount-summary').value = resultSummary.discount;
-                       document.getElementById('total-price').value = resultSummary.total_price;
-                    }
-                });
-
-
-          });
-        //-----END AJAX FOR ADJUSTING SUBTOTAL
+        
 
            
 </script>
@@ -408,16 +323,7 @@
                     <div class="col-lg-9">
                         <form role="form" method="post" action="<?php echo base_url();?>sales_order/update_sales_order/<?php echo $sales_order->sales_order_id;?>">
 
-                            <!-- <div class="form-group">
-                                <label>Type of Customer</label>
-                                <select class="form-control" name="customer_type" id="customerType">
-                                    <option value="">Select Type</option>
-                                    <option value="1" <?php if($sales_order->customer_type==1){echo "selected";}?>>Dealer Sale</option>
-                                    <option value="2" <?php if($sales_order->customer_type==2){echo "selected";}?>>Regular Customer</option>
-                                </select>
-                            </div> -->
-
-                            <div class="form-group" id="customer" style="display:block">
+                            <div class="form-group" id="customer">
                                 <label>Select Customer</label>
                                 <select class="form-control" name="customer_id" id="customerId">
                                     <option value="">select customer</option>
@@ -427,15 +333,13 @@
                                 </select>
                             </div>
 
-                            <!-- <div class="form-group" id="dealer" style="display:none">
-                                <label>Select Dealer</label>
-                                <select class="form-control" name="dealer_id" id="dealerId">
-                                    <option value="">select dealer</option>
-                                    <?php foreach($dealer_list as $value){?>
-                                    <option <?php if($sales_order->dealer_id==$value->dealer_id){ echo "selected";}?> value="<?php echo $value->dealer_id; ?>"><?php echo $value->dealer_name;?></option>
-                                <?php }?>
-                                </select>
-                            </div> -->
+                            <label>sales_order Date</label>
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control"  id="datepicker" name="sales_order_date" value="<?php echo $sales_order->sales_order_date;?>" required>
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <label>Select Warehouse</label>
@@ -474,13 +378,7 @@
                                 <label>Discount (%)</label>
                                 <input class="form-control discount" placeholder = "Discount" id="discount" value="<?php echo $sales_order->overall_discount;?>" name="sales_order_discount" type="number" step=".01" min="0" max="100" required>
                             </div>
-                            <label>sales_order Date</label>
-                            <div class="input-group date" data-provide="datepicker">
-                                <input type="text" class="form-control"  id="datepicker" name="sales_order_date" value="<?php echo $sales_order->sales_order_date;?>" required>
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </div>
-                            </div>
+                            
                             <label style="color:#F00;font-size:10px;"><?php echo form_error('sales_order_date');?></label>
                             <br/>
                             <button type="submit" class="btn btn-primary">Update</button>
@@ -500,18 +398,7 @@
 
 
 <script>
-    var itemSummary  = '<div class="col-lg-12" style="margin-top: 10px;border-top: 1px dotted #09192a;" id="itemSummary">'
-           
-                      +'<div class="col-lg-2"><label class="lblItem">Sub Total</label></div>'
-                      +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="sub-total" value="0"/></div>'
-                      +'<div class="col-lg-2"><label class="lblItem">Discount</label></div>'
-                      +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="discount-summary" value="0"/></div>'
-                       +'<div class="col-lg-2"><label class="lblItem">Total Price</label></div>'
-                      +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="total-price" value="0"/></div>'
-                      +'</div>';
-                      
     
-    $('#item-summary').append(itemSummary);
 
     <?php foreach($sales_order_detail as $value){?>
         // alert(<?php echo json_encode($value->item_name);?>);
@@ -550,7 +437,23 @@
         document.getElementById('count').value = count;
 
         $("#item option[value='"+<?php echo json_encode($value->item_id);?>+"']").remove();
-    <?php } ?>  
+    <?php } ?>
+
+    var itemSummary  = '<div class="col-lg-12" style="margin-top: 10px;border-top: 1px dotted #09192a;" id="itemSummary">'
+            +'<div class="col-lg-2"><label class="lblItem">Sub Total</label></div>'
+            +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="sub-total" value="0"/></div>'
+            +'<div class="col-lg-2"><label class="lblItem">VAT</label></div>'
+            +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="vat" value="0"/></div>'
+            +'<div class="col-lg-2"><label class="lblItem">Discount</label></div>'
+            +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="discount-summary" value="0"/></div>'
+             +'<div class="col-lg-2"><label class="lblItem">Total Price</label></div>'
+            +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="total-price" value="0"/></div>'
+            +'</div>';
+                      
+    
+    $('#item-summary').append(itemSummary);
+
+
       
 </script>
 
@@ -580,6 +483,8 @@
            
             +'<div class="col-lg-2"><label class="lblItem">Sub Total</label></div>'
             +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="sub-total" value="0"/></div>'
+            +'<div class="col-lg-2"><label class="lblItem">VAT</label></div>'
+            +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="vat" value="0"/></div>'
             +'<div class="col-lg-2"><label class="lblItem">Discount</label></div>'
             +'<div class="col-lg-1"><input style="background: rgba(0,0,0,0); border : none;" type="text" disabled id="discount-summary" value="0"/></div>'
              +'<div class="col-lg-2"><label class="lblItem">Total Price</label></div>'
@@ -612,25 +517,6 @@
                 $("#item option[value='"+this.value+"']").remove();
               }
         });
-
-
-        
-        var customerType = $('#customerType option:selected').val();
-
-        if(customerType == 1){
-            $( "#dealer" ).show( 500 );
-            $( "#customer" ).hide( 500 );
-            $( "#customerId" ).val("");
-          }else if (customerType == 2){
-            $( "#customer" ).show( 500 );
-            $( "#dealer" ).hide( 500 );
-            $( "#dealerId" ).val("");
-          }else {
-            $( "#customer" ).hide( 500 );
-            $( "#dealer" ).hide( 500 );
-            $( "#customerId" ).val("");
-            $( "#dealerId" ).val("");
-        }
         
         $( "#customerType" ).change(function() {
           // alert( "Handler for .change() called."+this.value);
@@ -735,8 +621,24 @@
         });
 
 
-         //-----AJAX FOR ADJUSTING SUBTOTAL
+         
+
+</script>
+
+
+<?php } ?>
+
+
+
+<script type="text/javascript">
+  //-----AJAX FOR ADJUSTING SUBTOTAL
        $('#create').on('keyup', '.qty', function(e){ //Once remove button is clicked
+
+                var salesOrderDate = document.getElementById('datepicker').value;
+                if(salesOrderDate == ""){
+                  $('.qty').val("");
+                  alert('please insert valid order date!!');
+                }
           
                 var salesOrderPrice = $('input[name="sales_order_price[]"]').map(function(){ 
                     return this.value; 
@@ -755,6 +657,7 @@
                         'sales_order_price[]': salesOrderPrice,
                         'quantity[]': qty,
                         'discount' : discount,
+                        'sales_order_date' : salesOrderDate,
                         // other data
                     },
                     success: function(data){
@@ -762,6 +665,7 @@
                         var resultSummary = $.parseJSON(data);
                         console.log(resultSummary);
                        document.getElementById('sub-total').value = resultSummary.sub_total;
+                       document.getElementById('vat').value = resultSummary.value_added_tax;
                        document.getElementById('discount-summary').value = resultSummary.discount;
                        document.getElementById('total-price').value = resultSummary.total_price;
                     }
@@ -774,41 +678,43 @@
 
         //-----AJAX FOR ADJUSTING SUBTOTAL  with DISCOUNT
        $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is clicked
-          
-                var salesOrderPrice = $('input[name="sales_order_price[]"]').map(function(){ 
-                    return this.value; 
-                }).get();
+            var salesOrderDate = document.getElementById('datepicker').value;
+            if(salesOrderDate == ""){
+              $('.qty').val("");
+              alert('please insert valid order date!!');
+            }
+      
+            var salesOrderPrice = $('input[name="sales_order_price[]"]').map(function(){ 
+                return this.value; 
+            }).get();
 
-                var qty = $('input[name="quantity[]"]').map(function(){ 
-                    return this.value; 
-                }).get();
+            var qty = $('input[name="quantity[]"]').map(function(){ 
+                return this.value; 
+            }).get();
 
-                var discount = document.getElementById('discount').value;
+            var discount = document.getElementById('discount').value;
 
-                $.ajax({
-                    type: 'POST',
-                    url: '<?php echo base_url()?>sales_order/ajax_get_order_total_with_discount/',
-                    data: {
-                        'sales_order_price[]': salesOrderPrice,
-                        'quantity[]': qty,
-                        'discount': discount,
-                        // other data
-                    },
-                    success: function(data){
-                        // Parse the returned json data
-                        var resultSummary = $.parseJSON(data);
-                        console.log(resultSummary);
-                       document.getElementById('sub-total').value = resultSummary.sub_total;
-                       document.getElementById('discount-summary').value = resultSummary.discount;
-                       document.getElementById('total-price').value = resultSummary.total_price;
-                    }
-                });
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo base_url()?>sales_order/ajax_get_order_total_with_discount/',
+                data: {
+                    'sales_order_price[]': salesOrderPrice,
+                    'quantity[]': qty,
+                    'discount': discount,
+                    'sales_order_date' : salesOrderDate,
+                    // other data
+                },
+                success: function(data){
+                    // Parse the returned json data
+                    var resultSummary = $.parseJSON(data);
+                    console.log(resultSummary);
+                   document.getElementById('sub-total').value = resultSummary.sub_total;
+                   document.getElementById('discount-summary').value = resultSummary.discount;
+                   document.getElementById('total-price').value = resultSummary.total_price;
+                }
+            });
 
 
-          });
-        //-----END AJAX FOR ADJUSTING SUBTOTAL
-
+      });
+    //-----END AJAX FOR ADJUSTING SUBTOTAL
 </script>
-
-
-<?php } ?>

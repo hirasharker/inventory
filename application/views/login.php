@@ -51,8 +51,14 @@
                                             <!-- <p class="help-block">Example block-level help text here.</p> -->
                                         </div>
                                         <br/>
+                                        <div class="form-group">
+                                          <label style="color: #F00 !important;"><?php echo $this->session->userdata('error'); $this->session->unset_userdata('error'); ?> </label>
+                                        </div>
                                         <button type="submit" class="btn btn-primary">Sign in</button>
                                     </form>
+                                    <?php if($this->session->userdata('error') != NULL){ ?>
+                                    
+                                    <?php } ?>
                                 </div>
                                 <!-- /.col-lg-6 (nested) -->
                             </div>
