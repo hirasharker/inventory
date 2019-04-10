@@ -65,7 +65,6 @@ class Inventory_Model extends CI_Model {
         return $result;
     }
 
-
     public function get_item_sales_quantity_by_item_id_and_date($item_id,$to_date){
         $this->db->select('sum(quantity) as sales_quantity');
         $this->db->from('tbl_sales_detail');
@@ -107,8 +106,6 @@ class Inventory_Model extends CI_Model {
         $this->db->group_by('tbl_sales_detail.item_name');
         $this->db->where('tbl_sales_detail.sales_date >=',$from_date);
         $this->db->where('tbl_sales_detail.sales_date <=',$to_date);
-        // $this->db->where('tbl_sales_detail.sales_date >=','2018-1-1');
-        // $this->db->where('tbl_sales_detail.sales_date <=','2020-1-1');
 
         $result_query = $this->db->get();
         $result = $result_query->result();
@@ -145,6 +142,7 @@ class Inventory_Model extends CI_Model {
             ,tbl_purchase_detail.item_name, tbl_purchase_detail.item_id');
         $this->db->from('tbl_purchase_detail');
         $this->db->group_by('tbl_purchase_detail.item_id');
+        $this->db->group_by('tbl_purchase_detail.item_name');
 
         if($warehouse_id != ''){
             $this->db->where('tbl_purchase_detail.warehouse_id',$warehouse_id);
@@ -163,6 +161,7 @@ class Inventory_Model extends CI_Model {
             ,tbl_sales_detail.item_name, tbl_sales_detail.item_id');
         $this->db->from('tbl_sales_detail');
         $this->db->group_by('tbl_sales_detail.item_id');
+        $this->db->group_by('tbl_sales_detail.item_name');
 
         if($warehouse_id != ''){
             $this->db->where('tbl_sales_detail.warehouse_id',$warehouse_id);

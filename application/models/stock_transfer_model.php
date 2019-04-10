@@ -18,11 +18,12 @@ class Stock_Transfer_Model extends CI_Model {
     public function get_sent_stock_transfer_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date){
         $this->db->select('tbl_stock_transfer_detail.item_id, tbl_stock_transfer_detail.item_name, sum(tbl_stock_transfer_detail.quantity) as total_sent_quantity');
         $this->db->from('tbl_stock_transfer_detail');
-        $this->db->where('DATE(tbl_stock_transfer.stock_transfer_date) >=',$from_date);
-        $this->db->where('DATE(tbl_stock_transfer.stock_transfer_date) <=',$to_date);
+        $this->db->where('tbl_stock_transfer.stock_transfer_date >=',$from_date);
+        $this->db->where('tbl_stock_transfer.stock_transfer_date <=',$to_date);
         $this->db->where('tbl_stock_transfer_detail.previous_warehouse_id',$warehouse_id);
         $this->db->join('tbl_stock_transfer','tbl_stock_transfer.stock_transfer_id = tbl_stock_transfer_detail.stock_transfer_id');
         $this->db->group_by('tbl_stock_transfer_detail.item_id');
+        $this->db->group_by('tbl_stock_transfer_detail.item_name');
         $result_query=$this->db->get();
         $result=$result_query->result();
         return $result;
@@ -31,11 +32,12 @@ class Stock_Transfer_Model extends CI_Model {
     public function get_received_stock_transfer_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date){
         $this->db->select('tbl_stock_transfer_detail.item_id, tbl_stock_transfer_detail.item_name, sum(tbl_stock_transfer_detail.quantity) as total_received_quantity');
         $this->db->from('tbl_stock_transfer_detail');
-        $this->db->where('DATE(tbl_stock_transfer.stock_transfer_date) >=',$from_date);
-        $this->db->where('DATE(tbl_stock_transfer.stock_transfer_date) <=',$to_date);
+        $this->db->where('tbl_stock_transfer.stock_transfer_date >=',$from_date);
+        $this->db->where('tbl_stock_transfer.stock_transfer_date <=',$to_date);
         $this->db->where('tbl_stock_transfer_detail.current_warehouse_id',$warehouse_id);
         $this->db->join('tbl_stock_transfer','tbl_stock_transfer.stock_transfer_id = tbl_stock_transfer_detail.stock_transfer_id');
         $this->db->group_by('tbl_stock_transfer_detail.item_id');
+        $this->db->group_by('tbl_stock_transfer_detail.item_name');
         $result_query=$this->db->get();
         $result=$result_query->result();
         return $result;
