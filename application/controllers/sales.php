@@ -235,6 +235,8 @@ class Sales extends CI_Controller {
 			$sales_data['customer_name']	=	$customer_data->customer_name;
 			$sales_data['customer_type']	=	$customer_data->customer_type;
 		}
+
+		$sales_data['value_added_tax_percentage'] 	=	$value_added_tax_percentage;
 		
 		$sales_data['sales_date']		=	$sales_date;
 		$sales_data['overall_discount']	=	$sales_order->overall_discount;
