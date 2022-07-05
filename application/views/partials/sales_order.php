@@ -27,6 +27,10 @@
                                     <option value="2">Regular Customer</option>
                                 </select>
                             </div> -->
+                            <div>
+                                <label style="color: #f00;"><?php echo $this->session->userdata('error_message'); $this->session->unset_userdata('error_message'); ?></label>
+                                <label style="color: #3A9C12;"><?php echo $this->session->userdata('message'); $this->session->unset_userdata('message'); ?></label>
+                            </div>
 
                             <div class="form-group" id="customer" style="display:block">
                                 <label>Select Customer</label>
@@ -174,7 +178,7 @@
                 +'<div class="col-lg-2">'
                 +'<input class="form-control stock-quantity" type="hidden" value="'+stockQuantity+'">'
                 +'<input class="form-control" placeholder = "Discount" name="discount[]" required value="0" type="hidden"></div>'
-                +'<input class="col-lg-2 qty" placeholder = "QTY" name="quantity[]" required><div class="col-lg-1"><label>('+stockQuantity+')</label></div>'
+                +'<input class="col-lg-2 qty" type="number" min="1" placeholder = "QTY" name="quantity[]" required><div class="col-lg-1"><label>('+stockQuantity+')</label></div>'
                 +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
                 if(this.value != 0){
@@ -235,7 +239,7 @@
 
                   $.each(opts, function(i, d) {
                       // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
-                      $('#item').append('<option itemName="' + d.item_name + '" value="' + d.item_id + '" stockQuantity = "'+ d.quantity +'" itemPrice = "'+d.item_price+'">' +d.part_no+"-"+ d.item_name + '</option>');
+                      $('#item').append('<option itemName="' + d.p_item_name + '" value="' + d.item_id + '" stockQuantity = "'+ d.quantity +'" itemPrice = "'+d.item_price+'">' +d.part_no+"-"+ d.item_name + '</option>');
 
                   });
               }

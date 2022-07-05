@@ -14,8 +14,8 @@ class Sales_Order_Model extends CI_Model {
         // $this->db->join('tbl_sales_order_detail','tbl_sales_order_detail.sales_order_id = tbl_sales_order.sales_order_id','left');
         $this->db->join('tbl_customer','tbl_customer.customer_id = tbl_sales_order_detail.customer_id','left');
         $this->db->group_by('tbl_sales_order_detail.sales_order_id, customer_name, customer_type, overall_discount, sales_order_date');
-        // $this->db->order_by('tbl_sales_order.time_stamp','desc');
-        // $this->db->order_by('tbl_sales_order.customer_name','desc');
+        $this->db->order_by('sales_order_id','desc');
+        $this->db->limit(1000);
         $result_query=$this->db->get();
         $result=$result_query->result();
         return $result;

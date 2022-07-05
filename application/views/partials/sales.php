@@ -18,7 +18,11 @@
                     <div class="col-lg-9">
                      <?php echo form_open('sales/add_sales');?>
                        <!-- <form role="form" method="get" action="#"> -->
-
+                            <div>
+                                <label style="color: #f00;"><?php echo $this->session->userdata('error_message'); $this->session->unset_userdata('error_message'); ?></label>
+                                <label style="color: #3A9C12;"><?php echo $this->session->userdata('message'); $this->session->unset_userdata('message'); ?></label>
+                            </div>
+        
                             <div class="form-group">
                                 <label>Sale Against Sales Order</label>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -49,7 +53,7 @@
 
                             <div class="form-group" id="customer" style="display:block">
                                 <label>Select Customer</label>
-                                <select class="form-control select-tag" name="customer_id" id="customerId" style="width: 100% !important;">
+                                <select class="form-control select-tag" name="customer_id" id="customerId" style="width: 100% !important;" required>
                                     <option value="">select customer</option>
                                     <?php foreach($customer_list as $value){?>
                                     <option value="<?php echo $value->customer_id; ?>"><?php echo $value->customer_name;?></option>
@@ -206,9 +210,10 @@ $( "#item" ).change(function(){
         +'<input class="form-control item-price" placeholder = "Price" name="sales_price[]" value="'+itemPrice+'" required type="hidden" >'
         +'<label>MRP '+itemPrice+'/-</label></div>'
         +'<div class="col-lg-2">'
-        +'<input class="form-control stock-quantity" type="hidden" value="'+stockQuantity+'">'
+        +'<input class="form-control stock-quantity" type="number" value="'+stockQuantity+'" min="0" style="display:none">'
+
         +'<input class="form-control" placeholder = "Discount" name="discount[]" required value="0" type="hidden"></div>'
-        +'<input class="col-lg-2 qty" placeholder = "QTY" name="quantity[]" required><div class="col-lg-1"><label>('+stockQuantity+')</label></div>'
+        +'<input class="col-lg-2 qty" type="number" min="1" placeholder = "QTY" name="quantity[]" required><div class="col-lg-1"><label>('+stockQuantity+')</label></div>'
         +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
         if(this.value != 0){
@@ -321,7 +326,7 @@ $( "#warehouseId" ).change(function() {
 
           $.each(opts, function(i, d) {
               // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
-              $('#item').append('<option itemName="' + d.item_name + '" value="' + d.item_id + '" stockQuantity = "'+ d.quantity +'" itemPrice = "'+d.item_price+'">' +d.part_no+"-"+ d.item_name + '</option>');
+              $('#item').append('<option itemName="' + d.p_item_name + '" value="' + d.item_id + '" stockQuantity = "'+ d.quantity +'" itemPrice = "'+d.item_price+'">' +d.part_no+"-"+ d.item_name + '</option>');
 
           });
         }
@@ -662,7 +667,7 @@ $('#discount-div').on('keyup', '.discount', function(e){ //Once remove button is
                 +'<input class="form-control" placeholder = "Discount" name="discount[]" required value="0" type="hidden"></div>'
                 +'<div class="col-lg-2">'
                 +'<input class="form-control stock-quantity" type="hidden" value="'+stockQuantity+'">'
-                +'<input class="form-control" placeholder = "QTY" name="quantity[]" required value="0" type="number" max="'+stockQuantity+'"></div>'
+                +'<input class="form-control" placeholder = "QTY" min="1" name="quantity[]" required value="0" type="number" max="'+stockQuantity+'"></div>'
                 +'<div class="col-lg-1"><label>('+stockQuantity+')</label></div>'
                 +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 

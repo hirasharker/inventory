@@ -169,20 +169,20 @@ class Sales_Order extends CI_Controller {
 		$stock[]						=	array();
 
 		for ($i=0; $i < $error_count ; $i++) { 
-			$stock[$i]					=	$this->item_model->get_item_by_id($item_id[$i])->quantity;
-			$this->form_validation->set_rules('discount['.$i.']', 'Discount', 'required|numeric');
-        	$this->form_validation->set_rules('quantity['.$i.']', 'Quantity', 'required|numeric|less_than_equal_to['.$stock[$i].']');
-        	$this->form_validation->set_message('less_than_equal_to', 'There are only {param} {field} left');
+			$stock[$i]					=	$this->stock_model->get_item_by_warehouse_id_and_item_id($sales_order_data['warehouse_id'], $item_id[$i])->quantity;
+
+			if($quantity[$i] > $stock[$i]){
+        		$session_data['error_message']			=	'Failed! You only have '.$stock[$i].' '.$item_name[$i].' left in stock!!';
+
+        		$this->session->set_userdata($session_data);
+        		redirect('sales_order','refresh');
+        	}
+			
 		}
 
-		$this->form_validation->set_rules('sales_order_price[]', 'sales_order price', 'required|numeric');
-        $this->form_validation->set_rules('sales_order_date', 'sales_order Date', 'required');
+			$result													=	$this->sales_order_model->add_sales_order($sales_order_data);
 
-        if ($this->form_validation->run() != FALSE) {
-
-			$result							=	$this->sales_order_model->add_sales_order($sales_order_data);
-
-			$sales_order_detail_data				=	array();
+			$sales_order_detail_data								=	array();
 
 			$sales_order_detail_data['warehouse_id']				=	$sales_order_data['warehouse_id'];
 			// $sales_order_detail_data['dealer_id']					=	$sales_order_data['dealer_id'];
@@ -205,9 +205,7 @@ class Sales_Order extends CI_Controller {
 				// $this->stock_model->subtract_stock_quantity($sales_order_detail_data['item_id'], $sales_order_detail_data['warehouse_id'], $sales_order_detail_data['quantity']);
 			}
 			redirect('sales_order/view_sales_orders','refresh');
-		}else{
-			$this->index(0,$error_count);
-		}
+		
 	}
 
 	public function update_sales_order($sales_order_id)

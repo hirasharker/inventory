@@ -445,7 +445,7 @@
                     </li>
                     
                     <?php if($receivable_permission->permission_view==1){?>
-                    <li class="<?php if ($dev_key == "receivable") {echo 'active';} ?>">
+                    <!-- <li class="<?php if ($dev_key == "receivable") {echo 'active';} ?>">
                         <a href="<?php echo base_url();?>">Receivable<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level <?php if ($dev_key == "recievable_status") {echo 'collapse in';} ?>">
                             <li class="<?php if ($selected == "individual_receivable") {echo 'active-menu';} ?>">
@@ -455,7 +455,7 @@
                                 <a href="<?php echo base_url();?>report_sales/group_receivable">Group Statement</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
                     <?php }?>
                     <?php if($sales_report_permission->permission_view==1){?>
                     <li class="<?php if ($dev_key == "sales_report") {echo 'active';} ?>">

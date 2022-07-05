@@ -106,12 +106,12 @@
             <td style="text-align: right;"><b><?php echo $discount;?></b></td>
             <td><b><?php echo $sales->sub_total;?></b></td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td style="border-right: none"></td>
             <td style="text-align: right; width: 39.88%; border-left: none;"><b></b></td>
             <td  colspan="4" style="text-align: right; width: 42.3%">VAT  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $sales->value_added_tax_percentage;?>%</td>
             <td  style="text-align: right;"><?php echo round($value_added_tax,2);?></td>
-          </tr>
+          </tr> -->
           <tr>
             <td style="border-right: none"></td>
             <td style="text-align: right; width: 39.88%; border-left: none;"><b>Add &amp; Total:</b></td>
@@ -153,7 +153,7 @@
             <td style="width : 15%; text-align: center; border-top: 2px solid #000;">Authorised Signature</td>
           </tr>
         </table>
-        <p>Declaration: SOLD GOODS ARE NOT TAKEN BACK, NB: THE PAYMENT BY CHEQUE ONLY</p>
+        <p>Declaration: SOLD GOODS ARE NOT TAKEN BACK, NB: THE PAYMENT BY CHEQUE ONLY, All PRICES ARE INCLUSIVE OF VAT</p>
       </div>
     </div><!-- wrapper -->
 </body>

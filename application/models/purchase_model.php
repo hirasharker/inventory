@@ -96,7 +96,7 @@ class Purchase_Model extends CI_Model {
     }
 
     public function get_purchase_details_by_id($purchase_id){
-        $this->db->select('*');
+        $this->db->select('tbl_purchase_detail.*');
         $this->db->from('tbl_purchase_detail');
         $this->db->where('purchase_id',$purchase_id);
         $result_query=$this->db->get();

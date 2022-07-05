@@ -24,8 +24,8 @@
                                 <label>Sales Mode</label>
                                 <select class="form-control" name="sales_mode" id="salesMode">
                                     <option value="">Select Mode</option>
-                                    <option value="1">Dealer Sale</option>
-                                    <option value="2">Regular Customer</option>
+                                    <!-- <option value="1">Dealer Sale</option> -->
+                                    <option value="2">Dealer Sale</option>
                                     <!-- <option value="3">Quick Sale</option> -->
                                 </select>
                             </div>
@@ -40,7 +40,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group" id="dealer" style="display:none">
+                           <!--  <div class="form-group" id="dealer" style="display:none">
                                 <label>Select Dealer</label>
                                 <select class="form-control select-tag" name="dealer_id" id="dealerId" style="width: 100% !important;">
                                     <option value="">select dealer</option>
@@ -48,7 +48,7 @@
                                     <option value="<?php echo $value->dealer_id; ?>"><?php echo $value->dealer_name;?></option>
                                 <?php }?>
                                 </select>
-                            </div>
+                            </div> -->
 
 
 

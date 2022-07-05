@@ -73,6 +73,9 @@
                                     <?php }else{?>
                                     <label style="color:#aea4a4; font-weight:normal;">delete</label>
                                     <?php }?>
+                                    <?php if($permission->permission_view == 1){ ?>
+                                     | <a href="<?php echo base_url();?>sales_order/print_sales_order/<?php echo $value->sales_order_id;?>" target="_blank"> Print </a>
+                                    <?php }?>
                                     </td>
                                 </tr>
                             <?php $i++; }?>

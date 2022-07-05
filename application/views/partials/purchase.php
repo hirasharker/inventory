@@ -140,8 +140,8 @@
                       +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+this.value+'">'
                       +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
                       +'</div><div class="col-lg-4">'
-                      +'<input class="form-control" placeholder = "Price" name="purchase_price[]" required></div><div class="col-lg-3">'
-                      +'<input class="form-control" placeholder = "QTY" name="quantity[]" required></div>'
+                      +'<input class="form-control" type="number" placeholder = "Price" name="purchase_price[]" min="0" required></div><div class="col-lg-3">'
+                      +'<input class="form-control" type="number" placeholder = "QTY" name="quantity[]" min="0" required></div>'
                       +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
                             $('#create').append(code);
                               document.getElementById('count').value = count;
@@ -296,8 +296,8 @@
         +itemName+'</label><input class="form-control item-id" type="hidden" name="item_id[]" value="'+<?php echo json_encode($value->item_id);?>+'">'
         +'<input class="form-control" type="hidden" name="item_name[]" value="'+itemName+'">'
         +'</div><div class="col-lg-4">'
-        +'<input class="form-control" placeholder = "Price" name="purchase_price[]" value="'+<?php echo json_encode($value->purchase_price);?>+'" required></div><div class="col-lg-3">'
-        +'<input class="form-control" placeholder = "QTY" name="quantity[]" value="'+<?php echo json_encode($value->quantity);?>+'" required></div>'
+        +'<input class="form-control" type="number" placeholder = "Price" name="purchase_price[]" min="0" value="'+<?php echo json_encode($value->purchase_price);?>+'" required></div><div class="col-lg-3">'
+        +'<input class="form-control" type="number" placeholder = "QTY" name="quantity[]" value="'+<?php echo json_encode($value->quantity);?>+'" min="0" required></div>'
         +'<a href="" class="col-lg-1 remove"><i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i></a></div>';
 
         $('#create').append(code);

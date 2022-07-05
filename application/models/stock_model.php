@@ -57,7 +57,7 @@ class Stock_Model extends CI_Model {
     }
 
     public function get_item_by_warehouse_id($warehouse_id){
-        $this->db->select('tbl_stock.*,tbl_item.part_no, tbl_item.item_price');
+        $this->db->select('tbl_stock.*,tbl_item.part_no, tbl_item.item_price, tbl_item.item_name as p_item_name');
         $this->db->from('tbl_stock');
         $this->db->join('tbl_item','tbl_item.item_id = tbl_stock.item_id');
         $this->db->where('tbl_stock.warehouse_id',$warehouse_id);
@@ -66,6 +66,20 @@ class Stock_Model extends CI_Model {
         $result=$result_query->result();
         return $result;
     }
+
+    public function get_item_by_warehouse_id_and_item_id($warehouse_id, $item_id){
+        $this->db->select('tbl_stock.*,tbl_item.part_no, tbl_item.item_price');
+        $this->db->from('tbl_stock');
+        $this->db->join('tbl_item','tbl_item.item_id = tbl_stock.item_id');
+        $this->db->where('tbl_stock.warehouse_id',$warehouse_id);
+        $this->db->where('tbl_stock.item_id',$item_id);
+        $this->db->where('tbl_stock.quantity !=',0);
+        $result_query=$this->db->get();
+        $result=$result_query->row();
+        return $result;
+    }
+
+    
     
     
     public function add_stock($data){

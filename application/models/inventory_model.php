@@ -137,9 +137,10 @@ class Inventory_Model extends CI_Model {
     //--------warehouse_inventory SECTION -------------------------
     public function get_group_purchase_inventory_data_by_date_and_warehouse_id($warehouse_id,$from_date,$to_date){
         $this->db->distinct();
-        $this->db->select('coalesce(sum(distinct(tbl_purchase_detail.quantity)),0) as purchase_quantity
-            ,coalesce(sum(purchase_price*tbl_purchase_detail.quantity)/sum(tbl_purchase_detail.quantity),0) as item_rate
-            ,tbl_purchase_detail.item_name, tbl_purchase_detail.item_id');
+        $this->db->select('coalesce(sum(distinct(tbl_purchase_detail.quantity)),0) as purchase_quantity ,tbl_purchase_detail.item_name, tbl_purchase_detail.item_id');
+        // $this->db->select('coalesce(sum(distinct(tbl_purchase_detail.quantity)),0) as purchase_quantity
+        //     ,coalesce(sum(purchase_price*tbl_purchase_detail.quantity)/sum(tbl_purchase_detail.quantity),0) as item_rate
+        //     ,tbl_purchase_detail.item_name, tbl_purchase_detail.item_id');
         $this->db->from('tbl_purchase_detail');
         $this->db->group_by('tbl_purchase_detail.item_id');
         $this->db->group_by('tbl_purchase_detail.item_name');

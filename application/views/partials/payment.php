@@ -31,7 +31,7 @@
                             <div class="form-group input-group">
                              
                                 <span class="input-group-addon">&#x9f3;</span>
-                                <input type="text" class="form-control" name="paid_amount" value="<?php echo set_value('paid_amount'); ?>" required>
+                                <input type="number" min="0" class="form-control" name="paid_amount" value="<?php echo set_value('paid_amount'); ?>" required>
                                 <span class="input-group-addon">.00</span>
                             </div>
                            
@@ -101,7 +101,7 @@
                             <div class="form-group input-group">
                              
                                 <span class="input-group-addon">&#x9f3;</span>
-                                <input type="text" class="form-control" name="paid_amount" value="<?php echo $payment->paid_amount;?>">
+                                <input type="number" min="0" class="form-control" name="paid_amount" value="<?php echo $payment->paid_amount;?>">
                                 <span class="input-group-addon">.00</span>
                             </div>
                            

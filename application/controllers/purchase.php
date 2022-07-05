@@ -108,6 +108,8 @@ class Purchase extends CI_Controller {
 		if($permission->permission_add != 1){
 			redirect('access_control/denied/purchase/add_purchase','refresh');
 		}
+		// echo "ok";
+		// exit();
 		$purchase_data						=	array();
 		$purchase_data['user_id']			=	$this->session->userdata('user_id');
 		$purchase_data['user_name']			=	$this->session->userdata('user_name');
@@ -123,12 +125,17 @@ class Purchase extends CI_Controller {
 		$item_insertion_mode 				=	$this->input->post('item_insertion_mode','',TRUE);
 
 		if($item_insertion_mode == 2){
+			// echo "ok";
+			// exit();
 
 			$session_data										=	array();
 
 			$file_name 											=	NULL;
 
 			$purchase_upload									=	$this->upload_model->upload_file('purchase_list',''); //after upload
+			// print_r( $purchase_upload);
+			// exit();
+
 			if(isset($purchase_upload['file_name'])){
 				$file_name 			 							=	$purchase_upload['file_name'];
 			}else{
@@ -139,7 +146,7 @@ class Purchase extends CI_Controller {
 			
 			$this->upload_purchase($purchase_data, $file_name);
 
-			redirect('purchase/view_purchases','refresh');
+			// redirect('purchase/view_purchases','refresh');
 		}
 
 		$error_count					=	$this->input->post('count','',TRUE);
@@ -230,7 +237,7 @@ class Purchase extends CI_Controller {
 
 			for ($i=1; $i <= count($result) ; $i++) {
 				$purchase_detail_data['item_id'] 				=	$result[$i]['id'];
-				$purchase_detail_data['item_name'] 				=	$result[$i]['name'];
+				// $purchase_detail_data['item_name'] 				=	$result[$i]['name'];
 				$purchase_detail_data['purchase_price'] 		=	$result[$i]['price'];
 				$purchase_detail_data['quantity'] 				=	$result[$i]['quantity'];
 				$purchase_detail_data['purchase_discount']		=	0;
@@ -245,7 +252,7 @@ class Purchase extends CI_Controller {
 					$stock_data 							=	array();
 					$stock_data['item_id']					=	$result[$i]['id'];
 					$stock_data['warehouse_id']				=	$purchase_detail_data['warehouse_id'];
-					$stock_data['item_name']				=	$result[$i]['name'];
+					// $stock_data['item_name']				=	$result[$i]['name'];
 					$stock_data['quantity']					=	$result[$i]['quantity'];
 
 					$stock_result 							=	$this->stock_model->add_stock($stock_data);
@@ -255,7 +262,7 @@ class Purchase extends CI_Controller {
 				}
 
 			}
-		redirect('purchase/view_purchases','refresh');
+		// redirect('purchase/view_purchases','refresh');
 		}else{
 			$this->index(0,$error_count);
 		}

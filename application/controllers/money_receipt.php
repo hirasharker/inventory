@@ -42,6 +42,11 @@ class Money_Receipt extends CI_Controller {
 	
 	public function index ($money_receipt_id=0)
 	{
+		$session_data										=	array();
+		$session_data['token']								=	1;
+
+		$this->session->set_userdata($session_data);
+
 		$permission 	=	$this->module_model->get_permission_by_module_id_and_user_id(10, $this->session->userdata('user_id')); // module_id for bank is 20.....
 		if($permission->permission_add != 1){
 			redirect('access_control/denied/money_receipt/add_money_receipt','refresh');
@@ -105,6 +110,13 @@ class Money_Receipt extends CI_Controller {
 		if($permission->permission_add != 1){
 			redirect('access_control/denied/money_receipt/add_money_receipt','refresh');
 		}
+
+		if($this->session->userdata('token')!=1){
+			redirect('sales','refresh');
+		}
+
+		$this->session->unset_userdata('token');
+		
 		$money_receipt_data							=	array();
 		$money_receipt_data['user_id']				=	$this->session->userdata('user_id');
 		$money_receipt_data['user_name']			=	$this->session->userdata('user_name');

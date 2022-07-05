@@ -40,14 +40,8 @@
                             <input class="form-control" placeholder = "Chassis No" name="chassis_no" id="chassisNo">
                         </div>
                         <div class="form-group" id="customerContainer" style="display: none;">
-                            <label>Select Customer</label>
-                            <select class="form-control" name="customer_id" id="customerId" style="width: 100% !important;">
-                                <?php foreach($customer_list as $value){?>
-                                <option customerName="<?php echo $value->customer_name
-                                ;?>" value="<?php echo $value->customer_id
-                                ;?>"><?php echo $value->customer_id.' - '.$value->customer_name;?></option>
-                                <?php }?>
-                            </select>
+                            <label>Customer Name</label>
+                            <input class="form-control" name="customer_id" id="customerId" style="width: 100% !important;">
                         </div>
                         <input id="customerName" type="hidden" name="customer_name" value="">
 
@@ -70,7 +64,7 @@
                         </div>
                         <div class="form-group">
                             <label>Select Item</label>
-                            <select class="form-control" name="item_id" id="item" >
+                            <select class="form-control select-tag" name="item_id" id="item" >
                                 <?php foreach($item_list as $value){?>
                                 <!-- <option value="<?php echo $value->item_id;?>"><?php echo $value->part_no.' - '.$value->item_name;?></option> -->
                                 <?php }?>
@@ -156,7 +150,6 @@
       $( ".item-list" ).remove();
       var count = 0;
       document.getElementById('count').value = count;
-      var customerId = $(this).find('option:selected').attr('customerId');
       document.getElementById('customerId').value = customerId;
       var customerName = $(this).find('option:selected').attr('customerName');
       document.getElementById('customerName').value = customerName;
@@ -182,8 +175,8 @@
             }
         });
     }); // sales-id.change...............
-    $('#customerId').change(function() {
-        var customerName    =   $(this).find(':selected').attr('customerName');
+    $('#customerId').keyup(function() {
+        var customerName    =   $(this).val();
         document.getElementById('customerName').value = customerName;
     }); //customerId.change
 

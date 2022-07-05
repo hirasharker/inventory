@@ -46,6 +46,12 @@ class Sales extends CI_Controller {
 			redirect('access_control/denied/sales_invoice/add_sales','refresh');
 		}
 
+		$session_data										=	array();
+		$session_data['token']								=	1;
+
+		$this->session->set_userdata($session_data);
+
+
 		$data						=	array();
 		$data['page_title']			=	"Inventory Management";
 
@@ -132,6 +138,13 @@ class Sales extends CI_Controller {
 		if($permission->permission_add != 1){
 			redirect('access_control/denied/sales_invoice/add_sales','refresh');
 		}
+
+		if($this->session->userdata('token')!=1){
+			redirect('sales','refresh');
+		}
+
+		$this->session->unset_userdata('token');
+		
 		$sales_data						=	array();
 		$sales_data['user_id']			=	$this->session->userdata('user_id');
 		$sales_data['user_name']		=	$this->session->userdata('user_name');
@@ -217,7 +230,9 @@ class Sales extends CI_Controller {
 
 	public function add_sales_against_sales_order($sales_order_id, $sales_date, $value_added_tax_percentage){
 		$session_data 					=	array();
+		
 		$sales_data						=	array();
+		
 		$sales_data['user_id']			=	$this->session->userdata('user_id');
 		$sales_data['user_name']		=	$this->session->userdata('user_name');
 
@@ -227,7 +242,6 @@ class Sales extends CI_Controller {
 		$sales_order_detail				=	$this->sales_order_model->get_sales_order_details_by_id($sales_order_id, $sales_order->warehouse_id);
 
 		$sales_data['warehouse_id']		=	$sales_order->warehouse_id;
-		$sales_data['warehouse_name']	=	$sales_order->warehouse_name;
 		
 		$sales_data['customer_id']		=	$sales_order->customer_id;
 		if($sales_data['customer_id']!= NULL){
@@ -246,21 +260,32 @@ class Sales extends CI_Controller {
 		$result 						=	0;
 
 		foreach($sales_order_detail as $value) {
-			$stock						=	$this->item_model->get_item_by_id($value->item_id)->quantity;
+			$stock										=	$this->stock_model->get_item_by_warehouse_id_and_item_id($sales_data['warehouse_id'], $value->item_id)->quantity;
         	if($value->quantity > $stock){
-        		$session_data['error_message']	=	'You only have '.$stock.' '.$value->item_name.' left in stock!!';
+        		$session_data['error_message']			=	'Failed! You only have '.$stock.' '.$value->item_name.' left in stock!!';
 
         		$this->session->set_userdata($session_data);
         		redirect('sales','refresh');
         	}
 
+		}
+			$result 									=	0;
+
+		foreach($sales_order_detail as $value) {
+
         	$sales_detail_data				=	array();
 
         	if($i==0){
-        		$result										=	$this->sales_model->add_sales($sales_data);
+        		$result									=	$this->sales_model->add_sales($sales_data);
         	}
+
+        	if(!$result){
+        		$session_data['error_message']			=	'Failed!';
+        	}
+
         	$sales_detail_data['warehouse_id']			=	$sales_data['warehouse_id'];
-			// $sales_detail_data['dealer_id']				=	$sales_data['dealer_id'];
+
+			
 			$sales_detail_data['customer_id']			=	$sales_data['customer_id'];
 			$sales_detail_data['sales_id']				=	$result;
 			$sales_detail_data['item_id']				=	$value->item_id;
@@ -280,7 +305,11 @@ class Sales extends CI_Controller {
 			$i++;
 		} //foreach
 
-		redirect('sales/view_sales','refresh');
+		$session_data['message']			=	'Sales Invoice #'.$result.' is successfully saved!!';
+
+		$this->session->set_userdata($session_data);
+
+		redirect('sales','refresh');
 	}
 
 	public function update_sales($sales_id)

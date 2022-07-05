@@ -109,7 +109,7 @@ class Warranty_Claim extends CI_Controller {
 			$warranty_claim_data['customer_id']					=	$sales_detail->customer_id;
 			$warranty_claim_data['customer_name']				=	$sales_detail->customer_name;
 		}else {
-			$warranty_claim_data['customer_id']						=	$this->input->post('customer_id','',TRUE);
+			// $warranty_claim_data['customer_id']						=	$this->input->post('customer_id','',TRUE);
 			$warranty_claim_data['customer_name']					=	$this->input->post('customer_name','',TRUE);
 		}
 		$warranty_claim_data['warehouse_id']					=	$this->input->post('warehouse_id','',TRUE);

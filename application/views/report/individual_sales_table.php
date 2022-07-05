@@ -11,19 +11,21 @@
                       <th colspan="4" style="vertical-align:middle; text-align:center;">Sales</th>
                   </tr>
                   <tr>
+                      <th style="vertical-align:middle; text-align:center;">Invoice No</th>
                       <th style="vertical-align:middle; text-align:center;">Product</th>
                       <th style="vertical-align:middle; text-align:center;">Qty</th>
-                      <th style="vertical-align:middle; text-align:center;">Rate</th>
+                      <!-- <th style="vertical-align:middle; text-align:center;">Rate</th> -->
                       <th style="vertical-align:middle; text-align:center;">Amount</th>
                   </tr>
               </thead>
              <?php foreach($sales as $s_value){?>
                <tr style="margin:0;padding:0;">
                   <td style="vertical-align:middle; text-align:center;"><?php echo $s_value->sales_date;?></td>
+                  <td style="vertical-align:middle; text-align:center;"><?php echo $s_value->sales_id;?></td>
                   <td style="vertical-align:middle; text-align:center;"><?php echo $s_value->item_name;?></td>
                   <td style="vertical-align:middle; text-align:center;"><?php echo $s_value->quantity?></td>
-                  <td style="vertical-align:middle; text-align:center;"><?php echo $s_value->item_rate;?></td>
-                  <td style="vertical-align:middle; text-align:center;"><?php echo $s_value->item_rate*$s_value->quantity;?></td>
+                  <!-- <td style="vertical-align:middle; text-align:center;"><?php echo $s_value->item_rate;?></td> -->
+                  <td style="vertical-align:middle; text-align:center;"><?php echo ($s_value->sales_price) * (100 - $s_value->overall_discount)/100;?></td>
                </tr>
             <?php }?>
           </table>

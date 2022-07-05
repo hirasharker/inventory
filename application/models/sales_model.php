@@ -9,8 +9,8 @@ class Sales_Model extends CI_Model {
 
 
     public function get_all_sales(){
-        $this->db->select("tbl_sales.sales_id, tbl_sales.sales_order_id,  tbl_sales.customer_type, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
-            , tbl_sales.sales_date, string_agg(tbl_sales_detail.item_name, ', ') as item_name, (sum(tbl_sales_detail.sales_price * tbl_sales_detail.quantity-tbl_sales_detail.individual_discount))*(1-.01*tbl_sales.overall_discount) as total_price"); 
+        $this->db->select("tbl_sales.sales_id, tbl_sales.value_added_tax_percentage, tbl_sales.sales_order_id,  tbl_sales.customer_type, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
+            , tbl_sales.sales_date, string_agg(tbl_sales_detail.item_name, ', ') as item_name, (sum(tbl_sales_detail.sales_price * tbl_sales_detail.quantity-tbl_sales_detail.individual_discount))*(1-1/(100+tbl_sales.value_added_tax_percentage)*tbl_sales.overall_discount) as total_price"); 
         $this->db->from('tbl_sales');
         $this->db->join('tbl_sales_detail','tbl_sales_detail.sales_id = tbl_sales.sales_id');
         $this->db->group_by('tbl_sales.sales_id');
@@ -54,9 +54,9 @@ class Sales_Model extends CI_Model {
     }
 
     public function get_individual_sales_report_by_date_and_customer_id($customer_id,$from_date,$to_date){
-        $this->db->select("tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.user_id, tbl_sales.user_name, string_agg(tbl_sales_detail.item_name, ', ') as item_name, sum(tbl_sales_detail.quantity) as quantity, tbl_sales.sales_date"); 
+        $this->db->select("tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.overall_discount, tbl_sales.user_id, tbl_sales.user_name, string_agg(tbl_sales_detail.item_name, ', ') as item_name, sum(tbl_sales_detail.sales_price * tbl_sales_detail.quantity) as sales_price, sum(tbl_sales_detail.quantity) as quantity, tbl_sales.sales_date"); 
         $this->db->from('tbl_sales');
-        $this->db->join('tbl_sales_detail','tbl_sales_detail.sales_id = tbl_sales.sales_id');
+        $this->db->join('tbl_sales_detail','tbl_sales_detail.sales_id = tbl_sales.sales_id','left');
         $this->db->where('tbl_sales.sales_date >=',$from_date);
         $this->db->where('tbl_sales.sales_date <=',$to_date);
         $this->db->where('tbl_sales.customer_id',$customer_id);
@@ -87,13 +87,14 @@ class Sales_Model extends CI_Model {
     }
 
     public function get_group_sales_report_by_date($from_date,$to_date){
-        $this->db->select('tbl_sales.sales_id, tbl_sales.customer_id, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
-            , tbl_sales_detail.item_name, tbl_sales_detail.quantity, tbl_sales.sales_date
+        $this->db->select('tbl_sales.sales_id, tbl_sales.customer_id, tbl_item.part_no, tbl_sales.customer_name, tbl_sales.dealer_id, tbl_sales.dealer_name, tbl_sales.user_id, tbl_sales.user_name
+            , tbl_sales_detail.item_name, tbl_sales_detail.item_id, tbl_sales_detail.quantity, tbl_sales.sales_date
             , (tbl_sales_detail.sales_price - tbl_sales_detail.individual_discount)*(1-.01*tbl_sales.overall_discount) as item_rate
             , tbl_money_receipt.received_amount,0, tbl_money_receipt.money_receipt_date'); 
         $this->db->from('tbl_sales');
         $this->db->join('tbl_sales_detail','tbl_sales_detail.sales_id = tbl_sales.sales_id','left');
         $this->db->join('tbl_money_receipt','tbl_money_receipt.sales_id = tbl_sales.sales_id','left');
+        $this->db->join('tbl_item','tbl_item.item_id = tbl_sales_detail.item_id','left');
         $this->db->where('tbl_sales.sales_date >=',$from_date);
         $this->db->where('tbl_sales.sales_date <=',$to_date);
         $this->db->order_by('tbl_sales.time_stamp','desc');

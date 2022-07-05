@@ -18,7 +18,9 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <form method="post" action="<?php echo base_url()?>inventory/warehouse_inventory_pdf" target="_blank">
+                        
+                        <form method="post" action="<?php echo base_url()?>inventory/generate_warehouse_inventory_detail" target="_blank">
+                        <!-- <form method="post" action="<?php echo base_url()?>inventory/warehouse_inventory_pdf" target="_blank"> -->
                         <!-- <form role="form" method="post" action="<?php echo base_url();?>purchase/add_purchase"> -->
                            <div class="form-group">
                                 <label>Select warehouse</label>

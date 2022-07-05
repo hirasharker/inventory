@@ -29,6 +29,7 @@
                                             <th>Customer Name</th>
                                             <th>Type of Customer</th>
                                             <th>Item Name</th>
+                                            <th>VAT</th>
                                             <th>Total Price</th>
                                             <th>Sales date</th>
                                             <th>Action</th>
@@ -60,7 +61,8 @@
                                                 }
                                             ?></td>
                                             <td><?php echo $value->item_name;?></td>
-                                            <td class="center"><?php echo $value->total_price;?></td>
+                                            <td><?php echo $value->value_added_tax_percentage; ?></td>
+                                            <td class="center"><?php echo round($value->total_price,2);?></td>
                                             <td><?php echo $value->sales_date;?></td>
                                             <td class="center">
                                             <?php if($permission->permission_edit==1){?>
@@ -73,10 +75,17 @@
                                             <label style="color:#aea4a4; font-weight:normal;">edit</label>|
                                             <?php }?>
                                             <?php if($permission->permission_delete==1){?>
-                                            <a data-href="<?php echo base_url();?>sales/delete_sales/<?php echo $value->sales_id;?>" data-toggle="modal" data-target="#confirm-delete"> delete </a> | <a href="<?php echo base_url();?>sales/sales_invoice/<?php echo $value->sales_id;?>" target="_blank"> invoice </a>
+                                            <a data-href="<?php echo base_url();?>sales/delete_sales/<?php echo $value->sales_id;?>" data-toggle="modal" data-target="#confirm-delete"> delete </a> | 
                                             <?php }else{?>
                                             <label style="color:#aea4a4; font-weight:normal;">delete</label>
                                             <?php }?>
+
+                                             <?php if($permission->permission_view==1){?>
+                                                    <a href="<?php echo base_url();?>sales/sales_invoice/<?php echo $value->sales_id;?>" target="_blank"> invoice </a> 
+                                            <?php }else{?>
+                                            <label style="color:#aea4a4; font-weight:normal;">edit</label>|
+                                            <?php }?>
+
                                             </td>
                                         </tr>
                                     <?php $i++; }?>

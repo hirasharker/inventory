@@ -1,7 +1,7 @@
 <table class="table table-striped table-bordered table-hover text-center" id="dataTables-example" >
     <thead>
         <tr>
-            <th class="text-center" colspan="2">Item Detail</th>
+            <th class="text-center" colspan="3">Item Detail</th>
             <th class="text-center">Purchase</th>
             <th class="text-center">Sales</th>
             <th class="text-center" colspan="2">Stock Transfer</th>
@@ -11,19 +11,22 @@
     <tbody>
         <tr class="gradeA">
             <th class="text-center">Item ID</th>
-            <th class="text-center">Item Name</th>
+            <th class="text-center">Part No</th>
+            <th class="text-center">Description</th>
             <th class="text-center">Qty</th>
             <th class="text-center">Qty</th>
             <th class="text-center">Received</th>
             <th class="text-center">Sent</th>
             <th class="text-center">Qty</th>
-            <th class="text-center">Rate</th>
+            <!-- <th class="text-center">Rate</th> -->
             <th class="text-center">Value</th>
         </tr>
 
         <?php foreach($item_data as $i_value){?>
         <tr class="gradeA">
             <td class="text-center"><?php echo $i_value->item_id?></td>
+
+            <td class="text-center"><?php echo $i_value->part_no;?></td>
 
             <td class="text-center"><?php echo $i_value->item_name?></td>
             
@@ -44,7 +47,7 @@
 
             <td class="text-center"><?php echo $sent_stock_quantity;?></td>
             <td class="text-center"><?php echo $i_value->stock_quantity; ?></td>
-            <td class="text-center"><?php echo $i_value->item_price;?></td>
+            <!-- <td class="text-center"><?php echo $i_value->item_price;?></td> -->
             <td class="text-center"><?php echo $i_value->item_price * $i_value->stock_quantity;?></td>
         </tr>
         <?php }?> 
